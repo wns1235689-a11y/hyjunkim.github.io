@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>사양서 — 도구(하니스)·재설계 엔진 | REHEARSAL ENGINE 문서 아카이브</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #15233F; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
+    #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #15233F; z-index: 9999; }
+    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
+    #__bundler_placeholder { color: #999; font-size: 14px; }
+  </style>
+  <noscript>
+    <style>#__bundler_loading { display: none; }</style>
+    <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
+      This page requires JavaScript to display.
+    </div>
+  </noscript>
+</head>
+<body>
+  <div id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect x="415" y="175" width="370" height="450" rx="22" fill="#FFFFFF"></rect>
+    <path d="M441 175 L428 175 Q415 175 415 197 L415 603 Q415 625 428 625 L441 625 Z" fill="#F2A91E"></path>
+    <rect x="486" y="224" width="36" height="14" rx="3" fill="#F2A91E"></rect>
+    <rect x="486" y="252" width="212" height="22" rx="6" fill="#15233F"></rect>
+    <rect x="486" y="312" width="256" height="12" rx="6" fill="#C4CDDA"></rect>
+    <rect x="486" y="340" width="228" height="12" rx="6" fill="#C4CDDA"></rect>
+    <rect x="486" y="392" width="256" height="122" rx="8" fill="#F2F4F8" stroke="#DDE3EC" stroke-width="2"></rect>
+    <line x1="486" y1="428" x2="742" y2="428" stroke="#DDE3EC" stroke-width="2"></line>
+    <line x1="486" y1="464" x2="742" y2="464" stroke="#DDE3EC" stroke-width="2"></line>
+    <line x1="571" y1="392" x2="571" y2="514" stroke="#DDE3EC" stroke-width="2"></line>
+    <line x1="657" y1="392" x2="657" y2="514" stroke="#DDE3EC" stroke-width="2"></line>
+    <rect x="486" y="548" width="182" height="12" rx="6" fill="#C4CDDA"></rect>
+  </svg>
+</div>
+  <div id="__bundler_loading">Unpacking...</div>
+
+  <script>
+    
+document.addEventListener('DOMContentLoaded', async function() {
+  const loading = document.getElementById('__bundler_loading');
+  function setStatus(msg) { if (loading) loading.textContent = msg; }
+
+  const FONT_MIME = /^(font[/]|application[/](x-)?font-|application[/]vnd\.ms-fontobject)/i;
+  const MIME_TOKEN = /^[\w.+-]+[/][\w.+-]+$/;
+  function toBase64(bytes) {
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  // Error sink persists across replaceWith since it's on window, not the DOM.
+  window.addEventListener('error', function(e) {
+    // Failed resource loads (CSP-blocked links, scripts, images) fire plain
+    // events at the element — warn only; real JS errors carry message/error.
+    if (!e.message && !e.error && e.target && e.target !== window) {
+      console.warn('[bundle] resource failed to load:',
+        e.target.tagName, String(e.target.src || e.target.href || ''));
+      return;
+    }
+    var p = document.body || document.documentElement;
+    var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
+    d.id = '__bundler_err';
+    d.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;font:12px/1.4 ui-monospace,monospace;background:#2a1215;color:#ff8a80;padding:10px 14px;border-radius:8px;border:1px solid #5c2b2e;z-index:99999;white-space:pre-wrap;max-height:40vh;overflow:auto';
+    d.textContent = (d.textContent ? d.textContent + String.fromCharCode(10) : '') +
+      '[bundle] ' + (e.message || e.type) +
+      (e.filename ? ' (' + e.filename.slice(0, 60) + ':' + e.lineno + ')' : '');
+  }, true);
+
+  try {
+    const manifestEl = document.querySelector('script[type="__bundler/manifest"]');
+    const templateEl = document.querySelector('script[type="__bundler/template"]');
+    if (!manifestEl || !templateEl) {
+      setStatus('Error: missing bundle data');
+      console.error('[bundler] Missing script tags — manifestEl:', !!manifestEl, 'templateEl:', !!templateEl);
+      return;
+    }
+
+    const manifest = JSON.parse(manifestEl.textContent);
+    let template = JSON.parse(templateEl.textContent);
+
+    // Nested page bundles (iframe targets). Each ships ONCE, in the ROOT
+    // document's manifest; frame srcs carry an about:blank#<uuid> marker
+    // instead of a substitutable uuid. Every document mints the blobs for
+    // its OWN frames — from local text at the root, or text obtained from
+    // its DIRECT parent over the relay protocol below — so each frame
+    // navigation stays same-origin with its initiator and a deduped page
+    // loads at any depth on any host, including a file:// download's
+    // opaque origins (where a blob minted by one document cannot be
+    // navigated to by another).
+    const pageOrderEl = document.querySelector('script[type="__bundler/page_order"]');
+    const pageOrder = pageOrderEl ? JSON.parse(pageOrderEl.textContent) : [];
+    const pageSet = new Set(pageOrder);
+    const pageTexts = {};
+
+    // ── Nested-page text protocol (parent-chain relay) ──
+    // Page bundles ship once, in the ROOT document's manifest. Every
+    // document mints the blobs for its OWN frames, obtaining page text
+    // through a strict parent-chain relay: a document only ever SENDS to
+    // its direct parent (which, for every document the publisher's own
+    // runtime minted, is another publisher document) and only ACCEPTS
+    // text from that direct parent; requests from below are honored only
+    // for the document's own child frames, and the ROOT never sends
+    // upward at all. That last rule is load-bearing: the artifact host's
+    // frame-ancestors allows claude.ai (and friends) to frame an
+    // artifact, so window.top can be a FOREIGN document — a top-addressed
+    // protocol would hand page uuids to that ancestor and accept forged
+    // "page text" from it, minting attacker HTML as an artifact-origin
+    // blob document. The chain never touches the ancestor: requests stop
+    // at the root, replies are origin-addressed per hop (never '*' when
+    // an origin exists), and both directions are origin-gated (on https
+    // a foreign sender's origin can never equal this document's; in
+    // opaque contexts — file:// — everything serializes as 'null', where
+    // an embedded EXTERNAL frame still fails the gate by carrying its
+    // own real origin, and a sandboxed child of such a frame is excluded
+    // by the own-child-frames check plus uuid unguessability). Shape is
+    // deny-by-default: one request form, one reply form, no error
+    // replies.
+    // window.origin is the SERIALIZED SECURITY origin ('null' in opaque
+    // contexts such as a sandboxed preview iframe) — location.origin is
+    // computed from the URL and stays 'https://…' even when the document
+    // is sandboxed, which would misgate every opaque chain.
+    const OWN_TARGET = /^https?:[/][/]/.test(window.origin || '')
+      ? window.origin
+      : '*';
+    function trustedOrigin(e) {
+      if (e.origin === window.origin) return true; // https chains; opaque==opaque
+      // file:// trees: Chrome serializes the file document's origin as
+      // 'file://' while the blob: documents it mints serialize as 'null',
+      // so the two legitimate shapes can never string-match — accept the
+      // pair in both directions. https origins never serialize as either,
+      // and sender identity (own child frame / direct parent) is checked
+      // separately.
+      return (
+        (e.origin === 'null' &&
+          (window.origin === 'file://' ||
+            window.location.protocol === 'file:')) ||
+        (/^file:/.test(e.origin) && window.origin === 'null')
+      );
+    }
+    // Non-empty only in the root document (nested bundles ship an empty
+    // island), so it doubles as the root marker: the root answers from
+    // local text and treats a miss as authoritative — never relaying to
+    // its (possibly foreign) parent.
+    const isPageRoot = pageOrder.length > 0;
+    const blobUrls = {};
+    const resourceBlobs = {};
+    const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+    const pendingFrames = {}; // uuid -> [{el, frag}] awaiting text for own frames
+    const pendingRelays = {}; // uuid -> [childWindow] awaiting text to pass down
+    function mountPage(el, frag, text) {
+      const pageBlob = new Blob([text], { type: 'text/html' });
+      const u = URL.createObjectURL(pageBlob);
+      resourceBlobs[u] = pageBlob;
+      el.src = u + frag;
+    }
+    function deliverPage(uuid, text) {
+      const frames = pendingFrames[uuid];
+      delete pendingFrames[uuid];
+      if (frames) for (const f of frames) mountPage(f.el, f.frag, text);
+      const relays = pendingRelays[uuid];
+      delete pendingRelays[uuid];
+      if (relays) {
+        for (const cw of relays) {
+          try { cw.postMessage({ __bundler_page: uuid, __bundler_text: text }, OWN_TARGET); } catch (err) { /* gone */ }
+        }
+      }
+    }
+    function ownFrameWindows() {
+      const out = [];
+      for (const f of Array.from(document.querySelectorAll('iframe'))) {
+        try { if (f.contentWindow) out.push(f.contentWindow); } catch (err) { /* detached */ }
+      }
+      return out;
+    }
+    window.addEventListener('message', function (e) {
+      const d = e.data;
+      if (!d || typeof d !== 'object' || !e.source) return;
+      // Origin gate first; the structural checks below (own-child-frames
+      // for requests, direct-parent + solicited-uuid for replies, the
+      // root's never-relay rule) are what hold in fully opaque chains
+      // where origin strings can't discriminate — a sandboxed root's
+      // FOREIGN wrapper still fails all three even though both serialize
+      // as real-vs-'null' rather than matching.
+      if (!trustedOrigin(e)) return;
+      if (typeof d.__bundler_need === 'string' && UUID_SHAPE.test(d.__bundler_need)) {
+        // Requests are honored only for this document's own child frames.
+        if (ownFrameWindows().indexOf(e.source) < 0) return;
+        const uuid = d.__bundler_need;
+        const text = pageTexts[uuid];
+        if (typeof text === 'string') {
+          try { e.source.postMessage({ __bundler_page: uuid, __bundler_text: text }, OWN_TARGET); } catch (err) { /* gone */ }
+          return;
+        }
+        if (isPageRoot || window.parent === window) return; // authoritative miss
+        const waiting = pendingRelays[uuid];
+        if (waiting) {
+          if (waiting.indexOf(e.source) < 0) waiting.push(e.source);
+          return;
+        }
+        // Never-answered uuids would otherwise accumulate forever under a
+        // request spray; past the cap (far above any real page count) new
+        // relays are dropped rather than remembered.
+        if (Object.keys(pendingRelays).length >= 128) return;
+        pendingRelays[uuid] = [e.source];
+        window.parent.postMessage({ __bundler_need: uuid }, OWN_TARGET);
+      } else if (
+        typeof d.__bundler_page === 'string' &&
+        UUID_SHAPE.test(d.__bundler_page) &&
+        typeof d.__bundler_text === 'string'
+      ) {
+        // The shape test is load-bearing beyond tidiness: the solicited
+        // check below uses the in operator, which matches prototype keys
+        // ('__proto__', 'constructor') — an unshaped key would reach
+        // deliverPage and throw, painting the error banner.
+        // Text is accepted only from the direct parent — the document
+        // that minted this one.
+        if (e.source !== window.parent || window.parent === window) return;
+        if (!(d.__bundler_page in pendingFrames) && !(d.__bundler_page in pendingRelays)) return;
+        deliverPage(d.__bundler_page, d.__bundler_text);
+      }
+    });
+
+    const uuids = Object.keys(manifest);
+    setStatus('Unpacking ' + uuids.length + ' assets...');
+
+    await Promise.all(uuids.map(async (uuid) => {
+      const entry = manifest[uuid];
+      try {
+        const binaryStr = atob(entry.data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+        let finalBytes = bytes;
+        if (entry.compressed) {
+          if (typeof DecompressionStream !== 'undefined') {
+            const ds = new DecompressionStream('gzip');
+            const writer = ds.writable.getWriter();
+            const reader = ds.readable.getReader();
+            writer.write(bytes);
+            writer.close();
+            const chunks = [];
+            let totalLen = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              totalLen += value.length;
+            }
+            finalBytes = new Uint8Array(totalLen);
+            let offset = 0;
+            for (const chunk of chunks) { finalBytes.set(chunk, offset); offset += chunk.length; }
+          } else {
+            console.warn('DecompressionStream not available, asset ' + uuid + ' may not render');
+          }
+        }
+
+        if (pageSet.has(uuid)) {
+          pageTexts[uuid] = new TextDecoder().decode(finalBytes);
+          return;
+        }
+        if (FONT_MIME.test(entry.mime) && MIME_TOKEN.test(entry.mime)) {
+          // Strict artifact hosts allow font-src data: but not blob:.
+          blobUrls[uuid] = 'data:' + entry.mime + ';base64,' +
+            (entry.compressed ? toBase64(finalBytes) : entry.data);
+        } else {
+          const blob = new Blob([finalBytes], { type: entry.mime });
+          blobUrls[uuid] = URL.createObjectURL(blob);
+          resourceBlobs[blobUrls[uuid]] = blob;
+        }
+      } catch (err) {
+        console.error('Failed to decode asset ' + uuid + ':', err);
+        const blob = new Blob([], { type: entry.mime });
+        blobUrls[uuid] = URL.createObjectURL(blob);
+        resourceBlobs[blobUrls[uuid]] = blob;
+      }
+    }));
+
+    const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
+    const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
+    const resourceMap = {};
+    for (const entry of extResources) {
+      if (blobUrls[entry.uuid]) resourceMap[entry.id] = blobUrls[entry.uuid];
+    }
+
+    // Artifact-host CSP (connect-src 'self') refuses fetch() of blob: URLs —
+    // consumers read these Blobs directly. Survives the swap like the error sink.
+    window.__resourceBlobs = resourceBlobs;
+
+    setStatus('Rendering...');
+    // Page uuids have no blob here — they ride inside about:blank#<uuid>
+    // frame markers the pass below resolves after the swap.
+    for (const uuid of uuids) {
+      if (pageSet.has(uuid)) continue;
+      template = template.split(uuid).join(blobUrls[uuid]);
+    }
+
+    // Strip integrity + crossorigin — blob URLs from a file:// document inherit
+    // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
+    // The manifest bytes are ours; SRI protects against CDN compromise, not this.
+    template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+
+    const resourceScript = '<script>window.__resources = ' +
+      JSON.stringify(resourceMap).replace(/<\//g, '<\\/') +
+      ';</' + 'script>';
+    // Inject after <head> so the DOCTYPE stays first; prepending the script
+    // would push the parser into quirks mode. DOMParser always emits a <head>
+    // (synthesizing one if the source HTML omitted it) but may carry
+    // attributes through, so match the full opening tag. slice() rather than
+    // replace() keeps us clear of $-pattern substitution in resourceScript.
+    const headOpen = template.match(/<head[^>]*>/i);
+    if (headOpen) {
+      const i = headOpen.index + headOpen[0].length;
+      template = template.slice(0, i) + resourceScript + template.slice(i);
+    }
+
+    // Parse the template and swap the root element. Scripts inserted via
+    // DOMParser/replaceWith are inert per spec — re-create each with
+    // createElement so they execute, awaiting onload for src scripts to
+    // preserve ordering (React before ReactDOM before Babel before text/babel).
+    const doc = new DOMParser().parseFromString(template, 'text/html');
+    document.documentElement.replaceWith(doc.documentElement);
+
+    // Resolve page-frame markers: mint this document's own blob for each
+    // framed page — from local text when this is the root, otherwise by
+    // asking the direct parent over the relay protocol above. An
+    // unanswered request leaves the frame on about:blank, the same
+    // degraded state as a refused embed.
+    {
+      const MARKER = /^about:blank#([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(#.*)?$/;
+      const needed = [];
+      for (const el of Array.from(document.querySelectorAll('iframe'))) {
+        const m = MARKER.exec(el.getAttribute('src') || '');
+        if (!m) continue;
+        const text = pageTexts[m[1]];
+        if (typeof text === 'string') {
+          mountPage(el, m[2] || '', text);
+        } else if (window.parent !== window && !isPageRoot) {
+          const had = pendingFrames[m[1]];
+          (pendingFrames[m[1]] = had || []).push({ el: el, frag: m[2] || '' });
+          if (!had) needed.push(m[1]);
+        }
+      }
+      for (const uuid of needed) {
+        window.parent.postMessage({ __bundler_need: uuid }, OWN_TARGET);
+      }
+    }
+
+    const dead = Array.from(document.scripts);
+    for (const old of dead) {
+      const s = document.createElement('script');
+      for (const a of old.attributes) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      // text/babel scripts with a src: read and inline. transformScriptTags
+      // does XHR against the src, but blob:null/ from a file:// origin is
+      // silently dropped. Inlining makes it a plain inline babel script,
+      // which transformScriptTags handles unconditionally.
+      if ((s.type === 'text/babel' || s.type === 'text/jsx') && s.src) {
+        const pre = resourceBlobs[s.src.split('#')[0]];
+        s.textContent = pre ? await pre.text() : await (await fetch(s.src)).text();
+        s.removeAttribute('src');
+      }
+      const p = s.src ? new Promise(function(r) { s.onload = s.onerror = r; }) : null;
+      old.replaceWith(s);
+      if (p) await p;
+    }
+    // Babel standalone auto-transforms type=text/babel on DOMContentLoaded,
+    // which fired before we swapped the document. Trigger manually if present.
+    if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
+      window.Babel.transformScriptTags();
+    }
+  } catch (err) {
+    setStatus('Error unpacking: ' + err.message);
+    console.error('Bundle unpack error:', err);
+  }
+});
+
+  </script>
+
+  <script type="__bundler/manifest">
+{}
+  </script>
+
+  <script type="__bundler/ext_resources">
+[]
+  </script>
+
+  <script type="__bundler/page_order">
+[]
+  </script>
+
+  <script type="__bundler/template">
+"<!DOCTYPE html>\n<html lang=\"ko\"><head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>사양서 — 도구(하니스)·재설계 엔진 | REHEARSAL ENGINE 문서 아카이브<\u002Ftitle>\n<meta name=\"description\" content=\"REHEARSAL ENGINE 사양 병합본. 1부 도구(하니스) 사양(SPEC.md) · 2부 재설계 엔진 사양(SPEC_V3.md). 각 부 내부는 원문 그대로.\">\n<style>\n/* ── 디자인 원천: rehearsal-engine.html :root 계승 · 웹폰트 로드 0 · 외부 요청 0 ── */\n:root{\n  --paper:#FFFFFF; --mist:#F2F4F8; --line:#DDE3EC;\n  --ink:#15233F; --ink-soft:#4A5870;\n  --gate:#F2A91E; --gate-deep:#D89200;\n  --blue:#2E6FB2; --red:#D6483B; --green:#2E9E6B;\n  --console:#0F1828; --console-line:#2A3852; --console-text:#D9E2F2; --console-dim:#8DA0C4;\n  --sans:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;\n  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Consolas,monospace;\n  --maxw:860px; --r:14px;\n}\n*{margin:0;padding:0;box-sizing:border-box}\nhtml{-webkit-text-size-adjust:100%}\nbody{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}\n::selection{background:var(--gate);color:var(--ink)}\na{color:var(--blue)}\na:hover{color:var(--gate-deep)}\n:focus-visible{outline:3px solid var(--gate);outline-offset:2px;border-radius:4px}\n\n.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}\n.doc{padding-bottom:64px}\n\n.back{display:inline-block;margin:34px 0 0;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);text-decoration:none}\n.back:hover{color:var(--ink)}\n\n.doc-head{padding:24px 0 20px}\n.doc-head h1{font-size:clamp(26px,4.2vw,38px);font-weight:800;letter-spacing:-.022em;line-height:1.24;text-wrap:balance}\n.merge-note{font-size:14px;color:var(--ink-soft);margin-top:10px;font-style:italic}\n\n/* 부(部) 구획 헤더 — 병합 예외를 위한 유일한 추가 요소 */\n.part-head{border-top:2px solid var(--ink);margin-top:18px;padding-top:30px}\n.part-tag{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--gate-deep);margin-bottom:9px}\n.part-title{font-size:clamp(22px,3.3vw,29px);font-weight:800;letter-spacing:-.02em;line-height:1.26;text-wrap:balance}\n\nsection{padding:30px 0;border-top:1px solid var(--line)}\nh2{font-size:clamp(20px,3vw,26px);font-weight:800}\nh3{font-size:clamp(18px,2.6vw,22px);font-weight:800;letter-spacing:-.012em;line-height:1.32;margin-bottom:12px;text-wrap:balance}\nh3 .sub-n{font-family:var(--mono);color:var(--gate-deep);font-size:.66em;font-weight:700;letter-spacing:.02em}\nh4{font-size:clamp(15px,2vw,16.5px);font-weight:700;letter-spacing:-.004em;line-height:1.4;margin:22px 0 9px}\n\np{margin:0 0 14px;text-wrap:pretty}\np:last-child{margin-bottom:0}\n\nul,ol{margin:2px 0 14px;padding:0;list-style:none}\nli{position:relative;padding-left:1.3em;margin-bottom:11px;line-height:1.68}\nli:last-child{margin-bottom:0}\nul>li::before{content:\"\";position:absolute;left:1px;top:.66em;width:6px;height:6px;background:var(--gate);border-radius:1px}\nli>ul{margin-top:11px;margin-bottom:0}\nli>ul>li::before{background:var(--ink-soft);width:5px;height:5px;border-radius:50%}\nol{counter-reset:it}\nol>li{padding-left:1.9em}\nol>li::before{counter-increment:it;content:counter(it)\".\";position:absolute;left:0;top:0;font-family:var(--mono);font-weight:700;color:var(--gate-deep)}\n\nstrong{font-weight:700;color:var(--ink)}\nem{font-style:italic}\ncode{font-family:var(--mono);font-size:.86em;background:var(--mist);border:1px solid var(--line);border-radius:5px;padding:.1em .4em;word-break:break-word}\n\nblockquote{border-left:4px solid var(--gate);background:var(--mist);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}\nblockquote p{margin-bottom:8px;font-size:15px;line-height:1.62;text-wrap:pretty}\nblockquote p:last-child{margin-bottom:0}\n\n.banner{margin:16px 0 4px}\n.banner .in{background:#FFF6E2;border:1px solid #F0D58C;border-left:4px solid var(--gate);border-radius:var(--r);padding:14px 20px}\n.banner p{font-weight:700;font-size:16px;line-height:1.5;color:var(--ink);text-wrap:pretty}\n\npre{background:var(--mist);color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:18px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}\npre code{display:block;font-family:var(--mono);font-size:13px;line-height:1.7;background:none;border:none;padding:0;white-space:pre;color:var(--ink)}\n\n/* 표 — rehearsal-engine .vst 계승 · 모바일 가로 스크롤 */\n.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 12px}\n.vst{width:100%;min-width:640px;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;font-size:14px;line-height:1.55}\n.vst th{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.05em;color:var(--ink-soft);text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);background:var(--mist);vertical-align:top}\n.vst td{padding:11px 13px;border-bottom:1px solid var(--line);border-left:1px solid var(--line);vertical-align:top}\n.vst td:first-child{border-left:none;white-space:nowrap}\n.vst tr:last-child td{border-bottom:none}\n.vst code{font-size:.9em}\n\n.site-foot{margin-top:34px;padding:18px 0 8px;border-top:2px solid var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--ink-soft)}\n\n@media print{\n  .back{display:none}\n  body{font-size:11pt;line-height:1.5}\n  .wrap{max-width:none;padding:0}\n  .doc{padding-bottom:0}\n  section{padding:14px 0}\n  .vst{min-width:0;font-size:9pt}\n  .tw,pre{overflow:visible}\n  pre code{white-space:pre-wrap}\n  tr{break-inside:avoid}\n  h1,h2,h3,h4,.part-title{break-after:avoid}\n  a{color:var(--ink);text-decoration:none}\n  .banner .in,blockquote,pre{-webkit-print-color-adjust:exact;print-color-adjust:exact}\n}\n@page{margin:16mm}\n<\u002Fstyle>\n<\u002Fhead>\n<body>\n\n\n\n<main class=\"wrap doc\">\n\n  \n  <a class=\"back\" href=\"../index.html\">← REHEARSAL ENGINE<\u002Fa>\n\n  <header class=\"doc-head\">\n    <h1>사양서 — 1부 도구(하니스) · 2부 재설계 엔진<\u002Fh1>\n    <p class=\"merge-note\">두 사양 문서(SPEC.md · SPEC_V3.md)를 한 페이지에 병합 — 지시된 예외이며, 각 부 내부는 원문 그대로.<\u002Fp>\n  <\u002Fheader>\n\n  <!-- =================== 1부 =================== -->\n  <div class=\"part-head\" id=\"part1\">\n    <div class=\"part-tag\">1부 — 도구(하니스) 사양<\u002Fdiv>\n    <h2 class=\"part-title\">SPEC.md — Research Harness UI 구축 사양서<\u002Fh2>\n  <\u002Fdiv>\n\n  <!-- 경고 라벨 · SPEC.md §5-4 원문 그대로 -->\n  <div class=\"banner\"><div class=\"in\"><p>⚠ 합성·비실측·인용불가<\u002Fp><\u002Fdiv><\u002Fdiv>\n\n  <blockquote>\n    <p><strong>지위<\u002Fstrong>: 이 문서는 INVENTORY.md와 함께 모든 빌드 세션의 기준 문서다. 두 문서가 충돌하면 SPEC이 우선하되, 충돌 발견 시 작업 중단 후 보고.<\u002Fp>\n    <p><strong>전제<\u002Fstrong>: 작업 전 INVENTORY.md 전체를 읽을 것. 본 문서의 §참조 표기는 INVENTORY.md의 섹션이다.<\u002Fp>\n    <p><strong>기준 브랜치<\u002Fstrong>: <code>claude/simulation-survey-planning-d9rlih<\u002Fcode><\u002Fp>\n  <\u002Fblockquote>\n\n  <section>\n    <h3><span class=\"sub-n\">0.<\u002Fspan> 제품 정체성<\u002Fh3>\n    <ul>\n      <li><strong>무엇<\u002Fstrong>: LLM 합성 설문 시뮬레이션 엔진(게이트 C에서 검증됨) 위에 얹는 <strong>개인용 research harness<\u002Fstrong> — 로컬 웹 UI.<\u002Fli>\n      <li><strong>유저<\u002Fstrong>: 소유자 1인. 배포·계정·클라우드 없음. 상업화 없음.<\u002Fli>\n      <li><strong>목적<\u002Fstrong>: 현재 수동 CLI + 세션 의존으로 수행하는 워크플로(풀 생성 → 스윕/시뮬 → 진단 → 판정 → 리포트)를 재현 가능하고 유실 없는 반복 도구로 승격.<\u002Fli>\n      <li><strong>비목적(명시)<\u002Fstrong>: 공개 SaaS 아님. 크롤링/외부 데이터 수집 기능 없음. 엔진 로직(프롬프트·스키마·통계) 재작성 아님.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">1.<\u002Fspan> 아키텍처 (확정)<\u002Fh3>\n    <pre><code>[브라우저: 로컬 웹 UI (React/Vite)]\n        │ HTTP (localhost)\n[얇은 백엔드 (FastAPI)]\n        ├── python 서브프로세스: 풀 생성·진단·판정 스크립트 직접 실행\n        ├── Claude Code 서브프로세스: wf_*.js 시뮬 실행 (러너, §4)\n        └── 파일 저장소: runs/ (git 추적, §3)<\u002Fcode><\u002Fpre>\n    <ul>\n      <li><strong>시뮬 실행은 Claude Code 서브프로세스 방식<\u002Fstrong>(INVENTORY §5.1 선택지 ①). ClaudeBackend 이식(선택지 ②)은 기각 — 검증된 실행 경로를 벗어나며 구조화 출력·병렬·재시도 재구현이 별도 프로젝트가 됨.<\u002Fli>\n      <li>DB 없음. 상태는 전부 <code>runs/<\u002Fcode> 파일. 서버는 단일 유저 전제(동시성 설계 불요, 단 §2-P0-5 전역상태 오염은 수정).<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">2.<\u002Fspan> 계보 경계 (확정 — 이 목록이 유일한 기준)<\u002Fh3>\n\n    <h4>현행 계보 (Phase 0 수정 허용 대상)<\u002Fh4>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>역할<\u002Fth><th>파일<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>풀 생성<\u002Ftd><td>build_fresh_pool.py, build_multipool.py, build_sweep.py<\u002Ftd><\u002Ftr>\n        <tr><td>공유 라이브러리<\u002Ftd><td>sim/config.py, sim/sampler.py (위 3종이 의존하는 범위만)<\u002Ftd><\u002Ftr>\n        <tr><td>시뮬 실행<\u002Ftd><td>wf_vs_v23.js, wf_v23_multi.js<\u002Ftd><\u002Ftr>\n        <tr><td>진단<\u002Ftd><td>vs_verify.py, vs_compare.py<\u002Ftd><\u002Ftr>\n        <tr><td>판정<\u002Ftd><td>v23_analyze.py, v23_multi_analyze.py, analyze_sweep.py<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n\n    <h4>레거시 동결 (읽기만 가능, 수정·삭제·이동 금지)<\u002Fh4>\n    <ul>\n      <li>구형 wf: wf_precise_survey.js, wf_vs_dist.js, wf_vs_d1.js, wf_vs_cat.js, wf_e1_dist.js, wf_vs_all.js, wf_fidelity.js<\u002Fli>\n      <li>구형 경로 후처리: extract_raw.py, map_and_ingest.py, patch_vs.py, patch_e1.py, patch_e2.py<\u002Fli>\n      <li>일회성 실험: e2_refine*.py 전부<\u002Fli>\n      <li>구세대 풀: build_oversample.py<\u002Fli>\n      <li>구형 산출: build_xlsx.py, build_sweep_xlsx.py<\u002Fli>\n      <li>미검증 A경로: run.py, run_live.py, sim/backends.py, sim/respondent.py, sim/aggregate.py, sim/report.py, sim/linter.py, sim/ingest.py<\u002Fli>\n      <li>레거시 파일은 지우지 않는다. 루트에 <code>LEGACY.md<\u002Fcode> 한 장을 만들어 위 목록과 \"역사적 아티팩트 — v2.3 이전 버전 계보\" 사유만 기록.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">3.<\u002Fspan> Phase 0 — 배관 (엔진 무수정 원칙의 유일한 예외)<\u002Fh3>\n    <p><strong>예외의 정확한 범위<\u002Fstrong>: 현행 계보에 한해 경로·시드·입출력의 파라미터화만 허용. <strong>프롬프트 문구, JSON 스키마, 통계 로직, 판정 임계값, 표집 salt는 1글자도 변경 금지.<\u002Fstrong> 변경이 불가피해 보이면 중단 후 보고.<\u002Fp>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>#<\u002Fth><th>작업<\u002Fth><th>내용<\u002Fth><th>근거<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>P0-1<\u002Ftd><td>경로 config 모듈<\u002Ftd><td><code>harness_paths.py<\u002Fcode> 신설: SP·저널BASE·runs/ 경로를 환경변수(기본값 포함)로 일원화. 현행 계보 py의 하드코딩 경로(§4a)를 이 모듈 참조로 치환. <strong>레거시 파일은 건드리지 않음<\u002Fstrong><\u002Ftd><td>§4a, §5.1-3<\u002Ftd><\u002Ftr>\n        <tr><td>P0-2<\u002Ftd><td>시드 재주입 CLI<\u002Ftd><td>build_fresh_pool·build_multipool·build_sweep에 <code>--seed<\u002Fcode>(및 필요 시 <code>--n<\u002Fcode>) 인자 추가. 미지정 시 기존 os.urandom 동작 유지. 기록된 시드 재주입 → bit-identical 풀 재생성 확인<\u002Ftd><td>§5.2<\u002Ftd><\u002Ftr>\n        <tr><td>P0-3<\u002Ftd><td>저널 영속화<\u002Ftd><td>시뮬 종료 직후 journal.jsonl + 해당 런의 풀 파일(prof/meta/cfg) + 실행 파라미터를 <code>runs/&lt;run_id&gt;/<\u002Fcode>로 복사하는 함수/스크립트. 20MB 초과 저널은 gzip<\u002Ftd><td>§5.1-3, §5.2<\u002Ftd><\u002Ftr>\n        <tr><td>P0-4<\u002Ftd><td>런 디렉토리 격리<\u002Ftd><td>풀 생성 산출물을 SP 공유 파일 덮어쓰기 대신 <code>runs/&lt;pool_id&gt;/<\u002Fcode> 스코프로 저장(하위 호환: SP에도 사본 유지 가능) — run_cfg 덮어쓰기 경쟁 제거<\u002Ftd><td>§5.1-4<\u002Ftd><\u002Ftr>\n        <tr><td>P0-5<\u002Ftd><td>전역상태 안전화<\u002Ftd><td>현행 계보의 <code>C.GLOBAL_SEED<\u002Fcode>/<code>C.LATENT_SPECS<\u002Fcode> 덮어쓰기를 try/finally 복원 패턴으로 감쌈<\u002Ftd><td>§5.1-2<\u002Ftd><\u002Ftr>\n        <tr><td>P0-6<\u002Ftd><td>vs_compare 입력 정식화<\u002Ftd><td><code>/tmp/args_dump.txt<\u002Fcode> 의존 제거 → 정식 파일 인자(multipool_args 형식 또는 runs/ 내 풀 파일)로 교체<\u002Ftd><td>§2.2, [불명확#4]<\u002Ftd><\u002Ftr>\n        <tr><td>P0-7<\u002Ftd><td>personas 주입 복원<\u002Ftd><td>wf_vs_v23.js·wf_v23_multi.js의 baked JSON 리터럴을 args 주입 방식으로 전환(구형 wf의 args 패턴 재사용). <strong>프롬프트·스키마는 그대로<\u002Fstrong><\u002Ftd><td>§4b, §1.0<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p><strong>P0 완료 기준<\u002Fstrong>: ① 새 환경(경로 무관)에서 현행 계보가 경로 에러 없이 동작 ② 기록된 시드로 풀 bit-identical 재현 확인 ③ 기존 저널 1개(R3 또는 R4)를 runs/로 이관해 v23_analyze가 runs/ 경로에서 정상 판정 출력 ④ 레거시 파일 diff 0줄.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">4.<\u002Fspan> Phase 1 — 러너 (Claude Code 서브프로세스 래퍼)<\u002Fh3>\n    <p><strong>계약<\u002Fstrong>:<\u002Fp>\n    <ul>\n      <li>입력: <code>{script: wf_vs_v23.js | wf_v23_multi.js, pool_id, effort, dry_run: bool, n_limit: int|null}<\u002Fcode><\u002Fli>\n      <li>동작: Claude Code CLI를 서브프로세스로 구동해 Workflow 실행 → 런ID 획득 → 저널 회수 → P0-3 영속화 호출 → 상태/로그 스트림 반환<\u002Fli>\n      <li>출력: <code>{run_id, journal_path(runs/ 내), status, token_estimate, log}<\u002Fcode><\u002Fli>\n    <\u002Ful>\n    <p><strong>비용 가드(필수)<\u002Fstrong>: ① <code>dry_run=true<\u002Fcode>면 N≤2로 강제 축소 실행(파이프라인 검증용) ② 실행 전 예상 규모(페르소나 수×문항)를 UI에 표시하고 확인 없이는 N&gt;50 실행 불가 ③ 러너가 임의로 재실행/재시도로 대량 토큰을 태우지 않도록 자동 재시도는 에이전트 단위 1회 상한.<\u002Fp>\n    <p><strong>P1 완료 기준<\u002Fstrong>: dry_run 스모크 테스트(N=2)로 실행→저널→runs/ 저장→v23_analyze 판정까지 무개입 완주.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">5.<\u002Fspan> Phase 2 — UI (화면 4+1, 이 목록이 상한)<\u002Fh3>\n    <p>공통: 모든 화면은 <code>runs/<\u002Fcode>의 파일을 읽어 렌더. UI가 자체 상태를 만들지 않음.<\u002Fp>\n    <ol>\n      <li><strong>실행 콘솔<\u002Fstrong> — 풀 생성(시드·N 입력, P0-2 CLI 호출) / 시뮬 실행(러너 호출, 비용 가드 UI) / 단계별 실행 버튼(풀→시뮬→진단→판정 각각 독립). 실행 로그 스트림. 런 히스토리 테이블(runs/ 스캔: run_id, 일시, N, effort, 시드).<\u002Fli>\n      <li><strong>진단 패널<\u002Fstrong> — 선택한 런에 vs_verify·vs_compare 로직 적용: 보기 사용률, 믿음질량 vs realized, 최빈패턴 점유율(동질성), 붕괴 3종 체크. 임계 초과 시 경고 배지 + 처방 문구(effort 상향/조건화 강화 — 게이트C 문서 §2c의 처방을 그대로 노출).<\u002Fli>\n      <li><strong>판정 대시보드<\u002Fstrong> — v23_analyze·v23_multi_analyze 출력 파싱: 연속상관표(부호·유의도), 다풀 부호일관, 세그교차(n&lt;15 소표본 경고 자동), dose-response, D1 수용곡선 차트. 각 신호에 등급 라벨(sim-내 견고 / 참고 / 신뢰불가) — 게이트C 문서 §⑨ 등급 체계 준수.<\u002Fli>\n      <li><strong>리포트 내보내기<\u002Fstrong> — 게이트C_시뮬결과_정리.md 포맷의 자동 생성(런 데이터 채움). <strong>⓪ 경고 헤더(합성·비실측·인용불가)는 하드코딩으로 항상 포함, 비활성화 옵션 자체를 만들지 않음.<\u002Fstrong><\u002Fli>\n      <li><strong>설계 뷰어 (읽기 전용)<\u002Fstrong> — 현행 v2.3 문항·보기·페르소나 latent 스펙·ANCHOR_PRIORS를 코드에서 파싱해 표시. <strong>편집 기능 없음(v2로 명시 이연).<\u002Fstrong><\u002Fli>\n    <\u002Fol>\n    <p><strong>P2 완료 기준<\u002Fstrong>: 기존 runs/ 데이터(이관된 R3/R4)가 4개 화면에 정상 표시 + dry_run 신규 런이 콘솔에서 트리거되어 진단·판정까지 화면에서 확인 가능.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">6.<\u002Fspan> 스코프 울타리 (전 Phase 공통)<\u002Fh3>\n    <ol>\n      <li>레거시 동결 — §2 목록 외 수정 금지.<\u002Fli>\n      <li>화면 5개 초과 금지, 문항 편집 UI 금지(v2).<\u002Fli>\n      <li>배포·인증·클라우드·DB 금지.<\u002Fli>\n      <li>엔진 로직(프롬프트·스키마·통계·임계값·salt) 불변 — P0 예외 범위 엄수.<\u002Fli>\n      <li>LLM 대량 실행은 명시적 사용자 확인 후에만(비용 가드 §4).<\u002Fli>\n      <li>각 Phase 완료 기준 충족 → 커밋 → 다음 Phase. Phase 건너뛰기 금지.<\u002Fli>\n    <\u002Fol>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">7.<\u002Fspan> 세션 운영 규칙 (빌드 세션용)<\u002Fh3>\n    <ul>\n      <li>세션 시작 시 INVENTORY.md + SPEC.md + LEGACY.md(생성 후) 읽기.<\u002Fli>\n      <li>Phase 단위 커밋: <code>p0: &lt;작업&gt;<\u002Fcode>, <code>p1: &lt;작업&gt;<\u002Fcode>, <code>p2: &lt;화면&gt;<\u002Fcode> 프리픽스.<\u002Fli>\n      <li>막히면(특히 [불명확] 7건 관련) 임의 추측으로 우회하지 말고 질문으로 중단.<\u002Fli>\n      <li>각 Phase 완료 시 완료 기준 체크 결과를 표로 보고.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <!-- =================== 2부 =================== -->\n  <div class=\"part-head\" id=\"part2\">\n    <div class=\"part-tag\">2부 — 재설계 엔진 사양<\u002Fdiv>\n    <h2 class=\"part-title\">SPEC_V3.md — 보정 시뮬 v3-sim (B+ 구성) 사양서<\u002Fh2>\n  <\u002Fdiv>\n\n  <!-- 경고 라벨 · SPEC_V3 §0 원문 그대로 -->\n  <div class=\"banner\"><div class=\"in\"><p>⚠ 보정 시뮬 · 가설 생성 전용 · 시장 증거 아님 · 인용 불가<\u002Fp><\u002Fdiv><\u002Fdiv>\n\n  <blockquote>\n    <p><strong>지위<\u002Fstrong>: 이 문서는 B+ 작업(보정→적합 검증→카피 변형 1런)의 기준 문서다. INVENTORY/SPEC/INSPECTION/RUNNER와 함께 읽되, v3-sim 범위에서는 본 문서가 우선한다.<\u002Fp>\n    <p><strong>기준 브랜치<\u002Fstrong>: <code>claude/runner-md-guide-89tnrn<\u002Fcode><\u002Fp>\n    <p><strong>명명<\u002Fstrong>: \"v3-sim\"은 <strong>엔진 버전<\u002Fstrong>이다. 설문 버전과 무관하며, 설문은 v2.5가 최종이고 본실행(설문 v3)은 미집행 확정이다.<\u002Fp>\n  <\u002Fblockquote>\n\n  <section>\n    <h3><span class=\"sub-n\">§0<\u002Fspan> 목적·산출물 지위<\u002Fh3>\n    <ul>\n      <li>목적 2개뿐: ① 실측(파일럿 N=88)으로 보정한 2요인 엔진이 실측의 조건부 패턴을 <strong>한 몸으로 재현하는지<\u002Fstrong> 적합 검증(= 실측→보정→검증 루프의 완결) ② 보정 엔진으로 통제 실험 시연 1건(타마린드 카피 변형).<\u002Fli>\n      <li>전 산출물 라벨(하드코딩, 비활성화 불가): <strong>\"보정 시뮬 · 가설 생성 전용 · 시장 증거 아님 · 인용 불가\"<\u002Fstrong>.<\u002Fli>\n      <li>이 작업은 예측력 검증이 아니라 <strong>구조 충분성 검증<\u002Fstrong>이다. 결합 구조를 주입하므로, 판정 대상은 주입하지 않은 창발 신호로 한정한다(§3·§4 서로소 원칙).<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§1<\u002Fspan> 계보 경계<\u002Fh3>\n    <ul>\n      <li><strong>신규 파일만 생성<\u002Fstrong>: build_pool_v3.py · wf_vs_v3.js · v3_analyze.py · v3_variant 관련 · SPEC_V3 부록 A · 최종 보고서. 필요시 harness_paths 재사용.<\u002Fli>\n      <li><strong>동결(무수정)<\u002Fstrong>: v2.3 엔진 전체(wf_vs_v23.js, wf_v23_multi.js, v23_*·vs_* 분석기), 하니스 UI(백엔드·프론트 — v3 지원은 스코프 밖), 시뮬 문서, 파일럿 보고서, 대조보고서, 설계서 v2.5, data/actual 원본.<\u002Fli>\n      <li>v2.3 코드의 프롬프트 골격·VS 분포화·방향 미주입 원칙·스키마 강제 패턴은 <strong>복사·계승<\u002Fstrong>하여 v3 파일에서 수정한다(원본 무변경).<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§2<\u002Fspan> 2요인 페르소나 설계<\u002Fh3>\n    <ul>\n      <li>기존 <code>향기피<\u002Fcode> latent에 더해 신규 latent 2종:\n        <ul>\n          <li><strong>경험평가<\u002Fstrong>(과거 카테고리 경험의 부정성): 실측 근거 = 협의 세그가 A1 '별로였다'의 80%·'무경험'의 71% 점유.<\u002Fli>\n          <li><strong>해결지향<\u002Fstrong>(장벽 제거 시 전환 동기): 실측 근거 = 세그의 C2 +11%p·D1 +14%p 우위.<\u002Fli>\n        <\u002Ful>\n      <\u002Fli>\n      <li><strong>결합 강도는 임의 설정 금지.<\u002Fstrong> data/actual/게이트C_파일럿_응답.xlsx에서 도출식과 함께 산출하여 <strong>부록 A(도출식·수치·산출 코드 경로)<\u002Fstrong>에 기록한다. 부록 A 커밋은 모든 LLM 런에 선행한다(§6 사전등록 경계).<\u002Fli>\n      <li><strong>방향 미주입 원칙 유지<\u002Fstrong>: latent와 결합은 주되, 어느 문항에서 어느 보기를 고르는지의 매핑은 프롬프트에 지정하지 않는다(v2.3 원칙 계승). 판정 신호는 LLM 해석의 창발이어야 한다.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§3<\u002Fspan> 주입 목록 (공개 — 순환 명시)<\u002Fh3>\n    <p>주변분포 앵커: 협의 유병 33%[24,43] · D1 곡선 수준(5.9k 93%/6.9k 65%/7.5k 28%/8.5k 16%) · C2 주변분포 · B1 전체 평균대. + §2의 2요인 구조·결합 강도(부록 A).<\u002Fp>\n    <p>이 항목들은 판정에 사용 금지(순환). 보고서에 \"주입 목록\"으로 전량 공개.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§4<\u002Fspan> 판정 목록 (주입과 서로소 — 창발만)<\u002Fh3>\n    <p>주판정 4개. 각각 <strong>통합 부호 + 3풀 중 2풀 이상 동부호<\u002Fstrong>여야 통과:<\u002Fp>\n    <ol>\n      <li><strong>ΔB1 음<\u002Fstrong>: 협의 세그(A2a 실현 '매우')−비기피의 B1 가중평균 차 &lt; 0<\u002Fli>\n      <li><strong>ΔC2 양<\u002Fstrong>: C1 실현 pick='이런 맛 안 찾음' 페르소나 <strong>제외 조건부<\u002Fstrong>(실측 SKIP 정렬) 구매의향(꼭1·가끔0.5·유지0) 차 &gt; 0<\u002Fli>\n      <li><strong>ΔD1 양<\u002Fstrong>: 총수용개수(buy 4점 합) 차 &gt; 0<\u002Fli>\n      <li><strong>B3 비대칭<\u002Fstrong>: '진짜 팟타이 맛 아닐 것' 질량이 세그 &lt; 비기피 (실측 7% vs 31%의 방향 재현 — 순수 창발 테스트)<\u002Fli>\n    <\u002Fol>\n    <p>보조 관찰(등급 무관, 기록만): dose 형태(B1에서 '매우' 최저 재현 여부) · E1 세그 양 보존.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§5<\u002Fspan> 적합 등급 (사전등록 — 멀티풀 런 전 커밋으로 고정)<\u002Fh3>\n    <ul>\n      <li><strong>완전 적합<\u002Fstrong> = 4/4 통과 (B3 포함)<\u002Fli>\n      <li><strong>부분 적합(구조 지지)<\u002Fstrong> = 3/4 통과이며 B3 포함<\u002Fli>\n      <li><strong>부분 적합(주변부만)<\u002Fstrong> = 3/4인데 B3 탈락 — \"2요인의 핵심 창발 미달\" 명시<\u002Fli>\n      <li><strong>부적합<\u002Fstrong> = ≤2/4<\u002Fli>\n      <li><strong>카피 변형 런 진행 조건 = 부분 적합(구조 지지) 이상.<\u002Fstrong> 미달 시 변형 런 미집행, 그 자체를 결과로 보고.<\u002Fli>\n      <li><strong>게이밍 차단<\u002Fstrong>: 적합 판정은 사전 지정 멀티풀 1런으로 확정, 재실행 금지. 기술적 결함(스키마 오류 등)으로 재실행이 불가피하면 사유·횟수를 보고서에 공개. 판정 기준의 사후 조정 불가.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§6<\u002Fspan> 런 계획·사전등록 경계<\u002Fh3>\n    <p><strong>사전등록 경계: SPEC_V3 + 부록 A 커밋 → 그 이후에만 LLM 런.<\u002Fstrong> 순서:<\u002Fp>\n    <ol>\n      <li>dry(N=2) — 파이프라인 확인<\u002Fli>\n      <li>단일풀(n≈50, R3급) — <strong>비용 게이트<\u002Fstrong>: 주판정 4개 중 2개 이상 방향 관측 시 진행. 미달 시 조기중단, \"부적합(단일풀 조기중단)\" 보고로 종료. 이 게이트는 등급 판정이 아니다.<\u002Fli>\n      <li>멀티풀(3×100, R4급, 사전 지정 1런) — <strong>등급은 이 런만으로 확정<\u002Fstrong><\u002Fli>\n      <li>구조 지지 이상일 때만: 카피 변형 런(§7)<\u002Fli>\n    <\u002Fol>\n    <p><strong>예산<\u002Fstrong>: 총 15M 토큰 트립와이어. 도달 시 즉시 중단하고 소요 내역·초과 필요 사유를 보고, 소유자 명시 승인 시에만 증액. 각 런 전에 예상 토큰을 로그에 기록.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§7<\u002Fspan> 카피 변형 런 (통제 실험 시연 — 탐색 전용)<\u002Fh3>\n    <ul>\n      <li><strong>단일 변수 조작, 컨셉 카드만<\u002Fstrong>:\n        <ul>\n          <li>대조군: 원문 그대로 — \"…새콤한 맛을 내는 타마린드 대신 매실청을 써서 향 부담을 덜었습니다…\"<\u002Fli>\n          <li>처치군: \"…매실청으로 새콤한 맛을 내 향 부담을 덜었습니다…\" (변경점 = \"타마린드 대신\" 존재 여부. 새콤함·매실청·향 부담 완화 클레임은 양 조건 보존. 그 외 전 문구·전 문항·E1 문안 동일)<\u002Fli>\n        <\u002Ful>\n      <\u002Fli>\n      <li>동일 풀·동일 시드, 단일풀 n≈100 × 2조건. <strong>페르소나 단위 쌍 비교<\u002Fstrong>로 분석 — 단, 쌍 비교가 제거하는 것은 풀 구성 노이즈이며 LLM 샘플링 노이즈는 남는다는 한계를 보고서에 명시.<\u002Fli>\n      <li>측정: E1 분포 이동(주) · B1(부) · <strong>B3 '맛 상상 안 됨' 질량 이동(탐색)<\u002Fstrong> — \"이해 장벽↓ vs 정보량↓\" 양방향 트레이드오프 가설, 사전 기대 방향 선언하지 않음.<\u002Fli>\n      <li><strong>성공/실패 기준 없음.<\u002Fstrong> 어느 방향이든 그대로 보고. 한계 명시: 시뮬 페르소나는 실측의 어휘 이해 실패를 겪지 않을 수 있으므로, 측정 대상은 \"단어 존재의 분포 효과\"이지 실측 메커니즘의 재현이 아니다.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§8<\u002Fspan> 최종 보고서 (게이트C_보정시뮬_보고서.md)<\u002Fh3>\n    <p>구조: ⓪ 지위 라벨(§0) → ① 주입 목록 전량(부록 A 인용) → ② 적합 판정표(주판정 4개 × 통합/풀별 부호, 등급) → ③ 보조 관찰 → ④ 변형 런 결과(집행 시) → ⑤ 한계(구조 충분성 검증일 뿐 예측력 아님 · 재실행 이력 · 쌍 비교 한계) → ⑥ 토큰 소요 장부.<\u002Fp>\n  <\u002Fsection>\n\n  <section>\n    <h3><span class=\"sub-n\">§9<\u002Fspan> 세션 운영<\u002Fh3>\n    <ul>\n      <li>커밋 프리픽스 <code>v3:<\u002Fcode>. 세션 시작 시 본 문서 + 대조보고서 §5(메커니즘)·§3(재질의) + 부록 A(존재 시) 읽기.<\u002Fli>\n      <li>막히면 — 특히 결합 도출·스키마 설계에서 — 추측하지 말고 [불명확] 질문으로 중단.<\u002Fli>\n      <li>세션 경계 권장: ① 부록 A 도출 + 엔진 구현 + dry / ② 단일풀→멀티풀 + 등급 판정 / ③ 변형 런 + 최종 보고서. 각 세션 종료 시 토큰 소요 보고.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <footer class=\"site-foot\">REHEARSAL ENGINE · 문서 아카이브 · 김형준<\u002Ffooter>\n\n<\u002Fmain>\n\n\n<\u002Fbody><\u002Fhtml>"
+  </script>
+</body>
+</html>

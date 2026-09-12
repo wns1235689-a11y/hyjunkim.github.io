@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>게이트C 보정 시뮬(v3-sim) 최종 보고서 | REHEARSAL ENGINE 문서 아카이브</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #15233F; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
+    #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #15233F; z-index: 9999; }
+    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
+    #__bundler_placeholder { color: #999; font-size: 14px; }
+  </style>
+  <noscript>
+    <style>#__bundler_loading { display: none; }</style>
+    <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
+      This page requires JavaScript to display.
+    </div>
+  </noscript>
+</head>
+<body>
+  <div id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect x="415" y="175" width="370" height="450" rx="22" fill="#FFFFFF"></rect>
+    <path d="M441 175 L428 175 Q415 175 415 197 L415 603 Q415 625 428 625 L441 625 Z" fill="#F2A91E"></path>
+    <rect x="486" y="224" width="36" height="14" rx="3" fill="#F2A91E"></rect>
+    <rect x="486" y="252" width="212" height="22" rx="6" fill="#15233F"></rect>
+    <rect x="486" y="312" width="256" height="12" rx="6" fill="#C4CDDA"></rect>
+    <rect x="486" y="340" width="228" height="12" rx="6" fill="#C4CDDA"></rect>
+    <rect x="486" y="392" width="256" height="122" rx="8" fill="#F2F4F8" stroke="#DDE3EC" stroke-width="2"></rect>
+    <line x1="486" y1="428" x2="742" y2="428" stroke="#DDE3EC" stroke-width="2"></line>
+    <line x1="486" y1="464" x2="742" y2="464" stroke="#DDE3EC" stroke-width="2"></line>
+    <line x1="571" y1="392" x2="571" y2="514" stroke="#DDE3EC" stroke-width="2"></line>
+    <line x1="657" y1="392" x2="657" y2="514" stroke="#DDE3EC" stroke-width="2"></line>
+    <rect x="486" y="548" width="182" height="12" rx="6" fill="#C4CDDA"></rect>
+  </svg>
+</div>
+  <div id="__bundler_loading">Unpacking...</div>
+
+  <script>
+    
+document.addEventListener('DOMContentLoaded', async function() {
+  const loading = document.getElementById('__bundler_loading');
+  function setStatus(msg) { if (loading) loading.textContent = msg; }
+
+  const FONT_MIME = /^(font[/]|application[/](x-)?font-|application[/]vnd\.ms-fontobject)/i;
+  const MIME_TOKEN = /^[\w.+-]+[/][\w.+-]+$/;
+  function toBase64(bytes) {
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  // Error sink persists across replaceWith since it's on window, not the DOM.
+  window.addEventListener('error', function(e) {
+    // Failed resource loads (CSP-blocked links, scripts, images) fire plain
+    // events at the element — warn only; real JS errors carry message/error.
+    if (!e.message && !e.error && e.target && e.target !== window) {
+      console.warn('[bundle] resource failed to load:',
+        e.target.tagName, String(e.target.src || e.target.href || ''));
+      return;
+    }
+    var p = document.body || document.documentElement;
+    var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
+    d.id = '__bundler_err';
+    d.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;font:12px/1.4 ui-monospace,monospace;background:#2a1215;color:#ff8a80;padding:10px 14px;border-radius:8px;border:1px solid #5c2b2e;z-index:99999;white-space:pre-wrap;max-height:40vh;overflow:auto';
+    d.textContent = (d.textContent ? d.textContent + String.fromCharCode(10) : '') +
+      '[bundle] ' + (e.message || e.type) +
+      (e.filename ? ' (' + e.filename.slice(0, 60) + ':' + e.lineno + ')' : '');
+  }, true);
+
+  try {
+    const manifestEl = document.querySelector('script[type="__bundler/manifest"]');
+    const templateEl = document.querySelector('script[type="__bundler/template"]');
+    if (!manifestEl || !templateEl) {
+      setStatus('Error: missing bundle data');
+      console.error('[bundler] Missing script tags — manifestEl:', !!manifestEl, 'templateEl:', !!templateEl);
+      return;
+    }
+
+    const manifest = JSON.parse(manifestEl.textContent);
+    let template = JSON.parse(templateEl.textContent);
+
+    // Nested page bundles (iframe targets). Each ships ONCE, in the ROOT
+    // document's manifest; frame srcs carry an about:blank#<uuid> marker
+    // instead of a substitutable uuid. Every document mints the blobs for
+    // its OWN frames — from local text at the root, or text obtained from
+    // its DIRECT parent over the relay protocol below — so each frame
+    // navigation stays same-origin with its initiator and a deduped page
+    // loads at any depth on any host, including a file:// download's
+    // opaque origins (where a blob minted by one document cannot be
+    // navigated to by another).
+    const pageOrderEl = document.querySelector('script[type="__bundler/page_order"]');
+    const pageOrder = pageOrderEl ? JSON.parse(pageOrderEl.textContent) : [];
+    const pageSet = new Set(pageOrder);
+    const pageTexts = {};
+
+    // ── Nested-page text protocol (parent-chain relay) ──
+    // Page bundles ship once, in the ROOT document's manifest. Every
+    // document mints the blobs for its OWN frames, obtaining page text
+    // through a strict parent-chain relay: a document only ever SENDS to
+    // its direct parent (which, for every document the publisher's own
+    // runtime minted, is another publisher document) and only ACCEPTS
+    // text from that direct parent; requests from below are honored only
+    // for the document's own child frames, and the ROOT never sends
+    // upward at all. That last rule is load-bearing: the artifact host's
+    // frame-ancestors allows claude.ai (and friends) to frame an
+    // artifact, so window.top can be a FOREIGN document — a top-addressed
+    // protocol would hand page uuids to that ancestor and accept forged
+    // "page text" from it, minting attacker HTML as an artifact-origin
+    // blob document. The chain never touches the ancestor: requests stop
+    // at the root, replies are origin-addressed per hop (never '*' when
+    // an origin exists), and both directions are origin-gated (on https
+    // a foreign sender's origin can never equal this document's; in
+    // opaque contexts — file:// — everything serializes as 'null', where
+    // an embedded EXTERNAL frame still fails the gate by carrying its
+    // own real origin, and a sandboxed child of such a frame is excluded
+    // by the own-child-frames check plus uuid unguessability). Shape is
+    // deny-by-default: one request form, one reply form, no error
+    // replies.
+    // window.origin is the SERIALIZED SECURITY origin ('null' in opaque
+    // contexts such as a sandboxed preview iframe) — location.origin is
+    // computed from the URL and stays 'https://…' even when the document
+    // is sandboxed, which would misgate every opaque chain.
+    const OWN_TARGET = /^https?:[/][/]/.test(window.origin || '')
+      ? window.origin
+      : '*';
+    function trustedOrigin(e) {
+      if (e.origin === window.origin) return true; // https chains; opaque==opaque
+      // file:// trees: Chrome serializes the file document's origin as
+      // 'file://' while the blob: documents it mints serialize as 'null',
+      // so the two legitimate shapes can never string-match — accept the
+      // pair in both directions. https origins never serialize as either,
+      // and sender identity (own child frame / direct parent) is checked
+      // separately.
+      return (
+        (e.origin === 'null' &&
+          (window.origin === 'file://' ||
+            window.location.protocol === 'file:')) ||
+        (/^file:/.test(e.origin) && window.origin === 'null')
+      );
+    }
+    // Non-empty only in the root document (nested bundles ship an empty
+    // island), so it doubles as the root marker: the root answers from
+    // local text and treats a miss as authoritative — never relaying to
+    // its (possibly foreign) parent.
+    const isPageRoot = pageOrder.length > 0;
+    const blobUrls = {};
+    const resourceBlobs = {};
+    const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+    const pendingFrames = {}; // uuid -> [{el, frag}] awaiting text for own frames
+    const pendingRelays = {}; // uuid -> [childWindow] awaiting text to pass down
+    function mountPage(el, frag, text) {
+      const pageBlob = new Blob([text], { type: 'text/html' });
+      const u = URL.createObjectURL(pageBlob);
+      resourceBlobs[u] = pageBlob;
+      el.src = u + frag;
+    }
+    function deliverPage(uuid, text) {
+      const frames = pendingFrames[uuid];
+      delete pendingFrames[uuid];
+      if (frames) for (const f of frames) mountPage(f.el, f.frag, text);
+      const relays = pendingRelays[uuid];
+      delete pendingRelays[uuid];
+      if (relays) {
+        for (const cw of relays) {
+          try { cw.postMessage({ __bundler_page: uuid, __bundler_text: text }, OWN_TARGET); } catch (err) { /* gone */ }
+        }
+      }
+    }
+    function ownFrameWindows() {
+      const out = [];
+      for (const f of Array.from(document.querySelectorAll('iframe'))) {
+        try { if (f.contentWindow) out.push(f.contentWindow); } catch (err) { /* detached */ }
+      }
+      return out;
+    }
+    window.addEventListener('message', function (e) {
+      const d = e.data;
+      if (!d || typeof d !== 'object' || !e.source) return;
+      // Origin gate first; the structural checks below (own-child-frames
+      // for requests, direct-parent + solicited-uuid for replies, the
+      // root's never-relay rule) are what hold in fully opaque chains
+      // where origin strings can't discriminate — a sandboxed root's
+      // FOREIGN wrapper still fails all three even though both serialize
+      // as real-vs-'null' rather than matching.
+      if (!trustedOrigin(e)) return;
+      if (typeof d.__bundler_need === 'string' && UUID_SHAPE.test(d.__bundler_need)) {
+        // Requests are honored only for this document's own child frames.
+        if (ownFrameWindows().indexOf(e.source) < 0) return;
+        const uuid = d.__bundler_need;
+        const text = pageTexts[uuid];
+        if (typeof text === 'string') {
+          try { e.source.postMessage({ __bundler_page: uuid, __bundler_text: text }, OWN_TARGET); } catch (err) { /* gone */ }
+          return;
+        }
+        if (isPageRoot || window.parent === window) return; // authoritative miss
+        const waiting = pendingRelays[uuid];
+        if (waiting) {
+          if (waiting.indexOf(e.source) < 0) waiting.push(e.source);
+          return;
+        }
+        // Never-answered uuids would otherwise accumulate forever under a
+        // request spray; past the cap (far above any real page count) new
+        // relays are dropped rather than remembered.
+        if (Object.keys(pendingRelays).length >= 128) return;
+        pendingRelays[uuid] = [e.source];
+        window.parent.postMessage({ __bundler_need: uuid }, OWN_TARGET);
+      } else if (
+        typeof d.__bundler_page === 'string' &&
+        UUID_SHAPE.test(d.__bundler_page) &&
+        typeof d.__bundler_text === 'string'
+      ) {
+        // The shape test is load-bearing beyond tidiness: the solicited
+        // check below uses the in operator, which matches prototype keys
+        // ('__proto__', 'constructor') — an unshaped key would reach
+        // deliverPage and throw, painting the error banner.
+        // Text is accepted only from the direct parent — the document
+        // that minted this one.
+        if (e.source !== window.parent || window.parent === window) return;
+        if (!(d.__bundler_page in pendingFrames) && !(d.__bundler_page in pendingRelays)) return;
+        deliverPage(d.__bundler_page, d.__bundler_text);
+      }
+    });
+
+    const uuids = Object.keys(manifest);
+    setStatus('Unpacking ' + uuids.length + ' assets...');
+
+    await Promise.all(uuids.map(async (uuid) => {
+      const entry = manifest[uuid];
+      try {
+        const binaryStr = atob(entry.data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+        let finalBytes = bytes;
+        if (entry.compressed) {
+          if (typeof DecompressionStream !== 'undefined') {
+            const ds = new DecompressionStream('gzip');
+            const writer = ds.writable.getWriter();
+            const reader = ds.readable.getReader();
+            writer.write(bytes);
+            writer.close();
+            const chunks = [];
+            let totalLen = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              totalLen += value.length;
+            }
+            finalBytes = new Uint8Array(totalLen);
+            let offset = 0;
+            for (const chunk of chunks) { finalBytes.set(chunk, offset); offset += chunk.length; }
+          } else {
+            console.warn('DecompressionStream not available, asset ' + uuid + ' may not render');
+          }
+        }
+
+        if (pageSet.has(uuid)) {
+          pageTexts[uuid] = new TextDecoder().decode(finalBytes);
+          return;
+        }
+        if (FONT_MIME.test(entry.mime) && MIME_TOKEN.test(entry.mime)) {
+          // Strict artifact hosts allow font-src data: but not blob:.
+          blobUrls[uuid] = 'data:' + entry.mime + ';base64,' +
+            (entry.compressed ? toBase64(finalBytes) : entry.data);
+        } else {
+          const blob = new Blob([finalBytes], { type: entry.mime });
+          blobUrls[uuid] = URL.createObjectURL(blob);
+          resourceBlobs[blobUrls[uuid]] = blob;
+        }
+      } catch (err) {
+        console.error('Failed to decode asset ' + uuid + ':', err);
+        const blob = new Blob([], { type: entry.mime });
+        blobUrls[uuid] = URL.createObjectURL(blob);
+        resourceBlobs[blobUrls[uuid]] = blob;
+      }
+    }));
+
+    const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
+    const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
+    const resourceMap = {};
+    for (const entry of extResources) {
+      if (blobUrls[entry.uuid]) resourceMap[entry.id] = blobUrls[entry.uuid];
+    }
+
+    // Artifact-host CSP (connect-src 'self') refuses fetch() of blob: URLs —
+    // consumers read these Blobs directly. Survives the swap like the error sink.
+    window.__resourceBlobs = resourceBlobs;
+
+    setStatus('Rendering...');
+    // Page uuids have no blob here — they ride inside about:blank#<uuid>
+    // frame markers the pass below resolves after the swap.
+    for (const uuid of uuids) {
+      if (pageSet.has(uuid)) continue;
+      template = template.split(uuid).join(blobUrls[uuid]);
+    }
+
+    // Strip integrity + crossorigin — blob URLs from a file:// document inherit
+    // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
+    // The manifest bytes are ours; SRI protects against CDN compromise, not this.
+    template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+
+    const resourceScript = '<script>window.__resources = ' +
+      JSON.stringify(resourceMap).replace(/<\//g, '<\\/') +
+      ';</' + 'script>';
+    // Inject after <head> so the DOCTYPE stays first; prepending the script
+    // would push the parser into quirks mode. DOMParser always emits a <head>
+    // (synthesizing one if the source HTML omitted it) but may carry
+    // attributes through, so match the full opening tag. slice() rather than
+    // replace() keeps us clear of $-pattern substitution in resourceScript.
+    const headOpen = template.match(/<head[^>]*>/i);
+    if (headOpen) {
+      const i = headOpen.index + headOpen[0].length;
+      template = template.slice(0, i) + resourceScript + template.slice(i);
+    }
+
+    // Parse the template and swap the root element. Scripts inserted via
+    // DOMParser/replaceWith are inert per spec — re-create each with
+    // createElement so they execute, awaiting onload for src scripts to
+    // preserve ordering (React before ReactDOM before Babel before text/babel).
+    const doc = new DOMParser().parseFromString(template, 'text/html');
+    document.documentElement.replaceWith(doc.documentElement);
+
+    // Resolve page-frame markers: mint this document's own blob for each
+    // framed page — from local text when this is the root, otherwise by
+    // asking the direct parent over the relay protocol above. An
+    // unanswered request leaves the frame on about:blank, the same
+    // degraded state as a refused embed.
+    {
+      const MARKER = /^about:blank#([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(#.*)?$/;
+      const needed = [];
+      for (const el of Array.from(document.querySelectorAll('iframe'))) {
+        const m = MARKER.exec(el.getAttribute('src') || '');
+        if (!m) continue;
+        const text = pageTexts[m[1]];
+        if (typeof text === 'string') {
+          mountPage(el, m[2] || '', text);
+        } else if (window.parent !== window && !isPageRoot) {
+          const had = pendingFrames[m[1]];
+          (pendingFrames[m[1]] = had || []).push({ el: el, frag: m[2] || '' });
+          if (!had) needed.push(m[1]);
+        }
+      }
+      for (const uuid of needed) {
+        window.parent.postMessage({ __bundler_need: uuid }, OWN_TARGET);
+      }
+    }
+
+    const dead = Array.from(document.scripts);
+    for (const old of dead) {
+      const s = document.createElement('script');
+      for (const a of old.attributes) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      // text/babel scripts with a src: read and inline. transformScriptTags
+      // does XHR against the src, but blob:null/ from a file:// origin is
+      // silently dropped. Inlining makes it a plain inline babel script,
+      // which transformScriptTags handles unconditionally.
+      if ((s.type === 'text/babel' || s.type === 'text/jsx') && s.src) {
+        const pre = resourceBlobs[s.src.split('#')[0]];
+        s.textContent = pre ? await pre.text() : await (await fetch(s.src)).text();
+        s.removeAttribute('src');
+      }
+      const p = s.src ? new Promise(function(r) { s.onload = s.onerror = r; }) : null;
+      old.replaceWith(s);
+      if (p) await p;
+    }
+    // Babel standalone auto-transforms type=text/babel on DOMContentLoaded,
+    // which fired before we swapped the document. Trigger manually if present.
+    if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
+      window.Babel.transformScriptTags();
+    }
+  } catch (err) {
+    setStatus('Error unpacking: ' + err.message);
+    console.error('Bundle unpack error:', err);
+  }
+});
+
+  </script>
+
+  <script type="__bundler/manifest">
+{}
+  </script>
+
+  <script type="__bundler/ext_resources">
+[]
+  </script>
+
+  <script type="__bundler/page_order">
+[]
+  </script>
+
+  <script type="__bundler/template">
+"<!DOCTYPE html>\n<html lang=\"ko\"><head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>게이트C 보정 시뮬(v3-sim) 최종 보고서 | REHEARSAL ENGINE 문서 아카이브<\u002Ftitle>\n<meta name=\"description\" content=\"방향 미주입 LLM 페르소나가 2요인 구조를 재생산하는지 점검한 보정 시뮬 종착 판정. 가설 생성 전용·시장 증거 아님·인용 불가.\">\n<style>\n/* ── 디자인 원천: rehearsal-engine.html :root 계승 · 웹폰트 로드 0 · 외부 요청 0 ── */\n:root{\n  --paper:#FFFFFF; --mist:#F2F4F8; --line:#DDE3EC;\n  --ink:#15233F; --ink-soft:#4A5870;\n  --gate:#F2A91E; --gate-deep:#D89200;\n  --blue:#2E6FB2; --red:#D6483B; --green:#2E9E6B;\n  --console:#0F1828; --console-line:#2A3852; --console-text:#D9E2F2; --console-dim:#8DA0C4;\n  --sans:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;\n  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Consolas,monospace;\n  --maxw:860px; --r:14px;\n}\n*{margin:0;padding:0;box-sizing:border-box}\nhtml{-webkit-text-size-adjust:100%}\nbody{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}\n::selection{background:var(--gate);color:var(--ink)}\na{color:var(--blue)}\na:hover{color:var(--gate-deep)}\n:focus-visible{outline:3px solid var(--gate);outline-offset:2px;border-radius:4px}\n\n.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}\n.doc{padding-bottom:64px}\n\n.back{display:inline-block;margin:34px 0 0;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);text-decoration:none}\n.back:hover{color:var(--ink)}\n\n.doc-head{padding:24px 0 22px;border-bottom:1px solid var(--line)}\n.doc-head h1{font-size:clamp(27px,4.4vw,40px);font-weight:800;letter-spacing:-.022em;line-height:1.24;text-wrap:balance}\n.meta{margin:16px 0 2px}\n.meta p{font-size:14.5px;color:var(--ink-soft);line-height:1.62;margin-bottom:5px}\n.meta p:last-child{margin-bottom:0}\n.meta code{font-size:.9em}\n\n.banner{margin:22px 0 4px}\n.banner .in{background:#FFF6E2;border:1px solid #F0D58C;border-left:4px solid var(--gate);border-radius:var(--r);padding:15px 20px}\n.banner p{font-weight:700;font-size:16.5px;line-height:1.55;color:var(--ink);text-wrap:pretty}\n\nsection{padding:34px 0;border-top:1px solid var(--line)}\nsection:first-of-type{border-top:none;padding-top:30px}\nh2{font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:-.012em;line-height:1.34;margin-bottom:14px;text-wrap:balance}\nh2 .sec-n{font-family:var(--mono);color:var(--gate-deep);font-size:.64em;font-weight:700;letter-spacing:.02em}\nh3{font-size:clamp(16px,2.2vw,19px);font-weight:700;letter-spacing:-.006em;line-height:1.42;margin:28px 0 10px;text-wrap:balance}\nh3 .sub-n{font-family:var(--mono);color:var(--gate-deep);font-size:.84em;font-weight:700;margin-right:.15em}\n\np{margin:0 0 14px;text-wrap:pretty}\np:last-child{margin-bottom:0}\n\nul,ol{margin:2px 0 14px;padding:0;list-style:none}\nli{position:relative;padding-left:1.3em;margin-bottom:11px;line-height:1.68}\nli:last-child{margin-bottom:0}\nul>li::before{content:\"\";position:absolute;left:1px;top:.66em;width:6px;height:6px;background:var(--gate);border-radius:1px}\nol{counter-reset:it}\nol>li{padding-left:1.8em}\nol>li::before{counter-increment:it;content:counter(it)\".\";position:absolute;left:0;top:0;font-family:var(--mono);font-weight:700;color:var(--gate-deep)}\n\nstrong{font-weight:700;color:var(--ink)}\nem{font-style:italic}\ndel,s{color:var(--ink-soft);text-decoration:line-through}\ncode{font-family:var(--mono);font-size:.86em;background:var(--mist);border:1px solid var(--line);border-radius:5px;padding:.1em .4em;word-break:break-word}\n\nblockquote{border-left:4px solid var(--gate);background:var(--mist);border-radius:0 10px 10px 0;padding:15px 20px;margin:18px 0}\nblockquote p{margin-bottom:10px;text-wrap:pretty}\nblockquote p:last-child{margin-bottom:0}\nblockquote.warn{background:#FFF6E2;border-color:var(--gate)}\n\npre{background:var(--mist);color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:18px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}\npre code{display:block;font-family:var(--mono);font-size:13px;line-height:1.65;background:none;border:none;padding:0;white-space:pre;color:var(--ink)}\n\n/* 표 — rehearsal-engine .vst 계승 · 모바일 가로 스크롤 */\n.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 12px}\n.vst{width:100%;min-width:640px;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;font-size:14px;line-height:1.55}\n.vst th{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.05em;color:var(--ink-soft);text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);background:var(--mist);vertical-align:top}\n.vst td{padding:11px 13px;border-bottom:1px solid var(--line);border-left:1px solid var(--line);vertical-align:top}\n.vst td:first-child{border-left:none}\n.vst tr:last-child td{border-bottom:none}\n.vst code{font-size:.92em}\n\n.site-foot{margin-top:34px;padding:18px 0 8px;border-top:2px solid var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--ink-soft)}\n\n@media print{\n  .back{display:none}\n  body{font-size:11pt;line-height:1.5}\n  .wrap{max-width:none;padding:0}\n  .doc{padding-bottom:0}\n  section{padding:14px 0}\n  .vst{min-width:0;font-size:9pt}\n  .tw,pre{overflow:visible}\n  pre code{white-space:pre-wrap}\n  tr{break-inside:avoid}\n  h1,h2,h3{break-after:avoid}\n  a{color:var(--ink);text-decoration:none}\n  .banner .in,.status,blockquote,pre{-webkit-print-color-adjust:exact;print-color-adjust:exact}\n}\n@page{margin:16mm}\n<\u002Fstyle>\n<\u002Fhead>\n<body>\n\n\n\n<main class=\"wrap doc\">\n\n  \n  <a class=\"back\" href=\"../index.html\">← REHEARSAL ENGINE<\u002Fa>\n\n  <header class=\"doc-head\">\n    <h1>게이트C 보정 시뮬(v3-sim) 최종 보고서<\u002Fh1>\n    <div class=\"meta\">\n      <p><strong>대상 런<\u002Fstrong>: <code>runs/v3run_multi_95638618/<\u002Fcode> (멀티풀 3×100 · 사전 지정 1런 · 종착 판정)<\u002Fp>\n      <p><strong>작성 시점<\u002Fstrong>: 2026-07-27 · 판정 확정 후 · <strong>재실행 없음<\u002Fstrong><\u002Fp>\n      <p><strong>사양<\u002Fstrong>: <code>SPEC_V3.md<\u002Fcode> + <code>SPEC_V3_부록A.md<\u002Fcode> (모든 판정 기준·해석 규칙은 결과 관측 전 커밋으로 고정)<\u002Fp>\n    <\u002Fdiv>\n  <\u002Fheader>\n\n  <!-- 경고 배너 · 문구는 ⓪ 산출물 지위 원문 그대로 -->\n  <div class=\"banner\"><div class=\"in\">\n    <p>⚠ 보정 시뮬 · 가설 생성 전용 · 시장 증거 아님 · 인용 불가<\u002Fp>\n  <\u002Fdiv><\u002Fdiv>\n\n  <section id=\"s0\">\n    <h2><span class=\"sec-n\">⓪<\u002Fspan> 산출물 지위 (SPEC_V3 §0 — 하드코딩·비활성화 불가)<\u002Fh2>\n    <blockquote class=\"warn\"><p>⚠ <strong>보정 시뮬 · 가설 생성 전용 · 시장 증거 아님 · 인용 불가<\u002Fstrong><\u002Fp><\u002Fblockquote>\n    <p>이 문서의 어떤 수치도 시장 사실이나 수요 예측으로 인용할 수 없다. 본 런이 검증한 것은 <strong>\"파일럿 실측에서 도출한 2요인 구조를, 방향을 알려주지 않은 LLM 페르소나가 문항 해석만으로 재생산하는지\"<\u002Fstrong> 하나뿐이다. 이는 <strong>구조의 충분성 점검<\u002Fstrong>이며 예측력 검증이 아니다. 등급 표기는 <strong>널 도달 확률을 병기하지 않은 채 단독 인용하는 것을 금지<\u002Fstrong>한다(§8 의무 공시).<\u002Fp>\n  <\u002Fsection>\n\n  <section id=\"s1\">\n    <h2><span class=\"sec-n\">①<\u002Fspan> 주입 목록 — 전량 공개 (SPEC_V3 §3 · 부록 A)<\u002Fh2>\n\n    <h3><span class=\"sub-n\">1-1.<\u002Fspan> 주변분포 앵커 (판정 금지 대상)<\u002Fh3>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>앵커<\u002Fth><th>주입값<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>협의 세그 유병률<\u002Ftd><td>33% [24, 43]<\u002Ftd><\u002Ftr>\n        <tr><td>D1 가격 곡선 <strong>수준<\u002Fstrong><\u002Ftd><td>5,900원 93% / 6,900원 65% / 7,500원 28% / 8,500원 16%<\u002Ftd><\u002Ftr>\n        <tr><td>C2 주변분포<\u002Ftd><td>전체 구매의향 질량<\u002Ftd><\u002Ftr>\n        <tr><td>B1 전체 평균대<\u002Ftd><td>파일럿 실측 평균대<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n\n    <h3><span class=\"sub-n\">1-2.<\u002Fspan> 2요인 결합 (판정 대상과 상수배 관계 — 항등식 공개)<\u002Fh3>\n    <p><code>judgment.json:coupling<\u002Fcode> 실측 기록: <strong>β_exp = 0.56 · β_sol = 0.17<\u002Fstrong> · BASE_EXP [0.36, 0.35] · BASE_SOL [0.50, 0.22] · SALT_EXP 70 · SALT_SOL 71 · 출처 부록 A A11(파일럿 N=88 도출).<\u002Fp>\n    <pre><code>β_shift = Δ(판정통계량) / Δa2int\n  Δa2int = 0.7119 (N=88 정본) · 0.7222 (C1 '안 찾음' 제외 n=74 — #2의 조건부 표본)\n\n  #2  C2 이진 구매율(n=74)   Δ = +0.111 → 0.111 / 0.7222 = 0.154\n  #3  D1 총수용 ÷ 4 (N=88)   Δ = +0.069 → 0.069 / 0.7119 = 0.097\n  ★  확정 β_sol = 0.170      복합지표 Δ = +0.123 / 0.7222   (부록 A A3 확정 원천)\n  (참고) C2 순서점수          Δ = +0.038 → 0.053            ← 보조 기록 지표(§4-2)<\u002Fcode><\u002Fpre>\n    <p>즉 <strong>#2·#3은 판정 대상과 주입값이 상수배 관계<\u002Fstrong>다. 따라서 이 두 판정에서 \"방향을 맞혔다\"는 진술은 사양상 금지되며, 허용되는 진술은 <strong>\"방향 미주입 하에서 결합이 보존/미보존되었다\"<\u002Fstrong> 뿐이다.<\u002Fp>\n\n    <h3><span class=\"sub-n\">1-3.<\u002Fspan> 미주입 항목 (명시)<\u002Fh3>\n    <ul>\n      <li><strong>어느 특성 → 어느 보기 매핑<\u002Fstrong>: 지정하지 않음. 프롬프트는 특성 수준(매우낮음~매우높음)만 제시하고 방향을 주지 않는다.<\u002Fli>\n      <li><strong>요인 간 상관 γ(경험평가 ↔ 해결지향)<\u002Fstrong>: 주입하지 않음(부록 A A13-2 · 결정 ①). 근거는 정정 1의 편상관 +0.161이 절단 표본(경험평가 최상위 14명 배제·n=74) 추정이고, 대안 γ=0.10은 도출식 없는 임의값이어서 §2 \"결합 강도 임의 설정 금지\"에 걸린다는 것.<\u002Fli>\n    <\u002Ful>\n\n    <h3><span class=\"sub-n\">1-4.<\u002Fspan> 주입 검증 (LLM 0회 · 풀 생성 시 · n=300)<\u002Fh3>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>항목<\u002Fth><th>실측<\u002Fth><th>이론값<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>corr(향기피, 과거경험부정)<\u002Ftd><td><strong>+0.351<\u002Fstrong><\u002Ftd><td>+0.450 (β=0.56)<\u002Ftd><\u002Ftr>\n        <tr><td>corr(향기피, 해결지향)<\u002Ftd><td><strong>+0.198<\u002Fstrong><\u002Ftd><td>+0.172 (β=0.17)<\u002Ftd><\u002Ftr>\n        <tr><td>향기피 분포<\u002Ftd><td>μ=0.340 σ=0.230<\u002Ftd><td>—<\u002Ftd><\u002Ftr>\n        <tr><td>향기피 상3분위 − 하3분위 격차<\u002Ftd><td>과거경험부정 +0.232 · 해결지향 +0.119<\u002Ftd><td>—<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p>경험평가 결합은 클리핑으로 이론값 대비 <strong>감쇠<\u002Fstrong>했고(+0.351 &lt; +0.450), 해결지향은 근사했다. 이 감쇠는 §⑤ 한계의 첫 번째 후보 설명과 직결된다.<\u002Fp>\n  <\u002Fsection>\n\n  <section id=\"s2\">\n    <h2><span class=\"sec-n\">②<\u002Fspan> 적합 판정표 (주판정 4개 · 통합/풀별 부호 · 창발 등급)<\u002Fh2>\n    <p>풀 <code>v3multi_95638618<\u002Fcode>(seed 95638618 · 풀 시드 23587838 / 67906361 / 58499640) · <strong>N=300 · 타깃 214 · 세그 실현 31 / 비기피 183<\u002Fstrong>.<\u002Fp>\n\n    <h3><span class=\"sub-n\">2-1.<\u002Fspan> 통합 판정<\u002Fh3>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>판정<\u002Fth><th>지표<\u002Fth><th>통합 Δ<\u002Fth><th>기대<\u002Fth><th>풀부호<\u002Fth><th>통과<\u002Fth><th>창발 등급<\u002Fth><th>널 확률<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td><strong>#4<\u002Fstrong><\u002Ftd><td>B3 '진짜 팟타이 아닐것' 질량<\u002Ftd><td><strong>−0.032<\u002Fstrong> (세그 18.4% vs 비기피 21.6%)<\u002Ftd><td>음<\u002Ftd><td>−−+<\u002Ftd><td><strong>통과<\u002Fstrong><\u002Ftd><td><strong>순수 창발<\u002Fstrong><\u002Ftd><td>41.9%<\u002Ftd><\u002Ftr>\n        <tr><td><strong>#1<\u002Fstrong><\u002Ftd><td>ΔB1(가중평균)<\u002Ftd><td><strong>−0.024<\u002Fstrong><\u002Ftd><td>음<\u002Ftd><td>−−+<\u002Ftd><td><strong>통과<\u002Fstrong><\u002Ftd><td>좁은 창발<\u002Ftd><td>41.9%<\u002Ftd><\u002Ftr>\n        <tr><td>#2<\u002Ftd><td>ΔC2(이진 구매율·조건부 n=25/167)<\u002Ftd><td>−0.023<\u002Ftd><td>양<\u002Ftd><td>−++<\u002Ftd><td>미달<\u002Ftd><td>전파 확인(부분 순환)<\u002Ftd><td>—<\u002Ftd><\u002Ftr>\n        <tr><td>#3<\u002Ftd><td>ΔD1(총수용 정규화)<\u002Ftd><td>−0.029<\u002Ftd><td>양<\u002Ftd><td>−−+<\u002Ftd><td>미달<\u002Ftd><td>전파 확인(부분 순환)<\u002Ftd><td>—<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <blockquote><p><strong>표기 순서 주의(§3 말미 의무)<\u002Fstrong>: 헤드라인 \"2/4\"가 정보량 순서를 가리지 않도록 <strong>#4(순수 창발) &gt; #1(좁은 창발) &gt; #2·#3(전파 확인)<\u002Fstrong> 순으로 적었다. 통과한 두 건이 정보량 상위 두 건이라는 사실과, 그 효과 크기가 |Δ| ≤ 0.032로 작다는 사실을 함께 읽어야 한다.<\u002Fp><\u002Fblockquote>\n\n    <h3><span class=\"sub-n\">2-2.<\u002Fspan> 풀별 판정 (통과 규칙의 2/3 조건이 어디서 왔는지 공개)<\u002Fh3>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>풀<\u002Fth><th>n<\u002Fth><th>세그<\u002Fth><th>비기피<\u002Fth><th>ΔB1<\u002Fth><th>ΔC2<\u002Fth><th>ΔD1<\u002Fth><th>B3<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>풀0<\u002Ftd><td>71<\u002Ftd><td>16<\u002Ftd><td>55<\u002Ftd><td>−0.072<\u002Ftd><td>−0.080<\u002Ftd><td>−0.069<\u002Ftd><td>−0.030<\u002Ftd><\u002Ftr>\n        <tr><td>풀1<\u002Ftd><td>70<\u002Ftd><td>11<\u002Ftd><td>59<\u002Ftd><td>−0.108<\u002Ftd><td>+0.013<\u002Ftd><td>−0.044<\u002Ftd><td>−0.049<\u002Ftd><\u002Ftr>\n        <tr><td>풀2<\u002Ftd><td>73<\u002Ftd><td><strong>4<\u002Fstrong><\u002Ftd><td>69<\u002Ftd><td><strong>+0.081<\u002Fstrong><\u002Ftd><td><strong>+0.063<\u002Fstrong><\u002Ftd><td><strong>+0.020<\u002Fstrong><\u002Ftd><td><strong>+0.011<\u002Fstrong><\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p><strong>중요한 단서<\u002Fstrong>: #1·#3·#4의 \"2/3 풀 동부호\"는 <strong>세그 16명·11명 풀이 음(기대 방향), 세그 4명 풀이 양<\u002Fstrong>이라는 구성에서 나왔다. 즉 통과를 만든 것은 세그가 상대적으로 큰 두 풀이고, 부호를 뒤집은 것은 <strong>세그가 4명뿐인 풀2<\u002Fstrong>다. 풀2의 4개 판정 부호가 모두 반대라는 점은 우연 변동으로 해석하기에 자연스럽지만, 이 사실 자체가 <strong>풀 부호 조건이 세그 실현 인원에 크게 좌우된다<\u002Fstrong>는 것을 보여준다.<\u002Fp>\n\n    <h3><span class=\"sub-n\">2-3.<\u002Fspan> 적합 등급(§5): 부적합 (2/4, B3 포함)<\u002Fh3>\n    <ul>\n      <li><strong>널 도달 확률 의무 공시<\u002Fstrong>: 이 등급 <strong>79.8%<\u002Fstrong> · 판정당 41.9% · 구조지지 이상 15.9% · 완전 적합 3.1%.<\u002Fli>\n      <li><strong>변형런 진행 조건(부분 적합=구조 지지 이상)<\u002Fstrong>: 미충족 → <strong>§5대로 자동 취소<\u002Fstrong>.<\u002Fli>\n    <\u002Ful>\n\n    <h3><span class=\"sub-n\">2-4.<\u002Fspan> 종합 해석 — 사전등록 프레임으로 고정<\u002Fh3>\n    <blockquote>\n      <p><strong>부적합의 의미는 \"2요인 구조의 반증\"이 아니다.<\u002Fstrong> 이 등급이 말하는 것은 <strong>보수적 설계 3중첩(① latent 공간 비보정 주입에 따른 감쇠 · ② 요인 간 상관 미주입 · ③ 통제 불가능한 세그 실현 규모 31명) 하에서 판별 한계에 도달하지 못했다<\u002Fstrong>는 것이다. 그리고 <strong>이 비식별성 자체가 결과를 보기 전에 사전등록해 둔 해석 규칙(§8 후보 설명 3종)의 실현<\u002Fstrong>이다 — 우리는 \"부적합이 나오면 구조 실패와 검정력 부족을 구분할 수 없다\"고 미리 적었고, 실제로 구분할 수 없는 결과가 나왔다.<\u002Fp>\n      <p>따라서 이 보고서는 <strong>\"2요인 구조가 틀렸다\"고도, \"맞았다\"고도 주장하지 않는다.<\u002Fstrong> 주장 가능한 것은 하나뿐이다: <strong>이 설계로는 판별되지 않았고, 판별되지 않은 이유가 구조에 있는지 설계 보수성에 있는지 이 런으로는 알 수 없다.<\u002Fstrong><\u002Fp>\n    <\u002Fblockquote>\n\n    <h3><span class=\"sub-n\">2-5.<\u002Fspan> 순증 항목 — #4 (v2.3 대비)<\u002Fh3>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>판정<\u002Fth><th>v2.3 (R4 · n=300 · 동일 판정기)<\u002Fth><th>v3 (본 런)<\u002Fth><th>판정<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>#4 B3<\u002Ftd><td><strong>−0.000<\u002Fstrong> (미달)<\u002Ftd><td><strong>−0.032<\u002Fstrong> (통과)<\u002Ftd><td><strong>방향 정합 — 순증 1건<\u002Fstrong><\u002Ftd><\u002Ftr>\n        <tr><td>#1 ΔB1<\u002Ftd><td>−0.180 (통과)<\u002Ftd><td>−0.024 (통과)<\u002Ftd><td>통과 유지 · 효과 크기 축소<\u002Ftd><\u002Ftr>\n        <tr><td>#2 ΔC2<\u002Ftd><td>−0.032 (미달)<\u002Ftd><td>−0.023 (미달)<\u002Ftd><td>변화 없음<\u002Ftd><\u002Ftr>\n        <tr><td>#3 ΔD1<\u002Ftd><td>−0.051 (미달)<\u002Ftd><td>−0.029 (미달)<\u002Ftd><td>변화 없음<\u002Ftd><\u002Ftr>\n        <tr><td><strong>합계<\u002Fstrong><\u002Ftd><td><strong>1/4 부적합<\u002Fstrong><\u002Ftd><td><strong>2/4 부적합<\u002Fstrong><\u002Ftd><td>순증 = #4 통과<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p><strong>#4에 대해 허용되는 진술(과대·과소 해석 동시 차단)<\u002Fstrong>:<\u002Fp>\n    <ul>\n      <li>(허용) v2.3이 −0.000으로 내지 못한 방향이 v3에서 −0.032로 <strong>정합하게 나타났고<\u002Fstrong>, 이 항목은 결합 원천을 판정 대상으로 공유하지 않는 <strong>순수 창발<\u002Fstrong>이므로 2요인 구조에 귀속된다(§8 사전등록 규칙).<\u002Fli>\n      <li>(동시 병기 의무) <strong>#4 단독 통과의 널 도달 확률은 41.9%<\u002Fstrong>다. 참효과 0인 엔진도 이 통과를 5번 중 2번 낸다.<\u002Fli>\n      <li>(금지) \"2요인 구조가 B3를 재현했다\"는 확정 진술 — 널 확률과 아래 검정력 진단이 이를 지지하지 않는다.<\u002Fli>\n      <li>(금지) \"−0.032는 무의미하다\"는 폐기 진술 — 방향·계층·기준선 대비 순증은 사실이며, 사전등록 규칙이 이를 구조에 귀속시키라고 정해 두었다.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section id=\"s3\">\n    <h2><span class=\"sec-n\">③<\u002Fspan> 보조 관찰 (등급 무관 · 기록 전용 · §4-2 순서점수 병기 포함)<\u002Fh2>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>관찰<\u002Fth><th>통합<\u002Fth><th>풀0<\u002Fth><th>풀1<\u002Fth><th>풀2<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td><strong>dose_B1<\u002Fstrong> (아니다/조금/매우)<\u002Ftd><td>3.23 / 3.20 / <strong>3.19<\u002Fstrong><\u002Ftd><td>3.33/3.13/3.17<\u002Ftd><td>3.32/3.38/<strong>3.23<\u002Fstrong><\u002Ftd><td>3.08/3.12/3.17<\u002Ftd><\u002Ftr>\n        <tr><td>dose '매우' 최저<\u002Ftd><td><strong>True<\u002Fstrong><\u002Ftd><td>False<\u002Ftd><td>True<\u002Ftd><td>False<\u002Ftd><\u002Ftr>\n        <tr><td><strong>E1 나−가 Δ<\u002Fstrong><\u002Ftd><td><strong>+0.109<\u002Fstrong> (세그 30.3% vs 비기피 25.9%)<\u002Ftd><td>+0.187<\u002Ftd><td>−0.031<\u002Ftd><td>+0.187<\u002Ftd><\u002Ftr>\n        <tr><td>C2 순서점수 Δ(병기)<\u002Ftd><td>−0.011<\u002Ftd><td>−0.052<\u002Ftd><td>+0.013<\u002Ftd><td>+0.062<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <ul>\n      <li><strong>dose 단조성<\u002Fstrong>: 통합에서는 향신료 부담 '매우'가 첫인상 최저(3.19)로 단조 감소가 성립하나, <strong>풀별로는 1/3(풀1)만 성립<\u002Fstrong>한다. 통합 단조성은 풀 간 평균의 산물이며 견고하지 않다.<\u002Fli>\n      <li><strong>E1<\u002Fstrong>: 통합 +0.109로 세그가 '나(매실청 문구)'를 더 고르는 방향이지만 풀1에서 −0.031로 뒤집힌다. 단일풀에서 관측된 +0.297의 3분의 1 수준이다.<\u002Fli>\n      <li>이 절의 모든 수치는 <strong>등급 계산에 들어가지 않으며<\u002Fstrong>, 등급을 보완·상쇄하는 근거로 인용할 수 없다.<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section id=\"s4\">\n    <h2><span class=\"sec-n\">④<\u002Fspan> 카피 변형 런 (§7)<\u002Fh2>\n    <p><strong>미집행.<\u002Fstrong> 진행 조건은 \"부분 적합(구조 지지) 이상\"이었고 본 런이 <strong>부적합(2/4)<\u002Fstrong> 이므로 <strong>§5에 따라 자동 취소<\u002Fstrong>됐다. 소유자 미승인 상태에서 대기하던 예산(≈4.93M 토큰)도 집행하지 않았다.<\u002Fp>\n    <p>따라서 §8 구조가 예정한 \"쌍 비교 한계\" 서술은 본 보고서에서 해당 사항이 없다 — 쌍 비교를 수행하지 않았기 때문이다. 변형런이 측정하려던 \"'타마린드 대신' 문구 존재의 분포 효과\"는 <strong>미측정 상태로 남는다<\u002Fstrong>.<\u002Fp>\n  <\u002Fsection>\n\n  <section id=\"s5\">\n    <h2><span class=\"sec-n\">⑤<\u002Fspan> 한계<\u002Fh2>\n\n    <h3><span class=\"sub-n\">5-1.<\u002Fspan> 구조 충분성 점검일 뿐 예측력 아님<\u002Fh3>\n    <p>본 런은 \"실측에서 도출한 구조가 LLM 재생산으로 살아남는지\"만 본다. 통과·미달 어느 쪽도 실제 소비자 반응의 예측이 아니다.<\u002Fp>\n\n    <h3><span class=\"sub-n\">5-2.<\u002Fspan> 감쇠 해석 규칙 (결과 관측 전 사전등록 · 결정 ③=3a)<\u002Fh3>\n    <p>결합은 <strong>비보정<\u002Fstrong>으로 latent 공간에 주입했다. 실측 β는 실현↔실현 결합인데 주입은 latent 공간이므로 실현으로 내려올 때 감쇠가 한 번 더 걸린다 — 부록 A A5에서 <strong>시뮬 실현 세그 간 latent 격차 = 실측 실현 격차의 0.31배<\u002Fstrong>로 측정됐다. 주입 검증에서도 경험평가 상관이 이론 +0.450 → 실측 +0.351로 감쇠했다.<\u002Fp>\n    <p><strong>사전에 박아 둔 결론<\u002Fstrong>: 부적합 시 \"구조 자체의 실패\"와 \"감쇠로 인한 검정력 부족\"은 <strong>이 설계로 구분 불가능<\u002Fstrong>하다. 감쇠는 후보 설명으로 병기하되 <strong>재실행 사유가 아니다.<\u002Fstrong><\u002Fp>\n\n    <h3><span class=\"sub-n\">5-3.<\u002Fspan> 부적합 후보 설명 3종 — 전부 결과 관측 전 사전등록 · 어느 것도 재실행 사유 아님<\u002Fh3>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>#<\u002Fth><th>후보 설명<\u002Fth><th>근거<\u002Fth><th>사전등록 위치<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>①<\u002Ftd><td>latent→실현 감쇠 비보정<\u002Ftd><td>A5 배율 0.31 · 주입 검증 +0.450→+0.351<\u002Ftd><td>§8 감쇠 해석 규칙<\u002Ftd><\u002Ftr>\n        <tr><td>②<\u002Ftd><td>요인 간 상관 미주입(γ)<\u002Ftd><td>A13-2 · 절단 표본·임의값 회피<\u002Ftd><td>§8 미주입 결합 해석 규칙<\u002Ftd><\u002Ftr>\n        <tr><td>③<\u002Ftd><td>멀티풀 세그 해상도 31명<\u002Ftd><td>세그는 A2a 실현 표집 산물로 통제 불가 · 풀2는 4명<\u002Ftd><td>§8 세그 해상도 해석 규칙<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p>세 항목 모두 <strong>감쇠와 동일한 지위<\u002Fstrong>이며, 사후 γ 주입 후 재판정·세그 확대 추가 런·오버샘플 재판정은 3c 기각과 동형으로 <strong>금지<\u002Fstrong>된다.<\u002Fp>\n\n    <h3><span class=\"sub-n\">5-4.<\u002Fspan> 검정력 진단 (서술적 · 판정 무변경 · 순열검정 B=20,000)<\u002Fh3>\n    <p><code>gate_power_v3.py<\u002Fcode> — 타깃 안에서 세그/비기피 라벨을 무작위 재배치해 귀무분포를 만들고 관측 Δ의 양측 위치를 본다.<\u002Fp>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>판정<\u002Fth><th>관측 Δ<\u002Fth><th>귀무 95% 구간<\u002Fth><th>양측 p<\u002Fth><th>기대 부호 우연 확률<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>#1 ΔB1<\u002Ftd><td>−0.024<\u002Ftd><td>[−0.209, +0.206]<\u002Ftd><td>0.828<\u002Ftd><td>49.6%<\u002Ftd><\u002Ftr>\n        <tr><td>#2 ΔC2<\u002Ftd><td>−0.023<\u002Ftd><td>[−0.066, +0.062]<\u002Ftd><td>0.473<\u002Ftd><td>50.6%<\u002Ftd><\u002Ftr>\n        <tr><td>#3 ΔD1<\u002Ftd><td>−0.029<\u002Ftd><td>[−0.055, +0.057]<\u002Ftd><td>0.320<\u002Ftd><td>50.1%<\u002Ftd><\u002Ftr>\n        <tr><td>#4 B3<\u002Ftd><td>−0.032<\u002Ftd><td>[−0.051, +0.051]<\u002Ftd><td>0.245<\u002Ftd><td>51.3%<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p>세그가 6명(단일풀)→31명(멀티풀)으로 커지며 귀무 구간은 #1 ±0.53→±0.21, #4 ±0.10→±0.05로 절반 이하로 좁아졌다. 그런데도 <strong>관측 Δ 4개 모두 여전히 귀무 구간 안<\u002Fstrong>이다(p 0.245~0.828). 즉 <strong>통과한 #1·#4도 우연과 구분되지 않는다.<\u002Fstrong> 이 표는 §5 사후 조정 금지에 따라 등급을 바꾸지 않으며, <strong>통과 판정의 과대 해석을 막는 방향으로만<\u002Fstrong> 작용한다.<\u002Fp>\n\n    <h3><span class=\"sub-n\">5-5.<\u002Fspan> 재실행 이력 — 기술적 실패 1건 (전량 공개)<\u002Fh3>\n    <p>단일풀 1차 런 <code>wf_7aa3b5eb-961<\u002Fcode>이 <strong>50/50 에이전트 실패 · 유효 응답 0건 · 1,497,916 토큰 소모<\u002Fstrong>로 종료됐다. 원인은 엔진이 아니라 <strong>기동 방식<\u002Fstrong>이다 — personas를 스크립트에 리터럴로 박은 40KB 사본에서 에이전트 도구 정의에 SCHEMA가 전달되지 않아, 하니스가 인자를 <code>{input, __unparsedToolInput}<\u002Fcode> 2키로 포장한 뒤 원본 SCHEMA로 검증해 전량 거부했다(250회 시도 중 218회는 17키 완전 정합 페이로드였음). 원본 스크립트 + <code>args<\u002Fcode> 방식 1명 프로브는 툴 호출 1회에 통과.<\u002Fp>\n    <p><strong>조치<\u002Fstrong>: 기동 방식만 교체(args 청크 분할). 엔진·프롬프트·SCHEMA·salt·풀·시드·판정 기준 <strong>무변경<\u002Fstrong>. 병합 시 3종 검증(pid 집합 · 분포 합=10·가격 단조 · 프롬프트 S1~S5+특성 lvl 대조) 전량 통과.<\u002Fp>\n    <p><strong>책임 기록<\u002Fstrong>: dry(N=2)에서만 검증된 베이킹 관용구를 규모 확대 전에 재검사하지 않은 것이 손실의 직접 원인이다. 상세는 <code>V3_RUNLOG.md<\u002Fcode> §2.<\u002Fp>\n\n    <h3><span class=\"sub-n\">5-6.<\u002Fspan> 집계 한계 — 청크 2·3 토큰 미기록<\u002Fh3>\n    <p>멀티풀 청크 2(<code>wf_ae077857-63b<\u002Fcode>)·청크 3(<code>wf_1c15d128-eb8<\u002Fcode>)의 완료 통보가 세션에 전달되지 않아 <strong>정확한 토큰 소요가 기록되지 않았다.<\u002Fstrong> 저널·에이전트 전사에 남은 사용량으로 통보값을 재현하려 했으나 실패해(전사는 부분 기록) 실측 4청크 평균을 대입한 <strong>추정치<\u002Fstrong>로 장부에 적었다. 두 청크의 결과 100건은 저널에 온전히 남아 판정에 정상 반영됐다(누락 0 · 검증 통과).<\u002Fp>\n\n    <h3><span class=\"sub-n\">5-7.<\u002Fspan> 표본 구성의 구조적 제약<\u002Fh3>\n    <p>협의 세그는 A2a='매우' <strong>실현 표집<\u002Fstrong> 결과로 정해져 크기를 통제할 수 없다. 본 런에서 풀별 세그는 16 / 11 / <strong>4<\u002Fstrong>명으로 편차가 컸고, 풀 부호 조건이 이 편차에 좌우됐다(§2-2). 이는 설계 결함이 아니라 \"자연 타깃률 유지\" 원칙의 대가이며, 세그를 키우는 오버샘플은 사양상 금지돼 있다.<\u002Fp>\n  <\u002Fsection>\n\n  <section id=\"s5p\">\n    <h2><span class=\"sec-n\">⑤′<\u002Fspan> 사전등록 이탈 기록 — 1건 (별도 절 · SPEC_V3 §6-3)<\u002Fh2>\n\n    <h3>이탈 내용<\u002Fh3>\n    <p>§6 절차 2의 <strong>단일풀 비용 게이트가 미달<\u002Fstrong>(주판정 방향 관측 <strong>1/4<\u002Fstrong> · 게이트 통과의 널 확률 68.8%)했으나, 조기중단하지 않고 <strong>소유자 결정으로 등급런(멀티풀 3×100)을 진행<\u002Fstrong>했다.<\u002Fp>\n    <p><strong>게이트 기록 존치<\u002Fstrong>(삭제·수정 없음): 풀 <code>v3pool_45069727<\u002Fcode> · 타깃 37 · <strong>세그 실현 6<\u002Fstrong> / 비기피 31.<\u002Fp>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>판정<\u002Fth><th>단일풀 Δ<\u002Fth><th>기대<\u002Fth><th>결과<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>#1 ΔB1<\u002Ftd><td>−0.242<\u002Ftd><td>음<\u002Ftd><td>방향 일치<\u002Ftd><\u002Ftr>\n        <tr><td>#2 ΔC2<\u002Ftd><td>−0.003<\u002Ftd><td>양<\u002Ftd><td>미달<\u002Ftd><\u002Ftr>\n        <tr><td>#3 ΔD1<\u002Ftd><td>−0.074<\u002Ftd><td>양<\u002Ftd><td>미달<\u002Ftd><\u002Ftr>\n        <tr><td>#4 B3<\u002Ftd><td><strong>+0.043<\u002Fstrong><\u002Ftd><td>음<\u002Ftd><td>미달<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n\n    <h3>이탈 근거 — 관문의 검정력 부재<\u002Fh3>\n    <p>순열검정(B=20,000)에서 <strong>주판정 4개 전부가 귀무 95% 구간 내<\u002Fstrong>였다(양측 p 0.405 / 0.997 / 0.405 / 0.452 · 기대 부호 우연 확률 46.3~50.8%). 원인은 협의 세그 실현 인원이 <strong>6명<\u002Fstrong>이라는 관문 자체의 해상도 한계였다.<\u002Fp>\n\n    <h3>대칭 규칙 (이 이탈을 허용하는 유일한 형식)<\u002Fh3>\n    <p><strong>관문의 무정보성이 입증될 때만 우회할 수 있고, 결과의 방향은 우회 근거가 될 수 없다.<\u002Fstrong> 게이트가 통과했더라도 같은 검정력 진단이 나왔다면 동일하게 무정보로 처리해야 한다. \"미달했지만 방향이 마음에 든다\"는 종류의 근거는 이 규칙 하에서 금지된다.<\u002Fp>\n\n    <h3>결정에 관여하지 않은 관찰<\u002Fh3>\n    <p>단일풀 보조 관찰 <strong>E1 나−가 Δ = +0.297<\u002Fstrong>(세그 40.0% vs 비기피 24.8%)은 이 이탈 결정의 근거에 <strong>포함되지 않았다.<\u002Fstrong> 우회 판단은 오직 위 검정력 진단만을 근거로 한다.<\u002Fp>\n\n    <h3>사후 검증 — 우회 근거의 타당성 성립<\u002Fh3>\n    <p>멀티풀 결과가 단일풀 관측치의 성격을 사후에 확인해 줬다.<\u002Fp>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>판정<\u002Fth><th>단일풀(세그 6)<\u002Fth><th>멀티풀(세그 31)<\u002Fth><th>해석<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>#1 ΔB1<\u002Ftd><td>−0.242<\u002Ftd><td>−0.024<\u002Ftd><td>크기 <strong>10분의 1<\u002Fstrong> — 단일풀 값은 과대<\u002Ftd><\u002Ftr>\n        <tr><td>#4 B3<\u002Ftd><td><strong>+0.043<\u002Fstrong><\u002Ftd><td><strong>−0.032<\u002Fstrong><\u002Ftd><td><strong>부호 반전<\u002Fstrong><\u002Ftd><\u002Ftr>\n        <tr><td>#2 ΔC2<\u002Ftd><td>−0.003<\u002Ftd><td>−0.023<\u002Ftd><td>—<\u002Ftd><\u002Ftr>\n        <tr><td>#3 ΔD1<\u002Ftd><td>−0.074<\u002Ftd><td>−0.029<\u002Ftd><td>크기 축소<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <p><strong>단일풀의 관측치는 세그 6명의 노이즈였음이 확인된다<\u002Fstrong> — 특히 #4의 부호 반전은, 게이트가 #4를 \"미달\"로 판정한 것이 구조에 대한 정보가 아니라 표본 잡음이었음을 직접 보여준다. 즉 <strong>\"관문이 무정보였다\"는 우회 근거는 사후에도 타당했다.<\u002Fstrong><\u002Fp>\n    <p>동시에 반대 방향의 사실도 기록한다: <strong>우회해서 얻은 결론은 \"구조가 작동한다\"가 아니라 \"이 설계로는 판별되지 않는다\"였다.<\u002Fstrong> 이탈로 확보한 것은 유리한 결과가 아니라 <strong>해상도 5.2배(세그 6→31)에서의 정직한 비식별 판정<\u002Fstrong>이다.<\u002Fp>\n\n    <h3>이탈의 유효 범위<\u002Fh3>\n    <p><strong>1건으로 소진<\u002Fstrong>됐다. 멀티풀은 종착 판정이며 <strong>재실행·2차 우회·추가 런 없음<\u002Fstrong>(소유자 재확인 2026-07-27). 등급 기준·풀·지표 정의·임계는 이탈 전후 <strong>무변경<\u002Fstrong>이고, 발사 전 무결성 확인에서 <code>wf_vs_v3.js<\u002Fcode>·<code>build_pool_v3.py<\u002Fcode>·풀 자산 3종 <strong>git diff 0<\u002Fstrong>, 판정기 <code>v3_analyze.py<\u002Fcode> <strong>삭제·수정 0줄<\u002Fstrong>(널 확률 표시 12줄 추가만)을 확인했다.<\u002Fp>\n  <\u002Fsection>\n\n  <section id=\"s6\">\n    <h2><span class=\"sec-n\">⑥<\u002Fspan> 토큰 소요 장부 (§6 트립와이어 15,000,000)<\u002Fh2>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>항목<\u002Fth><th>토큰<\u002Fth><th>비고<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>dry (N=2)<\u002Ftd><td>49,273<\u002Ftd><td>파이프라인 확인<\u002Ftd><\u002Ftr>\n        <tr><td><strong>단일풀 1차 — 기술적 실패<\u002Fstrong><\u002Ftd><td><strong>1,497,916<\u002Fstrong><\u002Ftd><td><strong>유효 결과 0건<\u002Fstrong> (§5-5)<\u002Ftd><\u002Ftr>\n        <tr><td>진단 프로브 (1명)<\u002Ftd><td>24,659<\u002Ftd><td>원인 격리 · 결과 폐기<\u002Ftd><\u002Ftr>\n        <tr><td>단일풀 재실행 청크 1 (10명)<\u002Ftd><td>246,580<\u002Ftd><td><\u002Ftd><\u002Ftr>\n        <tr><td>단일풀 재실행 청크 2 (40명)<\u002Ftd><td>1,015,114<\u002Ftd><td><\u002Ftd><\u002Ftr>\n        <tr><td>멀티풀 청크 1 (풀0 0–49)<\u002Ftd><td>1,334,535<\u002Ftd><td><\u002Ftd><\u002Ftr>\n        <tr><td>멀티풀 청크 2 (풀0 50–99)<\u002Ftd><td><strong>≈1,339,368 (추정)<\u002Fstrong><\u002Ftd><td><strong>통보 미수신 — §5-6<\u002Fstrong><\u002Ftd><\u002Ftr>\n        <tr><td>멀티풀 청크 3 (풀1 1000–1049)<\u002Ftd><td><strong>≈1,339,368 (추정)<\u002Fstrong><\u002Ftd><td><strong>통보 미수신 — §5-6<\u002Fstrong><\u002Ftd><\u002Ftr>\n        <tr><td>멀티풀 청크 4 (풀1 1050–1099)<\u002Ftd><td>1,341,668<\u002Ftd><td><\u002Ftd><\u002Ftr>\n        <tr><td>멀티풀 청크 5 (풀2 2000–2049)<\u002Ftd><td>1,348,454<\u002Ftd><td><\u002Ftd><\u002Ftr>\n        <tr><td>멀티풀 청크 6 (풀2 2050–2099)<\u002Ftd><td>1,332,813<\u002Ftd><td><\u002Ftd><\u002Ftr>\n        <tr><td><strong>합계<\u002Fstrong><\u002Ftd><td><strong>≈10,869,748<\u002Fstrong><\u002Ftd><td><strong>트립와이어의 ≈72.5%<\u002Fstrong><\u002Ftd><\u002Ftr>\n        <tr><td>(자동 취소) 카피 변형 런<\u002Ftd><td>0<\u002Ftd><td>구조 지지 미달 → §5 취소<\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <ul>\n      <li><strong>추정치 사유<\u002Fstrong>: 청크 2·3은 완료 통보 미전달로 정확 토큰이 기록되지 않아 실측 4청크 평균(1,339,368)을 대입했다. 멀티풀 소계 = 실측 4청크 5,357,470 + 추정 2청크 2,678,736 ≈ <strong>8,036,206<\u002Fstrong>.<\u002Fli>\n      <li><strong>예상 대비 실측<\u002Fstrong>: 멀티풀 사전 기록 예상 7,570,000(단가 25,234/명) → 실측·추정 ≈8,036,206(단가 26,787/명), <strong>+6.1%<\u002Fstrong>.<\u002Fli>\n      <li><strong>기술적 실패 비중<\u002Fstrong>: 1,497,916은 전체 소요의 <strong>13.8%<\u002Fstrong> 이며 산출물 0건이다. 이 실패가 없었다면 총 소요는 ≈9.37M(62.5%)였다.<\u002Fli>\n      <li>트립와이어 미도달 · 증액 승인 불필요(변형런 자동 취소로 추가 예산 소요 없음).<\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <section id=\"apx\">\n    <h2>부록 — 재현 커맨드<\u002Fh2>\n    <pre><code># 1) 풀 생성 (사전등록 · 결과 관측 전 커밋 5fde5ab)  ※ 시드 각주 참조\npython3 build_pool_v3.py --seed 20260726 --n 100 --pools 3      # → runs/v3multi_95638618/  (등급런)\npython3 build_pool_v3.py --seed 20260725 --n 50                 # → runs/v3pool_45069727/   (게이트런)\n\n# 2) 설문 집행 (원본 스크립트 + args 청크 6회 · 풀 경계 정렬)\n#    Workflow(scriptPath=wf_vs_v3.js, args=&lt;multipool_args.json 50명 슬라이스&gt;)\n\n# 3) 병합 + 3종 검증\nHARNESS_JOURNAL_BASE=&lt;workflows&gt; python3 merge_v3_chunks.py --multipool \\\n  --out v3run_multi_95638618 --pool runs/v3multi_95638618 \\\n  --chunks wf_b716c8c1-35b wf_ae077857-63b wf_1c15d128-eb8 \\\n           wf_df640906-e35 wf_370ecac6-297 wf_6a8b1706-b2a\n\n# 4) 종착 판정\nHARNESS_SP=$PWD/runs/v3run_multi_95638618 HARNESS_JOURNAL_BASE=$PWD/runs \\\n  python3 v3_analyze.py v3run_multi_95638618 --json runs/v3run_multi_95638618/judgment.json\n\n# 5) 검정력 진단 (서술적 · 판정 무변경)\nHARNESS_SP=$PWD/runs/v3run_multi_95638618 HARNESS_JOURNAL_BASE=$PWD/runs \\\n  python3 gate_power_v3.py v3run_multi_95638618 --B 20000\n\n# 6) 널 도달 확률 재산출\npython3 null_rate_v3.py<\u002Fcode><\u002Fpre>\n\n    <h3>시드 각주 — 커맨드가 이 런을 실제로 재현하는지 확인함<\u002Fh3>\n    <p><code>--seed<\u002Fcode>는 <strong>마스터 시드<\u002Fstrong>이며, 풀 시드·SAMPLE_SEED·디렉토리명은 여기서 파생된다. 두 이름 체계가 달라 혼동하기 쉬우므로 명시한다.<\u002Fp>\n    <div class=\"tw\"><table class=\"vst\">\n      <thead><tr><th>런<\u002Fth><th>커맨드 <code>--seed<\u002Fcode>(마스터)<\u002Fth><th>파생 풀 시드<\u002Fth><th>SAMPLE_SEED<\u002Fth><th>디렉토리명 출처<\u002Fth><\u002Ftr><\u002Fthead>\n      <tbody>\n        <tr><td>등급런(멀티풀 3×100)<\u002Ftd><td><strong>20260726<\u002Fstrong><\u002Ftd><td>23587838 / 67906361 / 58499640<\u002Ftd><td>95638618<\u002Ftd><td><strong>SAMPLE_SEED<\u002Fstrong> → <code>v3multi_95638618<\u002Fcode><\u002Ftd><\u002Ftr>\n        <tr><td>게이트런(단일풀 50)<\u002Ftd><td><strong>20260725<\u002Fstrong><\u002Ftd><td>45069727<\u002Ftd><td>93579064<\u002Ftd><td><strong>풀 시드<\u002Fstrong> → <code>v3pool_45069727<\u002Fcode><\u002Ftd><\u002Ftr>\n      <\u002Ftbody>\n    <\u002Ftable><\u002Fdiv>\n    <ul>\n      <li>마스터 시드 선정 규칙(사전 선언·결과 무관): 게이트런 20260725, 등급런은 <strong>+1 = 20260726<\u002Fstrong>.<\u002Fli>\n      <li><strong>재현 확인(2026-07-27 실시)<\u002Fstrong>: 위 두 커맨드를 <code>HARNESS_RUNS<\u002Fcode>를 스크래치로 돌려 재생성한 뒤 커밋본과 <code>cmp<\u002Fcode> 대조 — <strong>6개 파일 전부 바이트 동일<\u002Fstrong>(<code>multipool_args.json<\u002Fcode> · <code>multipool_meta.json<\u002Fcode> · <code>multipool_cfg.json<\u002Fcode> / <code>prof.json<\u002Fcode> · <code>pool_meta.json<\u002Fcode> · <code>run_cfg.json<\u002Fcode>). 즉 이 보고서의 판정 대상 풀은 커맨드만으로 완전 재현된다.<\u002Fli>\n      <li>LLM 응답 자체는 재현 대상이 아니다(샘플링 확률적). 재현되는 것은 <strong>풀·프롬프트·판정 파이프라인<\u002Fstrong>이며, 응답 원본은 병합 저널 <code>runs/v3run_multi_95638618/journal.jsonl<\u002Fcode>에 보존돼 있어 판정(4·5단계)은 결정적으로 재계산된다.<\u002Fli>\n    <\u002Ful>\n    <p><strong>관련 문서<\u002Fstrong>: <code>SPEC_V3.md<\u002Fcode>(사양·판정 기준·해석 규칙) · <code>SPEC_V3_부록A.md<\u002Fcode>(도출 근거·정정 이력·A11 결합·A13-2 미주입·A14 널 확률·A15 해석 노트) · <code>V3_RUNLOG.md<\u002Fcode>(런 이력 원장·기술적 실패 상세·토큰 장부) · <code>runs/v3run_multi_95638618/judgment.json<\u002Fcode>(판정 원본) · <code>runs/v3run_single_45069727/judgment.json<\u002Fcode>(게이트 원본).<\u002Fp>\n    <blockquote class=\"warn\"><p>⚠ 재확인: <strong>보정 시뮬 · 가설 생성 전용 · 시장 증거 아님 · 인용 불가.<\u002Fstrong><\u002Fp><\u002Fblockquote>\n  <\u002Fsection>\n\n  <footer class=\"site-foot\">REHEARSAL ENGINE · 문서 아카이브 · 김형준<\u002Ffooter>\n\n<\u002Fmain>\n\n\n<\u002Fbody><\u002Fhtml>"
+  </script>
+</body>
+</html>
