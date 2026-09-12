@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전이 증명 — 4렌즈 OS × 삼양식품 × e.l.f. Beauty | 김형준</title>
+<meta name="description" content="시뮬레이션 1위의 4렌즈 사고방식이 프리미엄(삼양식품)과 value pricing(e.l.f. Beauty), 정반대 축의 실제 시장에서 반복됨을 검증한 기록.">
+<meta property="og:title" content="전이 증명 — 같은 렌즈, 반대 행동">
+<meta property="og:description" content="게임에서 통한 의사결정 OS가 정반대 전략 축 두 곳에서 재현되는가 — 삼양식품 × e.l.f. Beauty 검증 기록.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hyjunkim.com/decision-os/transfer.html">
+<meta property="og:image" content="https://hyjunkim.com/decision-os/og.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* :root 토큰 — ai-flow.html에서 그대로 계승 (변경 금지) */
+:root{
+  --paper:#FFFFFF; --mist:#F2F4F8; --line:#DDE3EC;
+  --ink:#15233F; --ink-soft:#4A5870;
+  --gate:#F2A91E; --gate-deep:#D89200;
+  --blue:#2E6FB2; --red:#D6483B; --green:#2E9E6B;
+  --console:#0F1828; --console-line:#2A3852; --console-text:#D9E2F2; --console-dim:#8DA0C4;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Consolas,monospace;
+  --maxw:1020px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gate);color:var(--ink)}
+a{color:var(--blue)}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gate);outline-offset:2px;border-radius:4px}
+
+/* progress + nav */
+#bar{position:fixed;top:0;left:0;height:3px;background:var(--gate);width:0;z-index:90}
+.nav{position:fixed;top:3px;left:0;right:0;z-index:80;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px}
+.nav-logo{font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.08em;color:var(--ink);text-decoration:none}
+.nav-logo b{color:var(--gate-deep)}
+.nav-links{margin-left:auto;display:flex;gap:14px}
+.nav-links a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.nav-links a:hover{color:var(--ink)}
+@media(max-width:640px){.nav-links{display:none}}
+.nav-back{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600;white-space:nowrap}
+.nav-back:hover{color:var(--ink)}
+
+/* shared */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+section{padding:84px 0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--ink-soft);margin-bottom:14px}
+.eyebrow::before{content:"";width:22px;height:10px;background:var(--gate);border-radius:2px}
+h2{font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-.02em;line-height:1.3;margin-bottom:14px}
+.lead{color:var(--ink-soft);max-width:760px}
+.mono{font-family:var(--mono)}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;padding:2px 8px;border-radius:99px;vertical-align:middle}
+.tag.est{background:#FFF3D6;color:#8A6100;border:1px solid #F0D58C}
+.tag.cap{background:#E5EFFA;color:#1F538C;border:1px solid #BCD4EE}
+.fn{position:relative;border:none;background:none;font:inherit;color:inherit;border-bottom:1px dashed var(--blue);padding:0 1px}
+.fn:hover::after,.fn:focus-visible::after,.fn.on::after{content:attr(data-note);position:absolute;left:50%;bottom:135%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:12.5px;line-height:1.5;padding:8px 12px;border-radius:8px;width:max-content;max-width:300px;z-index:50;font-family:var(--sans);text-align:left;font-weight:400}
+.alt{background:var(--mist)}
+
+/* hero */
+.hero{padding-top:150px;padding-bottom:90px}
+.board{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:34px}
+.board span b{color:var(--ink);font-weight:600}
+.hero h1{font-size:clamp(40px,7vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1.12;margin-bottom:10px}
+.hero h1 .y{color:var(--gate-deep)}
+.thesis{font-size:clamp(21px,3.2vw,30px);font-weight:700;letter-spacing:-.01em;line-height:1.45;margin:26px 0 14px;max-width:820px}
+.thesis em{font-style:normal;box-shadow:inset 0 -0.45em var(--gate)}
+.hero .lead{font-size:17.5px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:46px}
+.crest{margin:20px 0 4px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:12px;font-weight:600;background:var(--gate);color:var(--ink);padding:4px 12px;border-radius:99px;letter-spacing:.04em}
+.bsub{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.statcap{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.08em;margin-top:44px}
+.statcap+.stats{margin-top:12px}
+.pv{display:inline-flex;flex-direction:column;align-items:center;line-height:1.05}
+.pv i{font-style:normal;font-family:var(--mono);font-size:9.5px;font-weight:400;color:var(--ink-soft);letter-spacing:.05em;margin-top:4px}
+.hl{font-style:normal;box-shadow:inset 0 -0.45em var(--gate)}
+.stat{border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;background:#fff}
+.stat .n{font-family:var(--mono);font-size:clamp(26px,3.6vw,34px);font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.stat .n small{font-size:.6em;font-weight:600}
+.stat .n.w{font-size:clamp(19px,2.6vw,26px)}
+.stat .l{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+.stat:nth-child(1) .n{color:var(--green)}
+.stat:nth-child(2) .n{color:var(--red)}
+.stat:nth-child(3) .n{color:var(--blue)}
+.stat:nth-child(4) .n{color:var(--gate-deep)}
+@media(max-width:880px){.stats{grid-template-columns:1fr 1fr}}
+
+/* why twice: axis */
+.axis{display:flex;align-items:stretch;gap:0;margin:34px 0 10px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff}
+.axis .pole{flex:1;padding:18px 16px}
+.axis .pole b{display:block;font-size:15.5px;font-weight:800}
+.axis .pole span{display:block;font-size:13px;color:var(--ink-soft);margin-top:3px;line-height:1.5}
+.axis .pole.s{border-left:4px solid var(--red)}
+.axis .pole.e{border-right:4px solid var(--blue);text-align:right}
+.axis .mid{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;min-width:150px;background:var(--mist)}
+.axis .mid .mlabel{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--ink);background:var(--gate);padding:3px 10px;border-radius:99px;white-space:nowrap}
+.axis .mid .mline{flex:1;width:2px;background:var(--line);min-height:8px}
+.axis-sub{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.axis-sub span{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px}
+@media(max-width:680px){.axis{flex-direction:column}.axis .pole.e{text-align:left;border-right:none;border-left:4px solid var(--blue)}.axis .mid{min-width:0;flex-direction:row}.axis .mid .mline{height:2px;width:auto;min-height:0;min-width:20px}}
+
+/* the lens: definitions */
+.lensdef{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+.ld{display:flex;gap:12px;border:1px solid var(--line);border-left:4px solid var(--gate);border-radius:10px;background:#fff;padding:16px 18px}
+.ld .ln{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--gate-deep)}
+.ld b{font-size:15.5px}
+.ld p{font-size:13.5px;color:var(--ink-soft);margin-top:2px}
+@media(max-width:720px){.lensdef{grid-template-columns:1fr}}
+
+/* signature console */
+.console{background:var(--console);color:var(--console-text);border-radius:18px;padding:30px clamp(18px,3.5vw,34px) 34px;margin-top:34px;border:1px solid var(--console-line)}
+.console .eyebrow{color:var(--console-dim)}
+.console h3{font-size:clamp(20px,3vw,25px);font-weight:800;color:#fff;letter-spacing:-.01em}
+.console .hint{font-size:14px;color:var(--console-dim);margin:6px 0 22px;max-width:640px}
+.lens-modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:22px}
+.lens-modes button{border:1px solid var(--console-line);background:#0A111E;color:var(--console-dim);font-weight:700;font-size:13px;line-height:1.4;padding:10px 12px;border-radius:12px;text-align:left}
+.lens-modes button.on{background:var(--console-text);color:var(--console);border-color:var(--console-text)}
+@media(max-width:860px){.lens-modes{grid-template-columns:1fr 1fr}}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tcol{display:flex;flex-direction:column;background:#0A111E;border:1px solid var(--console-line);border-radius:14px;overflow:hidden}
+.tcol .chead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:12px 16px;border-bottom:1px solid var(--console-line)}
+.tcol .cn{font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:.04em}
+.tcol .cx{font-size:11.5px;color:var(--console-dim);text-align:right}
+.tcol.game .cn{color:var(--gate)}
+.tcol.sam .cn{color:#F07A6B}
+.tcol.elf .cn{color:#7FB3E8}
+.tcol .cbody{padding:14px 16px 16px;flex:1}
+.act{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;padding:2px 10px;border-radius:99px;border:1px solid;margin-bottom:10px}
+.tcol.game .act{color:var(--gate);border-color:var(--gate)}
+.tcol.sam .act{color:#F07A6B;border-color:#F07A6B}
+.tcol.elf .act{color:#7FB3E8;border-color:#7FB3E8}
+.ctxt{font-size:14px;line-height:1.65;color:var(--console-text)}
+.tnum{margin-top:14px;padding-top:12px;border-top:1px dashed var(--console-line)}
+.tnum b{display:block;font-family:var(--mono);font-size:clamp(19px,2.4vw,24px);font-weight:600;color:#fff;letter-spacing:-.01em}
+.tnum span{font-size:12px;color:var(--console-dim)}
+.tfoot{display:block;padding:11px 16px;border-top:1px solid var(--console-line);font-size:12.5px;font-weight:600;color:#A7B8D6;text-decoration:none}
+.tfoot:hover{color:#fff}
+.tbot{margin-top:16px;font-size:13.5px;color:var(--console-dim);border-top:1px dashed var(--console-line);padding-top:14px}
+.tbot b{color:var(--console-text)}
+.tnote{margin-top:12px;font-size:12.5px;color:var(--console-dim)}
+.tnote a{color:var(--console-text)}
+.console .term{margin:18px 0 20px;border:1px solid var(--console-line);background:#0A111E;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--console-text);line-height:1.7}
+.console .term b{color:var(--gate);font-weight:600}
+/* 증거 3종 리스트 (헤드라인 검증 문단 구조화용) */
+.evi{list-style:none;margin:14px 0 6px;display:grid;gap:8px;counter-reset:evi;max-width:760px}
+.evi li{border:1px solid var(--line);border-radius:10px;background:#fff;padding:12px 14px;font-size:14px;color:var(--ink-soft);display:flex;gap:12px;line-height:1.65}
+.evi li::before{counter-increment:evi;content:counter(evi);font-family:var(--mono);font-weight:600;color:var(--gate-deep);font-size:15px;flex:none}
+.evi li b{color:var(--ink)}
+@media(max-width:720px){.tri{grid-template-columns:1fr}}
+
+/* term note (light sections) */
+.term{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 14px;font-size:13px;color:var(--ink-soft);margin-top:18px}
+.term b{color:var(--ink);font-weight:600}
+
+/* case: 게임 축 참조 라인 (CASE 2 중복 제거용) */
+.gref{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);border-left:3px solid var(--line);padding:2px 0 2px 10px}
+.gref a{color:var(--ink-soft)}
+
+/* case: orientation box */
+.orient{margin:26px 0;border-left:4px solid var(--blue);background:#fff;border-radius:0 var(--r) var(--r) 0;padding:18px 20px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.orient .ot{font-family:var(--mono);font-size:12px;color:var(--blue);font-weight:600;letter-spacing:.08em;margin-bottom:6px}
+.orient p{font-size:14.5px;color:var(--ink-soft)}
+.orient p b{color:var(--ink)}
+
+/* case: lens detail (details.draw 계승, 기본 펼침) */
+details.draw{margin-top:18px;border:1px solid var(--line);border-radius:var(--r);background:#fff;overflow:hidden}
+details.draw summary{cursor:pointer;padding:16px 20px;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px}
+details.draw summary::-webkit-details-marker{display:none}
+details.draw summary::before{content:"−";font-family:var(--mono);font-weight:600;color:var(--gate-deep);font-size:18px}
+details.draw:not([open]) summary::before{content:"+"}
+details.draw .body{padding:0 20px 20px}
+details.draw .body p{font-size:14.5px;color:var(--ink-soft);margin-top:10px}
+details.draw .body p:first-child{margin-top:0}
+details.draw .body p b{color:var(--ink)}
+summary .sk{font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-weight:600}
+
+/* climax / 발견 박스 (ai-flow .zero 계승) */
+.zero{margin-top:22px;border-left:4px solid var(--gate);background:#fff;border-radius:0 var(--r) var(--r) 0;padding:18px 20px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.zero .zt{font-family:var(--mono);font-size:12px;color:var(--gate-deep);font-weight:600;letter-spacing:.08em;margin-bottom:6px}
+.zero p{font-size:14.5px;color:var(--ink-soft)}
+.zero p b{color:var(--ink)}
+
+/* 표면 ↔ 내재 토글 */
+.flip{margin-top:30px;border:1px solid var(--line);border-radius:var(--r);background:#fff;padding:22px}
+.flip h3{font-size:17px;font-weight:700}
+.flip .hint{font-size:13.5px;color:var(--ink-soft);margin:4px 0 16px}
+.flipctl{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:4px;gap:4px;background:var(--mist);margin-bottom:18px}
+.flipctl button{border:none;background:none;color:var(--ink-soft);font-weight:700;font-size:13px;padding:7px 14px;border-radius:99px}
+.flipctl button.on.srf{background:var(--ink-soft);color:#fff}
+.flipctl button.on.cor{background:var(--green);color:#fff}
+.fliprows{display:grid;gap:10px}
+.fliprow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fcell{border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:opacity .25s,border-color .25s,background .25s}
+.fcell .fk{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em;color:var(--ink-soft)}
+.fcell .fv{font-size:14px;margin-top:3px}
+.fcell .fv b{font-family:var(--mono)}
+.fcell.surface .fk{color:#9AA6BC}
+.fcell.core{background:#F7FBF8}
+.fcell.core .fk{color:var(--green)}
+.flip.s-srf .fcell.core,.flip.s-cor .fcell.surface{opacity:.38}
+.flip.s-cor .fcell.core{border-color:var(--green)}
+.flip.s-srf .fcell.surface{border-color:var(--ink-soft);opacity:1}
+.spark{display:block;width:100%;max-width:250px;height:56px;margin-top:8px}
+.spark polyline{fill:none;stroke-width:2.5}
+.spark circle{stroke:none}
+.spark text{font-family:var(--mono);font-size:9px}
+.spark-cap{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-top:2px}
+@media(max-width:640px){.fliprow{grid-template-columns:1fr}}
+
+/* 스코어보드 / 대비 표 (ai-flow .vs 계승) */
+.vs{width:100%;border-collapse:collapse;margin-top:26px;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.vs th,.vs td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.vs th{background:var(--ink);color:#fff;font-size:13px}
+.vs td:first-child{font-weight:700;font-size:13px}
+.vs tr:last-child td{border-bottom:none}
+.vs td .sub{display:block;font-size:12px;color:var(--ink-soft);font-weight:400;margin-top:2px}
+.vs td b{font-family:var(--mono);font-weight:600}
+@media(max-width:640px){.vs{font-size:12.5px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}.vs th,.vs td{padding:9px 10px;min-width:120px}}
+
+/* 출처 노트 */
+.srcnote{margin-top:14px;border:1px dashed var(--line);border-radius:10px;background:#fff;padding:12px 16px;font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+.srcnote .sk{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em;color:var(--ink-soft);display:block;margin-bottom:4px}
+.srcnote p+p{margin-top:6px}
+
+/* 스트레스 테스트 박스 */
+.stress{margin-top:26px;border-left:4px solid var(--red);background:#fff;border-radius:0 var(--r) var(--r) 0;padding:18px 20px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stress .st{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:600;letter-spacing:.08em;margin-bottom:6px}
+.stress p{font-size:14.5px;color:var(--ink-soft)}
+.stress p b{color:var(--ink)}
+.stress p+p{margin-top:8px}
+
+/* lessons: 2×3 상보 */
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+.lcol .lch{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.lcol .lch b{font-size:16px;font-weight:800}
+.lcol .lch span{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.lcol.sam .lch b{color:var(--red)}
+.lcol.elf .lch b{color:var(--blue)}
+.les{border:1px solid var(--line);border-radius:var(--r);background:#fff;padding:18px 20px}
+.les+.les,.lcol details.draw+.les,.les+details.draw{margin-top:12px}
+.les .ln{font-family:var(--mono);font-weight:600;font-size:12px;color:var(--gate-deep)}
+.les h4{font-size:15.5px;font-weight:700;margin:6px 0 8px}
+.les .proof{font-size:13px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
+.les .proof b{color:var(--ink);font-family:var(--mono);font-weight:600}
+.les p.d{font-size:14px;color:var(--ink-soft);margin-bottom:8px}
+@media(max-width:780px){.lgrid{grid-template-columns:1fr}}
+.cbcv{margin-top:26px;border:1.5px solid var(--ink);border-radius:var(--r);background:#fff;padding:22px}
+.cbcv .ct{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--gate-deep);font-weight:600;margin-bottom:8px}
+.cbcv p{font-size:14.5px;color:var(--ink-soft)}
+.cbcv p b{color:var(--ink)}
+.cbcv p+p{margin-top:8px}
+
+/* docs + footer */
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+.doc{border:1px solid var(--line);border-radius:var(--r);background:#fff;padding:20px;text-decoration:none;color:var(--ink);display:block;transition:border-color .2s}
+.doc:hover{border-color:var(--ink)}
+.doc .dk{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.1em}
+.doc h4{font-size:16.5px;font-weight:700;margin:6px 0 6px}
+.doc p{font-size:13.5px;color:var(--ink-soft)}
+@media(max-width:680px){.docs{grid-template-columns:1fr}}
+.linknote{margin-top:12px;font-size:12.5px;color:var(--ink-soft)}
+footer{background:var(--console);color:var(--console-dim);padding:70px 0 60px;margin-top:90px}
+footer .pos{color:#fff;font-size:clamp(19px,2.8vw,24px);font-weight:700;letter-spacing:-.01em;max-width:720px;line-height:1.5}
+footer .pos em{font-style:normal;color:var(--gate)}
+.contact{margin-top:22px;font-family:var(--mono);font-size:13.5px;display:flex;gap:22px;flex-wrap:wrap}
+.contact a{color:var(--console-text);text-decoration:none;border-bottom:1px solid var(--console-line)}
+.colophon{margin-top:46px;border:1px solid var(--console-line);border-radius:var(--r);padding:22px;background:#0A111E}
+.colophon h5{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--gate);margin-bottom:12px}
+.colophon p{font-size:13.5px;line-height:1.75}
+.colophon ul{list-style:none;margin-top:12px;display:grid;gap:6px}
+.colophon li{font-size:13px;display:flex;gap:10px}
+.colophon li b{color:var(--console-text);font-weight:600;white-space:nowrap}
+.hubslot{margin-top:34px;font-size:13px}
+.hubslot a{color:var(--console-dim);text-decoration:none}
+.byline{margin-top:30px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em}
+
+@media print{
+  .nav,#bar,.lens-modes,.flipctl{display:none!important}
+  .console{background:#fff;color:var(--ink);border:1px solid #999}
+  .console h3,.tnum b{color:var(--ink)}
+  .ctxt,.tbot,.tfoot,.console .term,.tcol .cx{color:var(--ink-soft)}
+  .tcol,.console .term{background:#fff;border-color:#ccc}
+  footer{background:#fff;color:var(--ink)}
+  footer .pos,.colophon li b{color:var(--ink)}
+  .colophon{background:#fff;border-color:#ccc}
+  section{padding:30px 0}
+  .fn{border-bottom:none}
+  .flip.s-srf .fcell.core,.flip.s-cor .fcell.surface{opacity:1}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<nav class="nav"><div class="nav-in">
+  <!-- 클러스터 규칙(브리프 §2): 백링크 보임 상태, 서브허브(index.html)로 연결 -->
+  <a class="nav-back" href="index.html">← 4렌즈 OS</a>
+  <a class="nav-logo" href="#top">TRANSFER<b>·</b>PROOF</a>
+  <div class="nav-links">
+    <a href="#lens">렌즈</a><a href="#case1">삼양</a><a href="#case2">e.l.f.</a><a href="#contrast">대비</a><a href="#lessons">교훈</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero wrap" id="top">
+  <div class="board">
+    <span>SERIES <b>4렌즈 의사결정 OS — 전이 증명</b></span>
+    <span>CASES <b>삼양식품 (KRX:003230) · e.l.f. Beauty (NYSE:ELF)</b></span>
+    <span>BASIS <b>결산 공시 · 실적 발표 · 소매 트래킹</b></span>
+  </div>
+  <h1>전이 증명<span class="y">.</span></h1>
+  <p class="thesis">한 번은 우연일 수 있다.<br>반대 축에서 두 번 반복되면, <em>방법</em>이다.</p>
+  <p class="crest"><span class="badge">비즈니스 시뮬레이션 종합 1위</span><span class="bsub">11팀 · DB그룹 기업경영체험스쿨</span></p>
+  <p class="lead">이 시뮬레이션에서 통과시킨 <button class="fn" data-note="① 읽는다 (흐름 선독) · ② 꿰뚫는다 (표면 ≠ 내재가치) · ③ 검증한다 (가정을 데이터로) · ④ 베팅한다 (확신 집중·리스크 단호). 정의와 전제는 아래 THE LENS 섹션에 있다">네 개의 렌즈</button>가, 프리미엄 축의 삼양식품과 정반대 value 축의 e.l.f. Beauty에서 그대로 관찰된다.<br>주인공은 두 기업이 아니라 사고방식이다. 이 페이지는 그 재현성의 검증 기록이다.</p>
+  <div class="statcap">이 렌즈가 게임 밖 실전에서 관찰된 실측 4종</div>
+  <div class="stats">
+    <div class="stat"><div class="n">22<small>%</small></div><div class="l">삼양 영업이익률<br>2025 연간 · 전 분기 20%대 <button class="fn" data-note="에프앤가이드 결산 코멘트 · 이지경제 2026.4.30 · 에너지경제 2026.5.15">출처</button></div></div>
+    <div class="stat"><div class="n w"><span class="pv">+9%<i>공급가</i></span> <small>→</small> <span class="pv">+6%<i>판매량</i></span></div><div class="l">삼양 — 가격을 올리고도 수요가 늘었다<br>2025년 4분기 미국 법인 <button class="fn" data-note="2025년 4분기 미국 법인 실적 보도 — 공급가 9% 인상 후 판매량 전분기 대비 6% 증가">출처</button></div></div>
+    <div class="stat"><div class="n w"><span class="pv">55%<i>평균 관세</i></span> <small>→</small> <span class="pv">71%<i>매출총이익률</i></span></div><div class="l">e.l.f. — 관세를 맞고도 마진을 지켰다<br>FY2026 <button class="fn" data-note="e.l.f. Beauty FY2026 실적 발표(2026.5.20) · CEO·CFO 어닝콜 · CNBC">출처</button></div></div>
+    <div class="stat"><div class="n w">4.5 <small>→</small> 12%</div><div class="l">미국 매스(대중가) 색조 점유율<br>e.l.f. 5년 유기적 확대 <button class="fn" data-note="Circana·Nielsen 소매 트래킹 기준 약 12% (2위, 점유율 최대 상승 브랜드)">출처</button></div></div>
+  </div>
+</header>
+
+<!-- WHY TWICE -->
+<section class="alt" id="why"><div class="wrap">
+  <div class="eyebrow">WHY TWICE</div>
+  <h2>왜 증명이 두 번인가</h2>
+  <p class="lead">비즈니스 시뮬레이션 종합 1위는 강력한 증거지만, 구조적 약점이 하나 있다. 게임 한 판은 데이터 포인트 하나이고, 닫힌 규칙 안에서 통한 사고방식이 현실의 열린 시장에서도 통하는지는 별도로 증명해야 한다. 실제 케이스 하나로 증명해도 반론이 남는다. "그 사고방식은 그 유형의 브랜드에만 맞는 것 아닌가."</p>
+  <p class="lead" style="margin-top:14px">그래서 증명을 정반대 축 두 곳에서 한다. 삼양식품은 극한의 매움을 프리미엄으로 <b>비싸게 파는 힘</b>(가격결정력, pricing power — 수요를 잃지 않고 가격을 올릴 수 있는 힘)으로 이겼고, e.l.f. Beauty는 프리스티지(prestige, 고가 명품)급 품질을 <b>매스(mass, 대중) 가격에 파는 힘</b>(value pricing)으로 이겼다.</p>
+  <p class="lead" style="margin-top:14px">가격 전략이 반대이고, 산업이 다르며, 수요를 다루는 방식도 다르다. 그런데도 같은 네 렌즈가 두 곳 모두에서 그대로 관찰된다. 주인공은 두 기업이 아니라 그 사고방식이고, 삼양과 e.l.f.는 그것이 서로 다른 현실에서 작동한다는 두 개의 증거다.</p>
+  <div class="axis">
+    <div class="pole s"><b>삼양식품</b><span>프리미엄 — 비싸게 파는 힘<br>가격결정력으로 마진 확보</span></div>
+    <div class="mid"><span class="mline"></span><span class="mlabel">같은 4렌즈</span><span class="mline"></span></div>
+    <div class="pole e"><b>e.l.f. Beauty</b><span>value — 싸게 팔며 마진을 지키는 힘<br>가치 인식으로 마진 방어</span></div>
+  </div>
+  <div class="axis-sub"><span>식품 ↔ 글로벌 뷰티</span><span>바이럴 증폭 ↔ 데이터 응답</span></div>
+</div></section>
+
+<!-- THE LENS -->
+<section id="thelens"><div class="wrap">
+  <div class="eyebrow">THE OPERATING SYSTEM</div>
+  <h2>전이되는 것은 전술이 아니라, 사고방식이다</h2>
+  <p class="lead">본격 검증에 들어가기 전에, 전제를 먼저 분명히 한다. 게임(닫힌 3일 경매·제로섬)과 브랜드 빌딩(열린 다년 시장·포지티브섬)은 층위와 시간축이 다르다. 그래서 전이되는 것은 전술(tactic)이 아니라 사고방식(mental model)이다.</p>
+  <p class="lead" style="margin-top:14px">닫힌 경매에서 흐름을 읽으면 군중을 피하는 게 정답이고, 열린 시장에서 트렌드를 읽으면 올라타 증폭하거나, 한발 더 나아가 수요를 감지해 가장 빠르게 응답하는 게 정답이다. 행동의 결은 매번 다르지만 <b>'남보다 먼저 본다'는 렌즈는 같다</b>.</p>
+  <div class="lensdef">
+    <div class="ld"><span class="ln">①</span><div><b>읽는다 (흐름 선독)</b><p>시장이 어디로 가는지를 남보다 먼저 본다.</p></div></div>
+    <div class="ld"><span class="ln">②</span><div><b>꿰뚫는다 (표면 ≠ 내재가치)</b><p>보이는 숫자와 사업의 실체를 갈라 본다.</p></div></div>
+    <div class="ld"><span class="ln">③</span><div><b>검증한다 (가정을 데이터로)</b><p>신호가 진짜인지 데이터로 확인한 뒤에 움직인다.</p></div></div>
+    <div class="ld"><span class="ln">④</span><div><b>베팅한다 (확신 집중·리스크 단호)</b><p>검증된 확신에 집중하고, 논리가 깨지면 매몰비용과 무관하게 끊는다.</p></div></div>
+  </div>
+</div></section>
+
+<!-- SIGNATURE: LENS SWITCH -->
+<section class="alt" id="lens"><div class="wrap">
+  <div class="eyebrow">SIGNATURE — LENS SWITCH</div>
+  <h2>렌즈를 바꿔 끼면, 행동이 바뀐다</h2>
+  <p class="lead">렌즈 버튼을 누르면 게임·삼양·e.l.f. 세 열이 그 렌즈에서의 행동으로 전환된다. 행동은 셋 다 다르고, 렌즈는 하나다. 각 열 하단에서 해당 케이스의 상세 서술로 내려갈 수 있다.</p>
+  <div class="console">
+    <div class="eyebrow">1 OS × 3 MARKETS — LIVE</div>
+    <h3>렌즈 전환 3열 뷰</h3>
+    <p class="hint">각 열은 행동 요약과 핵심 수치 하나로 압축했다. 게임 열은 의도적으로 압축 상태를 유지한다. 8분기 전 과정은 별도 기록의 몫이다.</p>
+    <div class="term"><b>게임(DVMP)이 처음이라면 — 30초 규칙</b><br>DB그룹 기업경영체험스쿨의 비즈니스 시뮬레이션이다. 참가 팀들이 8분기(R1·R2 각 4분기) 동안 같은 시장에서 가상 기업을 운영하며 재료 매입과 제품 판매를 입찰(경매)로 경쟁한다(최종 11팀). 낙찰은 명목 단가가 아니라 <b>환산지수</b> — 입찰가에 각 팀의 능력치(판매·구매경쟁력, R&amp;D 같은 영구 효과)를 반영해 보정한 값 — 가 낮은 순서로 결정되고, 입찰 수량이 전량 낙찰되면 <b>풀 낙찰</b>이라 부른다. 최종 평가는 ROE(자기자본이익률)·총자산·매출수량 종합이다. 우리 팀은 이 종합 평가의 최종 1위다(R1 ROE 최하위에서 출발).</div>
+    <div class="lens-modes" role="group" aria-label="렌즈 선택" id="lensBtns">
+      <button class="on" data-lens="1" aria-pressed="true">① 읽는다 (흐름 선독)</button>
+      <button data-lens="2" aria-pressed="false">② 꿰뚫는다 (표면 ≠ 내재가치)</button>
+      <button data-lens="3" aria-pressed="false">③ 검증한다 (가정을 데이터로)</button>
+      <button data-lens="4" aria-pressed="false">④ 베팅한다 (확신 집중·리스크 단호)</button>
+    </div>
+    <div class="tri" id="tri">
+      <article class="tcol game">
+        <div class="chead"><span class="cn">GAME — DVMP</span><span class="cx">11팀 중 종합 1위</span></div>
+        <div class="cbody">
+          <span class="act" id="actG">회피</span>
+          <p class="ctxt" id="txtG">시장별 입찰·낙찰 데이터를 8분기 누적 추적해 강팀 본진의 이동(미국→호주→이탈리아)을 한 발 앞서 예측하고, 다음에 비는 시장을 선점했다.</p>
+          <div class="tnum"><b id="numG">8분기</b><span id="subG">입찰·낙찰 데이터 누적 추적</span></div>
+        </div>
+        <a class="tfoot" href="dvmp.html">이 판단의 전체 과정(8분기 기록) →</a>
+      </article>
+      <article class="tcol sam">
+        <div class="chead"><span class="cn">삼양식품</span><span class="cx">프리미엄 축</span></div>
+        <div class="cbody">
+          <span class="act" id="actS">증폭</span>
+          <p class="ctxt" id="txtS">K-푸드 세계화·매운맛 놀이 소비·SNS 우선 구매, 세 흐름이 겹치는 지점을 먼저 읽고 매운맛 챌린지에 올라타 증폭했다.</p>
+          <div class="tnum"><b id="numS">100억 개+</b><span id="subS">불닭 누적 판매 · 100여 개국</span></div>
+        </div>
+        <a class="tfoot" href="#case1">CASE 1 상세 ↓</a>
+      </article>
+      <article class="tcol elf">
+        <div class="chead"><span class="cn">e.l.f. Beauty</span><span class="cx">value 축</span></div>
+        <div class="cbody">
+          <span class="act" id="actE">응답</span>
+          <p class="ctxt" id="txtE">뷰티 구매 결정이 매대에서 TikTok 피드로 옮겨가는 전환을 먼저 읽고, 2019년 오프라인 매장 22곳을 전부 닫아 자원을 디지털로 재배치했다.</p>
+          <div class="tnum"><b id="numE">22곳 → 0</b><span id="subE">오프라인 매장 전면 철수 (2019)</span></div>
+        </div>
+        <a class="tfoot" href="#case2">CASE 2 상세 ↓</a>
+      </article>
+    </div>
+    <p class="tbot" id="tbot"><b>렌즈 ①.</b> 닫힌 게임의 정답은 군중 회피, 열린 시장의 정답은 증폭과 응답이다. 행동은 갈리지만 '흐름을 먼저 읽는다'는 렌즈는 동일하다.</p>
+    <noscript><p class="tnote">자바스크립트가 꺼진 환경에서는 렌즈 ①만 표시된다. 네 렌즈 전체 조망은 아래 CONTRAST 표에 있다.</p></noscript>
+    <div class="term"><b>demand sensing(수요 감지)</b> — 실시간 데이터로 수요를 감지·검증해 빠르게 대응하는 방식. 렌즈 ③이 실무에서 불리는 이름이다.</div>
+    <p class="tnote">네 렌즈 × 세 시장 전체를 정적인 한 표로 보려면 <a href="#contrast">CONTRAST로 건너뛴다 ↓</a></p>
+  </div>
+</div></section>
+
+<!-- CASE 1 — 삼양식품 -->
+<section id="case1"><div class="wrap">
+  <div class="eyebrow">CASE 1 — SAMYANG · 프리미엄 축</div>
+  <h2>게임 밖에서도 작동하는가 — 삼양식품</h2>
+  <p class="lead">이 케이스가 증명하는 것은 삼양식품의 성공이 아니라, 내가 비즈니스 시뮬레이션에서 쓴 의사결정 방식이 닫힌 게임 밖 실제 시장에서도 똑같이 작동한다는 사실이다.</p>
+
+  <div class="orient">
+    <div class="ot">삼양식품 한눈에 — 케이스 배경</div>
+    <p>1961년 창업한 한국 식품 기업(KRX: 003230). 1963년 국내 최초 라면 '삼양라면'을 내놓은 원조지만, 2010년대 초 라면 시장 3위로 밀리고 <b>2015년 순손실(순이익 기준 적자)</b>까지 기록한 침체기를 겪었다. 반전의 축은 2012년 출시한 불닭볶음면이다. 개발을 주도한 김정수 부회장(2026년 6월 회장 취임)이 해외 단일 브랜드 전략을 밀어붙이며, 현재 불닭은 <b>100여 개국</b>에서 팔리고 누적 판매 <b>100억 개</b>를 넘겼다. 2025년 연간 매출 <b>2조 3,517억 원</b>(창사 첫 2조 돌파), 해외 매출 비중 <b>약 80%</b>로, 내수 기업이던 회사가 사실상 수출 기업으로 체질을 바꿨다.</p>
+  </div>
+
+  <details class="draw" open id="c1-l1">
+    <summary>① 읽는다 (흐름 선독) <span class="sk">— 어디로 가는가</span></summary>
+    <div class="body">
+      <p>게임에서 나는 시장별 입찰량·낙찰량·단가 분포를 8분기 누적 추적하며, 강팀들의 본진이 라운드마다 미국→호주→이탈리아로 이동하는 행동 패턴을 읽었다. 근거는 감이 아니라 데이터에 남는 자본의 궤적이다. 폭증한 시장에서 자본이 묶인 팀은 다음 분기 다른 시장으로 옮겨갈 압박을 받는다. 그 흐름을 한 발 앞서 읽으면, 남들이 보는 '지금 붐비는 시장'이 아니라 <b>'다음에 비는 시장'</b>이 보인다.</p>
+      <p>삼양은 같은 렌즈를 더 큰 흐름에 적용했다. K-콘텐츠 확산과 함께 '한국 음식'이 세계 소비의 흐름이 되고, 글로벌 Z세대가 매운맛을 놀이로 소비하며, 구매 결정이 매대가 아니라 SNS 피드에서 일어나는 전환. 이 세 흐름이 겹치는 지점을 불닭이 차지했다. 중요한 차이는 행동이다. 닫힌 게임에서 흐름을 읽은 나는 <b>군중을 피했고</b>, 열린 시장에서 흐름을 읽은 삼양은 <b>매운맛 챌린지에 올라타 증폭했다</b>. 행동은 반대지만 '흐름을 먼저 읽는다'는 렌즈는 동일하다.</p>
+    </div>
+  </details>
+
+  <details class="draw" open id="c1-l2">
+    <summary>② 꿰뚫는다 (표면 ≠ 내재가치) <span class="sk">— 보이는 가격이 전부가 아니다</span></summary>
+    <div class="body">
+      <p>게임의 경쟁자들은 시장 '기준가'라는 표면 숫자에 묶였다. 인도의 재료 기준가는 21만 원으로 매입 시장 중 가장 낮았고(일본 23만·한국 25만·브라질 27만), 다른 팀들은 어느 시장이든 기준가 ±1~2만 범위에서만 입찰했다. 처음 본 숫자 근처에서 판단이 굳는 앵커링(anchoring, 기준점 편향) 그대로다.</p>
+      <p>그런데 이 게임의 낙찰은 명목 단가가 아니라 환산지수, 곧 입찰가에 각 팀의 능력치를 반영해 보정한 값으로 갈린다. 우리 팀은 구매·판매경쟁력 같은 영구 능력치를 선제 투자로 쌓아 둔 상태였다. 재무제표에 잡히지 않지만 낙찰 경쟁력을 만드는 이 능력치가 게임의 무형자산(無形資産)이다. 그래서 남들 눈에 '기준가보다 4만이나 비싼' 25만 원이 우리 환산으로는 오히려 우위임을 계산할 수 있었고, 일부러 비싸 보이는 <b>25만 원에 베팅해 단독 낙찰</b>했다. 구체 산식과 낙찰 기록은 <a href="dvmp.html">게임 원본 기록</a>에 있다.</p>
+      <p>삼양이 본 내재가치는 두 겹이다. 첫째, 시장이 '너무 매워서 안 팔린다'고 무시한 극한 매움을, 경쟁자가 없는 <b>새 카테고리</b>(category creation, 기존에 없던 제품 범주를 만들어 시장을 선점하는 것)로 봤다. 둘째, 그 카테고리의 독점적 지위를 <b>가격결정력</b>(pricing power)으로 전환했다. 가격을 정한 것은 원가가 아니라 소비자가 인식한 가치, 곧 브랜드라는 무형자산이다.</p>
+      <p>이 가격결정력은 실측으로 확인된다. 내수 라면은 가격을 올리기 어렵지만, 불닭은 해외에서 '프리미엄 K라면'으로 자리 잡아 2025년 10월 관세 부담에 대응해 미국 공급가를 <b>9%</b> 올렸다. 소매 단계에서 미국 소비자가는 약 14% 뛰었지만(월마트 5개입 6.88달러 → 7.84달러, 2022년 이후 3년 만의 인상), 그 뒤에도 4분기 미국 법인 판매량은 전분기 대비 <b>6% 늘었다</b><button class="fn" data-note="2025년 4분기 미국 법인 실적 보도">출처</button>. 가격을 올리고도 수요를 잃지 않는다. 가격결정력의 실측 증거다.</p>
+    </div>
+  </details>
+
+  <details class="draw" open id="c1-l3">
+    <summary>③ 검증한다 (가정을 데이터로) = demand sensing <span class="sk">— 진짜인가, 지속되는가</span></summary>
+    <div class="body">
+      <p>게임의 마지막 분기, 우리 팀이 직접 만든 낙찰 확률 시뮬레이션 — 시장·단가별로 입찰 수량이 전량 낙찰(풀 낙찰)될 확률을 계산하는 자체 분석 모델 — 의 1차 결과는 분산이 안전하다고 했다. 4개 시장에 나누면 풀 낙찰 확률 90% 이상, 미국 한 곳에 1,200개를 몰면 약 35%. 그러나 그 35%는 "타팀이 미국에 메이저로 들어온다"는 입력 가정 위의 숫자였다. 나는 타팀 재고 분포(상위 6팀 전원 재고 1,000개 이상, 시장 총수용량 대비 공급 과잉)와 행동 패턴 데이터로 그 가정을 재검증했고, <b>가정 자체가 틀렸다고 판단해 모델의 입력을 수정했다. 결론이 뒤집혔다</b>. 그 판단이 맞았는지는 ④의 결과가 말한다. 한 분기 앞서 R2-3 호주에서 단가 양보가 부족해 미낙찰 난 실패를 데이터로 학습해, 마지막 분기 미국 단가를 적극 양보한 것도 같은 사고다. 가정을 데이터로 검증하고 즉시 교정한다.</p>
+      <p>삼양의 전이 지점이 가장 선명한 렌즈다. 바이럴 신호는 처음엔 한 번 웃고 지나갈 밈일 수도, 지속 수요일 수도 있다. 삼양은 이 신호를 SNS 챌린지 확산·검색량·소비자 반응·해외 바이어 문의 같은 실시간 데이터로 감지하고(demand sensing), 그것이 일시적 유행이 아니라 매출과 재구매로 이어지는 지속 수요임을 확인한 뒤에야 자원을 실었다.</p>
+      <p>그 전형이 <b>까르보 불닭</b>이다. "불닭에 크림소스를 섞으면 맛있다"는 소비자 레시피에서 출발해 2017년 12월 국내 한정판으로 출시됐고, <b>3개월간 3,600만 개</b>가 팔리는 수요를 확인한 뒤 2018년 5월 정식 제품으로 전환됐다. 신호(소비자 레시피·한정판 반응)를 데이터로 검증한 뒤에야 정식 자원을 실은 것이다. 글로벌 매운맛 챌린지가 폭발했을 때도 같은 규율로, 시장별 레시피와 현지 생산(중국 등)으로 검증된 수요를 흡수했다.</p>
+      <p>여기서 ① 읽는다와 ③ 검증한다가 갈린다. '신호를 읽는 것'과 '그 신호가 진짜인지 데이터로 검증하는 것'은 다른 일이다. 삼양은 <b>둘을 분리해서 했다</b>.</p>
+    </div>
+  </details>
+
+  <details class="draw" open id="c1-l4">
+    <summary>④ 베팅한다 (확신 집중·리스크 단호) <span class="sk">— 확신엔 집중, 논리 깨지면 끊는다</span></summary>
+    <div class="body">
+      <p>검증이 끝나자 나는 마지막 분기까지 확보한 제품 재고 <b>1,216개를 미국 단일 시장에 전량</b> 실었다. 분산이라는 통념을 버린 집중 베팅이었고, 그 결과 미국 시장 <b>약 55% 단독 점유</b>(총수용량 2,210개 중 전량 낙찰)와 단일 분기 최대 매출로 시즌 정점을 찍으며, R1 ROE 최하위에서 R2 종합 1위로의 역전을 완성했다. 동시에 회수율(ROI)이 1 밑으로 떨어지는 막판 추가 투자는 단호히 접고 자본을 보존했다. 집중과 절제는 한 세트다.</p>
+      <p>삼양의 베팅은 '해외 단일 브랜드 집중'이다. 마진을 높이기 어려운 포화 내수 시장에 자원을 분산하는 대신, 불닭이라는 한 브랜드로 해외에 집중했고 그 결과 해외 매출 비중이 2025년 연간 기준 <b>약 80%</b>에 이르렀다. 게임의 '미국 단일 시장'과 삼양의 '불닭 단일 브랜드'는 같은 행동이 아니다. 층위가 다르다. 같은 것은 '검증된 확신에 분산 대신 집중한다'는 베팅 원칙이다.</p>
+    </div>
+  </details>
+
+  <div class="zero">
+    <div class="zt">게임의 클라이맥스 — R2-4</div>
+    <p>게임 마지막 분기(R2-4)는 ③ 검증과 ④ 집중이 한 결정에서 만나는 클라이맥스다. <b>가정을 데이터로 뒤집고(③), 그 위에 전량을 실었다(④).</b></p>
+  </div>
+
+  <div class="flip" id="flip1">
+    <h3>표면 ≠ 내재가치 — ② 렌즈의 실물 증거</h3>
+    <p class="hint">시장·헤드라인이 보는 것과 사업의 실체를 갈라 본다. 스위치는 강조만 바꾸며, 두 열은 항상 함께 표시된다.</p>
+    <div class="flipctl" role="group" aria-label="표면과 실체 강조 전환">
+      <button class="srf" data-side="srf" aria-pressed="false">시장이 보는 것</button>
+      <button class="cor" data-side="cor" aria-pressed="false">사업의 실체</button>
+    </div>
+    <div class="fliprows">
+      <div class="fliprow">
+        <div class="fcell surface"><span class="fk">표면 — 주가 (사상 최고 대비)</span>
+          <div class="fv">약 -33% (장중 고점 166.5만 → 약 111만 원)</div>
+          <svg class="spark" viewBox="0 0 250 60" role="img" aria-label="삼양식품 주가 흐름 — 확정 4개 시점만 연결" style="color:var(--red)">
+            <polyline points="5,53 82,22 159,7 236,25" stroke="currentColor"/>
+            <circle cx="5" cy="53" r="3" fill="currentColor"/><circle cx="82" cy="22" r="3" fill="currentColor"/><circle cx="159" cy="7" r="3" fill="currentColor"/><circle cx="236" cy="25" r="3.5" fill="var(--ink)"/>
+          </svg>
+          <div class="spark-cap">19만~20만(24초) → 118만(25.5) → 166.5만(25.9 고점) → 약 111만(26.7) · 확정 시점만 연결</div>
+        </div>
+        <div class="fcell core"><span class="fk">실체 — 가격 인상 후 판매량</span><div class="fv">미국 공급가 <b>+9%</b> 뒤에도 판매량 <b>+6%</b></div></div>
+      </div>
+      <div class="fliprow">
+        <div class="fcell surface"><span class="fk">표면 — 헤드라인 매출 성장</span><div class="fv"><b>+36.1%</b> (단, 고환율 순풍 포함)</div></div>
+        <div class="fcell core"><span class="fk">실체 — 영업이익률</span><div class="fv"><b>약 22%</b> — 가격결정력이 만든 마진</div></div>
+      </div>
+      <div class="fliprow">
+        <div class="fcell surface"><span class="fk">표면 — 시총</span><div class="fv">최초 <b>10조</b> 돌파(2025.6) → 약 8.4조<span class="sub" style="display:block;font-size:12px;color:var(--ink-soft)">2026.7 기준 <button class="fn" data-note="10조 원은 시총 고점이 아니라 최초 돌파(2025.6.27) 시점의 마일스톤이다. -33%는 주가 고점(166.5만 원, 2025.9.11) 대비 조정률로, 10조 대비 하락률과는 기준점이 다르다.">참고</button></span></div></div>
+        <div class="fcell core"><span class="fk">실체 — 결산 후 모멘텀</span><div class="fv">2026년 1분기 <b>사상 최대</b> 분기 실적 지속</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:34px;font-size:18px">재무 스코어보드 — 성장과 수익성 (전략이 통했다는 증거)</h3>
+  <p class="lead" style="font-size:14.5px;margin-top:6px">전략이 통했는지는 숫자가 말한다. 다만 이건 결과지 주연이 아니다. 아래 수치는 2025년 연간 결산(확정) 기준이며, 결산 이후 발표·보도로 확인한 값이다.</p>
+  <table class="vs">
+    <tr><th>지표</th><th>2025년 (연간 결산 확정)</th><th>의미</th></tr>
+    <tr><td>매출액</td><td><b>2조 3,517억 원</b> (+36.1%) <button class="fn" data-note="이지경제 2026.4.30 · 에너지경제 2026.5.15 · 에프앤가이드 결산 코멘트">출처</button></td><td>창사 첫 2조 돌파 <span class="sub">2022년 9,090억 → 3년 만에 2.6배</span></td></tr>
+    <tr><td>영업이익</td><td><b>5,242억 원</b> (+52.1%)</td><td>첫 5,000억 돌파</td></tr>
+    <tr><td>영업이익률</td><td><b>약 22%</b></td><td>내수 라면 대비 압도적 <span class="sub">2025년 전 분기(4개 분기) 20%대</span></td></tr>
+    <tr><td>당기순이익</td><td><b>3,887억 원</b> (+43.2%) <button class="fn" data-note="에프앤가이드 결산 코멘트 — 원문 표기 +43.2%">출처</button></td><td>—</td></tr>
+    <tr><td>해외 매출 비중</td><td><b>약 80%</b> (2025년 연간) <button class="fn" data-note="이코노미트리뷴 · 한국신용평가 크레딧 오피니언(2026.4) — 해외매출 1조8,838억 ÷ 연결매출 2조3,517억 원">출처</button></td><td>농심 약 40%·오뚜기 약 10% 대비</td></tr>
+    <tr><td>2026년 1분기 (참고)</td><td>매출 <b>7,144억</b>·영업이익 <b>1,771억</b> (+35%/+32%) <button class="fn" data-note="회사 공시 및 공시 보도(뉴시스 외) — 컨센서스 상회">출처</button></td><td>분기 최대·컨센서스(시장 전망치 평균) 상회 <span class="sub">영업이익률 24.8%, 5개 분기 연속 20%대</span></td></tr>
+    <tr><td>시가총액</td><td>식품업계 최초 <b>10조</b> 돌파 <button class="fn" data-note="2025.6.27 종가 기준 10조490억 원">출처</button></td><td>황제주(주당 100만 원 이상) 등극 2025.5.16</td></tr>
+  </table>
+  <div class="srcnote">
+    <span class="sk">출처 노트 — 원문 각주 보존</span>
+    <p>출처(재무): 2025년 연간 결산 기준 — 결산 후 확인 보도(이지경제 2026.4.30, 에너지경제 2026.5.15)·에프앤가이드 결산 코멘트(매출 +36.1%·영업이익 +52.1%·당기순이익 +43.2%). 해외 매출 비중(연간 약 80%)은 2025년 연간 해외매출 1조8,838억 원 ÷ 연결매출 2조3,517억 원 기준(이코노미트리뷴·한국신용평가 크레딧 오피니언 2026.4). 최종 확정 절대값은 금융감독원 전자공시(DART)의 잠정실적 공시·사업보고서 원문으로 재확인 가능하다.</p>
+    <p>주가 흐름: 2024년 초 약 19만~20만 원 → 2025년 5월 16일 황제주(종가 118만 원) → 2025년 9월 11일 사상 최고가(장중 166만5,000원) → 2026년 7월 초 약 111만 원(고점 대비 약 -33%, 시가총액 약 8.4조 원). 출처: 한국경제·이코노미트리뷴·TradingView(KRX:003230), 조회 시점 기준이며 변동한다.</p>
+  </div>
+
+  <h3 style="margin-top:34px;font-size:18px">헤드라인 검증 — 내 케이스에도 ② 렌즈를 댄다</h3>
+  <p class="lead" style="font-size:15px;margin-top:6px"><b style="color:var(--ink)">+36.1%라는 성장률에는 고환율</b>(원화 약세가 수출 기업의 원화 환산 매출을 키우는 효과) <b style="color:var(--ink)">순풍이 일부 섞여 있다</b>. 회사 스스로 "고환율 효과 등에 힘입어"라고 밝혔다. 그래서 전략의 증거로 삼는 것은 환율이 만든 숫자가 아니라, 환율과 무관한 실체 세 가지다.</p>
+  <ol class="evi">
+    <li><div><b>가격결정력</b> — 공급가를 9% 올리고도 판매량이 6% 늘었다. 환율은 이 숫자를 만들 수 없다.</div></li>
+    <li><div><b>마진의 질</b> — 2025년 전 분기 영업이익률 20%대. 22%는 '많이 판' 결과가 아니라 '가격결정력으로 비싸게 판' 결과다.</div></li>
+    <li><div><b>지속성</b> — 결산이 끝난 뒤에도 이어진 2026년 1분기 사상 최대 실적.</div></li>
+  </ol>
+  <p class="lead" style="font-size:15px">이 마진은 무시받던 카테고리를 선점하고(② 꿰뚫는다), 검증된 수요에 집중한(③·④) 전략이 만든 것이다. 그리고 자기 케이스의 헤드라인마저 표면과 실체로 갈라 보는 이 규율은, 아래 CASE 2에서 그대로 반복된다. e.l.f. 스스로 +25% 성장의 약 90%가 인수분임을 밝히는 장면에서다.</p>
+
+  <div class="stress">
+    <div class="st">스트레스 테스트 — 그림자까지 본다</div>
+    <p>전략을 증거로 쓰려면 반대 증거도 봐야 한다. 삼양의 가장 큰 그림자는 집중의 뒷면, 곧 <b>단일 브랜드 의존</b>이다. 해외 매출의 80%가 불닭 한 브랜드에서 나오며, 업계에서도 '포스트 불닭'이 과제로 거론된다. ④의 집중 베팅이 만든 성공 구조가 그대로 리스크 구조이기도 한 것이다. 통상 환경도 변수다. 미국 관세에는 공급가 인상으로 대응했지만(② 참조) 관세 정책 자체가 유동적이고, 실적을 밀어 올린 고환율이 되돌아서면 원화 환산 성장률은 낮아진다. 확장 실행 리스크도 있다. 밀양 2공장(2025년 6월 준공)에 이어 첫 해외 생산기지인 중국 공장을 2027년 1월 완공 목표로 짓고 있는데, 수요 예측이 빗나가면 증설이 부담으로 바뀐다. 주가도 황제주 등극 후 고점 대비 약 -33% 조정을 받았다.</p>
+    <p>이 그림자들은 이 문서의 결론(사고방식이 작동했다)을 부정하지 않는다. 오히려 <b>'집중이 만든 성공은 집중이 만든 리스크와 한 몸'</b>이라는 것 자체가 ④ 베팅한다의 정직한 전모다. 게임에서 내가 미국 올인과 동시에 회수율 깨진 투자를 끊었듯, 집중에는 반드시 절제와 리스크 관리가 따라붙어야 한다.</p>
+  </div>
+
+  <div class="srcnote">
+    <span class="sk">근거 자료</span>
+    <p>2025년 연간 결산 — 결산 후 확인 보도(이지경제 2026.4.30·에너지경제 2026.5.15)·에프앤가이드 결산 / 분기 실적·해외 비중 — 회사 공시 및 공시 보도(뉴시스 2025.11.14 외) / 가격 인상·판매량 — 2025년 4분기 미국 법인 실적 보도 / 주가 — 한국경제·TradingView(KRX:003230, 조회 시점 명시). 게임 관련 수치는 DB그룹 기업경영체험스쿨 최종 평가 화면·재무제표 확정값(별도 케이스스터디 문서) 기준이다. 삼양 수치와 게임 수치는 출처를 분리해 관리한다.</p>
+  </div>
+</div></section>
+
+<!-- CASE 2 — e.l.f. Beauty -->
+<section class="alt" id="case2"><div class="wrap">
+  <div class="eyebrow">CASE 2 — E.L.F. BEAUTY · VALUE 축</div>
+  <h2>게임 밖에서도 반복되는가 — e.l.f. Beauty</h2>
+  <p class="lead">프리미엄 축(삼양)에서 작동을 확인한 렌즈를, 이번엔 정반대 축에 댄다. 이 케이스가 증명하는 것은 e.l.f.의 성공이 아니라, 내가 비즈니스 시뮬레이션에서 쓴 의사결정 방식이 삼양과 전혀 다른 전략 축에서도 똑같이 작동한다는 사실이다. 한 번은 우연일 수 있지만, 반대 축에서 두 번 반복되면 그것은 재현 가능한 방법이다.</p>
+
+  <div class="orient">
+    <div class="ot">e.l.f. Beauty 한눈에 — 케이스 배경</div>
+    <p>미국 오클랜드 소재 뷰티 기업(NYSE: ELF). 2004년 '아이즈·립스·페이스(eyes·lips·face)'라는 이름으로 창업, 제품 대부분이 <b>2~15달러대</b>의 100% 비건·크루얼티프리(동물실험 없음) 화장품이다. 2014년 합류한 CEO 타랑 아민(Tarang Amin, P&amp;G·클로락스 출신의 뷰티 업계 외부인)이 2019년 오프라인 매장 22곳을 전부 닫고 자원을 디지털·TikTok으로 돌리며 회사를 재편했다. FY2026(2026년 3월 말 종료) 순매출 <b>약 16억 3,650만 달러</b>, 미국 매스 색조화장품 <b>점유율 2위</b>(1위 메이블린)이자 점유율 최대 상승 브랜드다.</p>
+  </div>
+  <div class="term"><b>value pricing / dupe</b> — 고가 프리스티지 제품과 동등한 품질·마감을 훨씬 낮은 가격에 제공하는 전략. 'dupe(듀프)'는 고가 제품의 저가 대체재를 뜻하는 소비자 문화 용어다.<br><b>SKU</b> — Stock Keeping Unit, 재고 관리 단위. 실무에서는 개별 판매 제품 하나를 가리킨다.</div>
+
+  <details class="draw" open id="c2-l1">
+    <summary>① 읽는다 (흐름 선독) <span class="sk">— 어디로 가는가</span></summary>
+    <div class="body">
+      <p class="gref">게임 축은 CASE 1 ①과 동일하다 (<a href="#c1-l1">참조 ↗</a>) · 중복을 피해 여기서는 e.l.f.만 전개한다.</p>
+      <p>e.l.f.는 같은 렌즈를 세 개의 큰 흐름이 겹치는 지점에 댔다. 첫째, 뷰티 구매 결정이 백화점 매대와 뷰티 어드바이저의 설명에서 TikTok 피드와 크리에이터 리뷰로 옮겨가는 <b>채널 전환</b>. 둘째, 가격보다 콘텐츠와 진정성에 반응하는 Z세대의 <b>디지털-퍼스트 소비</b>. 셋째, 한때 고가 브랜드의 전유물이던 프리스티지 품질이 대중 가격대로 내려오는 <b>대중화</b>(democratization). 이 세 흐름이 만나는 자리에 e.l.f.가 있었다.</p>
+      <p>이 읽기가 선견이었다는 증거는 실행의 타이밍이다. e.l.f.는 대부분의 뷰티 기업이 TikTok에 계정조차 만들기 전에 그 채널에 브랜드를 걸었고, 2019년에는 오프라인 매장 22곳을 전부 닫아 자원을 디지털로 재배치했다. 남들이 매대에서 싸울 때, e.l.f.는 이미 <b>소비 결정이 일어나는 장소를 갈아탄 것</b>이다.</p>
+      <p>여기서 중요한 것은 행동의 방향이다. 닫힌 게임에서 흐름을 읽은 나는 군중이 몰릴 시장을 피해 빈 시장을 선점했다. 흐름을 읽는 목적이 '군중 회피'였다. 열린 시장에서 흐름을 읽은 e.l.f.는 반대로 군중이 어디로 갈지를 먼저 읽어 그곳에 가장 빠르게 공급했다. 목적이 '군중 응답'이다. 삼양이 매운맛 챌린지에 올라타 증폭한 것과도 또 결이 다르다. <b>행동은 회피·증폭·응답으로 매번 갈리지만, '흐름을 남보다 먼저 읽는다'는 렌즈 자체는 세 경우 모두 동일하다.</b> 전이되는 것은 이 렌즈이지 행동이 아니다.</p>
+    </div>
+  </details>
+
+  <details class="draw" open id="c2-l2">
+    <summary>② 꿰뚫는다 (표면 ≠ 내재가치) <span class="sk">— 비싼 게 좋은 게 아니다</span></summary>
+    <div class="body">
+      <p class="gref">게임 축은 CASE 1 ②와 동일하다 (<a href="#c1-l2">참조 ↗</a>) · 이하 e.l.f. 전개.</p>
+      <p>e.l.f.가 깬 표면은 뷰티 산업의 가장 오래된 공식인 <b>'비싼 가격 = 좋은 품질'</b>이다. e.l.f.는 이 등식을 정면으로 부정했다. 고가 럭셔리 제품과 동등한 마감을 몇 분의 일 가격에 내놓는 value pricing으로, 소비자가 '프리스티지 품질'과 '높은 가격'을 분리해서 인식하도록 만들었다. 제품 대부분이 2~15달러대에 머물고, 전체 제품의 <b>약 75%가 10달러 이하</b>다. 대표적인 것이 대체(dupe) 전략으로, 수십 달러짜리 하이엔드 제품과 사실상 같은 결과를 10달러 안팎에 제공해 고가 제품의 수요를 그대로 흡수한다. 크리에이터가 "이건 고가 제품과 똑같다"고 입증하는 순간 바이럴이 되는 구조이며, SPF가 포함된 할로 글로우 스킨 틴트(Halo Glow Skin Tint) 같은 제품이 그 전형이다.</p>
+      <p>여기서 핵심은 e.l.f.의 진짜 내재가치가 '싼 제품' 자체가 아니라는 점이다. 낮은 가격은 누구나 따라 할 수 있다. 따라 할 수 없는 것은 그 가격에도 열광하는 <b>브랜드와 로열티 커뮤니티, 그리고 트렌드를 제품으로 바꾸는 속도라는 무형자산</b>이다. 그 무형자산이 마진을 지킨다. 저가 전략이면 마진이 얇아야 정상인데, e.l.f.의 FY2026 매출총이익률(gross margin, 매출에서 원가를 뺀 이익률)은 <b>약 71%</b>로 오히려 프리스티지 브랜드에 가깝다.</p>
+      <p>더 결정적인 것은, FY2026에 평균 약 55%라는 고율 관세(전년의 약 2배)를 맞고도 매출총이익률이 전년 대비 <b>약 0.5%포인트밖에 빠지지 않았다</b>는 점이다. 관세 원가 상승분을 가격 인상으로 상당 부분 상쇄했다는 뜻이고, 이것이야말로 '싸게 파는 브랜드도 가격결정력을 가질 수 있다'는 실측 증거다. '싸게 파는데 마진은 지킨다'는 이 역설이, e.l.f.의 힘이 가격표가 아니라 무형자산에서 나온다는 증거다.</p>
+    </div>
+  </details>
+
+  <details class="draw" open id="c2-l3">
+    <summary>③ 검증한다 (가정을 데이터로) <span class="sk">— 진짜 수요인가, 그리고 얼마나 빨리 답하는가</span></summary>
+    <div class="body">
+      <p class="gref">게임 축은 CASE 1 ③과 동일하다 (<a href="#c1-l3">참조 ↗</a>) · 이하 e.l.f. 전개.</p>
+      <p>e.l.f.의 ③은 삼양과 결이 다르다. 삼양의 검증이 "이 바이럴이 밈인가 지속 수요인가"를 가르는 데 방점이 있었다면, e.l.f.의 검증은 거기에 <b>속도</b>를 더한다. e.l.f.는 소셜·검색·판매 데이터로 어떤 색조와 포맷이 실제 수요로 이어지는지 실시간 감지하고(demand sensing), 자사몰(DTC, Direct-to-Consumer — 소비자 직접 판매 채널)을 신제품 테스트베드로 써서 반응을 먼저 읽는다. 그 검증이 서면 제품 개발 사이클을 개념에서 진열까지 <b>약 20주</b>로 압축해 SKU로 내놓는다. 업계 통상 개발 주기가 12~18개월인 것과 비교하면, 검증된 수요를 경쟁자보다 서너 배 빠르게 진열대에 올리는 구조다.</p>
+      <p>여기서 ① 읽는다와 ③ 검증한다가 갈린다. 흐름을 읽는 것(어디로 가는가)과 그 특정 트렌드가 진짜 수요인지 데이터로 확인하는 것(진짜인가)은 다른 일이다. e.l.f.는 이 둘을 분리한 뒤, 검증이 끝난 수요에 대해서는 '얼마나 빨리 답하느냐'를 경쟁의 축으로 삼았다. <b>검증의 정확도와 실행의 속도를 한 시스템으로 묶은 것</b>이 e.l.f. ③의 핵심이다.</p>
+    </div>
+  </details>
+
+  <details class="draw" open id="c2-l4">
+    <summary>④ 베팅한다 (확신 집중·리스크 단호) <span class="sk">— 마케팅을 비용이 아니라 베팅으로 본다</span></summary>
+    <div class="body">
+      <p class="gref">게임 축은 CASE 1 ④와 동일하다 (<a href="#c1-l4">참조 ↗</a>) · 이하 e.l.f. 전개.</p>
+      <p>e.l.f.의 베팅은 '마케팅 자원의 집중'이다. 전통 뷰티 기업이 마케팅비를 순매출의 10~12% 수준으로 관리할 때, e.l.f.는 그 두 배가 넘는 <b>약 25%</b>를 마케팅에 싣는다. 이건 갑자기 나온 숫자가 아니라 5년에 걸친 의도된 전환이다. 5년 전 약 7%에서 25%로 끌어올렸고, 특정 분기에는 34%까지 올라간 적도 있다. 그리고 그 예산을 전통 TV·잡지 광고가 아니라 TikTok·크리에이터·커뮤니티라는, 자신이 읽은 흐름(①) 위에 집중한다. 브랜드 해시태그 캠페인 #eyeslipsface(Eyes Lips Face)는 회사가 밝힌 기준 <b>70억 뷰</b>를 넘겼다<button class="fn" data-note="CDO 엑타 초프라(Ekta Chopra) 직접 발언 기준 — '70억 뷰 이상'">출처</button>. 이것은 비용 통제의 실패가 아니라 의도된 베팅이다. 마케팅을 지출로 보면 줄여야 할 항목이지만, 성장 엔진으로 보면 실어야 할 베팅이 된다. e.l.f.는 후자를 택했고, 그 베팅이 <b>29분기 연속 순매출 성장, 7년 연속 순매출·점유율 동시 성장</b>이라는 결과로 돌아왔다. 게임에서 내가 '분산이 안전하다'는 통념을 버리고 한 시장에 집중했듯, e.l.f.는 '마케팅비는 낮을수록 좋다'는 통념을 버리고 마케팅에 집중했다.</p>
+    </div>
+  </details>
+
+  <div class="zero">
+    <div class="zt">게임의 클라이맥스 — 그리고 반복</div>
+    <p>게임 마지막 분기(R2-4)는 ③ 검증과 ④ 집중이 한 결정에서 만나는 클라이맥스였다. 가정을 데이터로 뒤집고(③) 그 위에 전량을 실었다(④). e.l.f.에서도 같은 결합이 반복된다. 데이터로 수요를 검증하고(③) 그 위에 마케팅 예산과 개발 속도를 집중해 싣는다(④). <b>검증 없는 집중은 도박이고, 집중 없는 검증은 실행이 아니다. 두 렌즈는 언제나 한 세트로 움직인다.</b></p>
+  </div>
+
+  <div class="flip" id="flip2">
+    <h3>표면 ≠ 내재가치 — ② 렌즈의 실물 증거</h3>
+    <p class="hint">시장·회계가 보는 것과 사업의 실체를 갈라 본다. 스위치는 강조만 바꾸며, 두 열은 항상 함께 표시된다.</p>
+    <div class="flipctl" role="group" aria-label="표면과 실체 강조 전환">
+      <button class="srf" data-side="srf" aria-pressed="false">시장·회계가 보는 것</button>
+      <button class="cor" data-side="cor" aria-pressed="false">사업의 실체</button>
+    </div>
+    <div class="fliprows">
+      <div class="fliprow">
+        <div class="fcell surface"><span class="fk">표면 — 주가 (사상 최고 대비)</span>
+          <div class="fv">약 -68% ($218.00 → 약 $69.91)</div>
+          <svg class="spark" viewBox="0 0 250 60" role="img" aria-label="e.l.f. 주가 — 확정 2개 시점만 연결" style="color:var(--blue)">
+            <polyline points="5,7 236,53" stroke="currentColor"/>
+            <circle cx="5" cy="7" r="3" fill="currentColor"/><circle cx="236" cy="53" r="3.5" fill="var(--ink)"/>
+          </svg>
+          <div class="spark-cap">$218.00(24.6.27 최고 종가) → $69.91(26.6.29) · 확정 2점만 연결</div>
+        </div>
+        <div class="fcell core"><span class="fk">실체 — 유기적 점유율 확대</span><div class="fv"><b>4.5% → 약 12%</b> (미국 매스 색조 2위)</div></div>
+      </div>
+      <div class="fliprow">
+        <div class="fcell surface"><span class="fk">표면 — GAAP 순이익</span><div class="fv">약 2,630만 달러 (전년비 약 <b>-76%</b>)</div></div>
+        <div class="fcell core"><span class="fk">실체 — 관세에도 지킨 매출총이익률</span><div class="fv"><b>약 71%</b> (평균 55% 관세 상쇄)</div></div>
+      </div>
+      <div class="fliprow">
+        <div class="fcell surface"><span class="fk">표면 — 헤드라인 순매출 성장</span><div class="fv"><b>+25%</b> (단, 약 90%가 인수 브랜드 rhode의 기여분)</div></div>
+        <div class="fcell core"><span class="fk">실체 — 로열티 회원 생애가치(LTV)</span><div class="fv">비회원 대비 <b>+166%</b></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:34px;font-size:18px">재무 스코어보드 — 성장과 수익성 (전략이 통했다는 증거)</h3>
+  <p class="lead" style="font-size:14.5px;margin-top:6px">전략이 통했는지는 숫자가 말한다. 다만 이건 결과지 주연이 아니다. 모든 수치는 FY2026(2026년 3월 말 종료) 연간 기준이며, 회사 실적 발표·SEC 공시로 확인한 확정값이다.</p>
+  <table class="vs">
+    <tr><th>지표</th><th>FY2026 (2026년 3월 말 종료)</th><th>의미</th></tr>
+    <tr><td>순매출 (net sales)</td><td><b>약 16억 3,650만 달러</b> (+25% YoY) <button class="fn" data-note="FY2026 4분기·연간 실적 발표(2026.5.20, BusinessWire) · SEC Form 8-K">출처</button><span class="sub">단, 성장의 약 90%는 rhode(e.l.f.가 인수한 뷰티 브랜드) 인수분 · 유기적 성장 3~4%</span></td><td>헤드라인 성장은 M&amp;A 주도 — 전략 증거는 아래 유기적 지표</td></tr>
+    <tr><td>매출총이익률 (gross margin)</td><td><b>약 71%</b> (전년비 약 -0.5%p)</td><td><b>55%</b> 관세 <button class="fn" data-note="대(對)중국 관세 스택: 25% Section 301 + 20% IEEPA + 10% 상호관세 — CEO 타랑 아민·CFO 맨디 필즈, FY2026 4분기 실적 직접 언급 (CNBC·어닝콜 2026.5)">출처</button>에도 가격 인상으로 방어</td></tr>
+    <tr><td>조정 EBITDA<span class="sub">이자·세금·감가상각 차감 전 이익, 일회성 요인 조정</span></td><td><b>약 3억 3,520만 달러</b> (마진 20%, +13% YoY)</td><td>마케팅 25% 집중과 병행한 수익성</td></tr>
+    <tr><td>연속 순매출 성장</td><td><b>29분기</b> 연속 · <b>7년</b> 연속(점유율 동반)</td><td>성장의 지속성 <span class="sub">대부분 rhode 인수 이전</span></td></tr>
+    <tr><td>미국 매스 색조화장품 점유율</td><td><b>약 12%</b> (2위, 점유율 최대 상승 브랜드) <button class="fn" data-note="소매 트래킹 데이터(Circana·Nielsen) 기준">출처</button></td><td>5년 전 4.5% → 약 12%, <b>유기적 확대</b> <span class="sub">1위는 메이블린</span></td></tr>
+    <tr><td>국제(해외) 매출</td><td>매출의 <b>약 16%</b> (FY2026 +38% 성장)</td><td>미국 중심 → 해외 확장 초기, 목표 약 30%</td></tr>
+    <tr><td>Beauty Squad 로열티 회원</td><td><b>500만 명 이상</b> (전년비 +30%) <button class="fn" data-note="회사 보고치 — 회원 500만+·'앱 거래의 95%'는 CDO 엑타 초프라 공개 발언·e.l.f.–Braze 공동 사례연구(2025~2026) / '자사몰 매출 약 80%'·'LTV +166%'는 회사 제시 수치 인용 업계 보도(Glossy·Chain Store Age, 2024 시점)">출처</button></td><td>자사몰 매출의 약 80%·앱 거래의 95% 기여</td></tr>
+  </table>
+  <div class="srcnote">
+    <span class="sk">출처 노트 — 원문 각주 보존</span>
+    <p>출처(재무): e.l.f. Beauty FY2026 4분기·연간 실적 발표(2026.5.20, BusinessWire)·SEC Form 8-K / 매스 색조화장품 점유율은 소매 트래킹 데이터(Circana·Nielsen) 기준 / 로열티 지표 출처 구분 — 회원 500만+와 '앱 거래의 95%가 회원'은 CDO 엑타 초프라(Ekta Chopra)의 공개 발언 및 e.l.f.–Braze 공동 사례연구 기준(2025~2026), '자사몰 매출의 약 80%'와 '회원 LTV +166%'는 e.l.f.가 제시한 수치를 인용한 업계 보도(Glossy·Chain Store Age, 2024) 기준이다. 후자는 SEC 공시가 아닌 회사 보고 수치이므로 시점(2024)을 함께 밝힌다.</p>
+    <p>주가 출처: Macrotrends(NYSE: ELF) — 사상 최고 종가 $218.00(2024.6.27), 2026.6.29 종가 $69.91, 시가총액 약 30억 달러 안팎(2026년 6월 기준). 주가·시총은 변동하므로 조회 시점을 명시한다.</p>
+    <p>GAAP 순이익 급감의 배경: 평균 약 55%로 뛴 관세(전년 약 25%의 2배 이상 — 25% Section 301 + 20% IEEPA + 10% 상호관세로 구성된 대(對)중국 관세 스택. e.l.f. CEO 타랑 아민·CFO 맨디 필즈가 FY2026 4분기 실적에서 직접 언급 / CNBC·어닝콜 2026.5) 원가와 인수 관련 회계 조정 등이 겹친 결과다. 조정 순이익(조정 EBITDA 기준의 영업 실체)은 약 1억 8,590만 달러로, 영업 자체의 체력은 유지됐다.</p>
+  </div>
+
+  <h3 style="margin-top:34px;font-size:18px">헤드라인 검증 — 내 케이스에도 ② 렌즈를 댄다</h3>
+  <p class="lead" style="font-size:15px;margin-top:6px">e.l.f.의 <b style="color:var(--ink)">+25% 성장조차 표면이다</b>. 그 약 90%는 rhode 인수 기여분(약 2억 9,350만 달러)이고, 유기적 성장은 3~4%에 그친다. GAAP 순이익도 rhode 실적이 인수 기준을 초과하며 발생한 약 5,760만 달러의 earnout(실적연동 대가) 충당금으로 왜곡됐다. top-line(매출)도 bottom-line(이익)도 rhode가 좌우한 회계연도다. 그래서 value pricing 전략의 증거는 M&amp;A로 부푼 헤드라인이 아니라, 인수 이전부터 유기적으로 쌓인 실체 세 가지다.</p>
+  <ol class="evi">
+    <li><div><b>유기적 점유율</b> — 미국 매스 색조 점유율을 5년 만에 4.5%에서 약 12%로 끌어올린 확대. 인수가 만들 수 없는 숫자다.</div></li>
+    <li><div><b>마진 방어</b> — 평균 55% 관세를 맞고도 지킨 약 71% 매출총이익률.</div></li>
+    <li><div><b>고객 경제성</b> — 로열티 회원이 비회원보다 166% 높은 생애가치.</div></li>
+  </ol>
+  <p class="lead" style="font-size:15px">시장은 주가로 과하게 벌하고(-68%) 헤드라인 성장은 M&amp;A로 과하게 부풀려 보이지만, 유기적 점유율·마진·고객 경제성이라는 실체는 흔들리지 않았다. 이 괴리가 ② 꿰뚫는다의 실물 증거다. 시장이 매기는 표면 가격(주가·회계 이익·M&amp;A로 부푼 매출)과 브랜드·커뮤니티·고객 경제성이라는 내재가치가 분리되는 순간이다. <b style="color:var(--ink)">자기 브랜드의 헤드라인마저 표면과 실체로 갈라 보는 것</b>, 그것이 ② 꿰뚫는다를 내 분석 자체에 적용하는 방식이다. CASE 1의 고환율 검증과 같은 규율이다.</p>
+
+  <div class="stress">
+    <div class="st">스트레스 테스트 — 그림자까지 본다</div>
+    <p>전략을 증거로 쓰려면 반대 증거도 봐야 한다. e.l.f.의 value pricing은 지금 시험대에 있다. 관세 대응 가격 인상이 핵심 e.l.f. 브랜드의 단기 수요에 부담을 줬고, 회사는 <b>FY2027에 오히려 일부 가격을 다시 낮춰 판매수량을 지키는 카드</b>를 꺼냈다. 공급망도 리스크다. 생산의 상당 부분이 중국에 의존해왔고(과거 약 75~80%), 회사는 이를 분산해 중국 외 생산 비중을 45% 이상으로 끌어올리는 중이다. 소셜(특히 TikTok) 알고리즘·규제 의존도 역시 구조적 약점이다.</p>
+    <p>이 그림자들은 이 문서의 결론(전략이 효과적이었다)을 부정하지 않는다. 오히려 <b>'가격결정력이 관세 앞에서 어디까지 버티는가'라는 질문 자체가, value pricing을 마케터의 관점에서 검증하는 살아 있는 실험</b>이다. (포트폴리오 다각화 차원의 rhode·Naturium 인수는 이 모델을 매스+프리스티지 혼합으로 확장하는 별도 축이며, 이 문서가 증거로 삼는 세 축(유기적 점유율·마진·고객 경제성)과는 분리해 다룬다.)</p>
+  </div>
+
+  <div class="srcnote">
+    <span class="sk">근거 자료</span>
+    <p>e.l.f. Beauty FY2026 실적 발표(2026.5.20)·SEC Form 8-K / Circana·Nielsen 소매 트래킹 / Macrotrends 주가 데이터 / 회사·업계 공개 자료(마케팅비·로열티·개발 주기). 게임 관련 수치는 DB그룹 기업경영체험스쿨 최종 평가 화면·재무제표 확정값(별도 케이스스터디 문서) 기준이다. e.l.f. 수치와 게임 수치는 출처를 분리해 관리한다.</p>
+  </div>
+</div></section>
+
+<!-- CONTRAST -->
+<section id="contrast"><div class="wrap">
+  <div class="eyebrow">CONTRAST</div>
+  <h2>같은 렌즈, 세 가지 행동</h2>
+  <p class="lead">두 케이스를 통과했다. 이제 게임까지 셋을 나란히 놓는다. 렌즈 전환 뷰의 전체 조망판이다: 네 렌즈를 한눈에, 인쇄·비JS 환경에서도 그대로 열람된다. 행동은 셋 다 다르고, 렌즈는 하나다. 게임 쪽 용어(환산, 풀 낙찰 등)는 위 시그니처의 '30초 규칙' 박스에 정의돼 있다.</p>
+  <table class="vs">
+    <tr><th>렌즈</th><th>게임 — 회피</th><th>삼양 — 증폭</th><th>e.l.f. — 응답</th></tr>
+    <tr><td>① 읽는다<span class="sub">(흐름 선독)</span></td><td>군중이 몰릴 시장을 피해 <b>비는 시장</b>을 선점</td><td>세 흐름의 교차점에서 매운맛 챌린지에 <b>올라타 증폭</b></td><td>결정이 일어나는 장소(TikTok)로 먼저 이동해 <b>가장 빠르게 공급</b></td></tr>
+    <tr><td>② 꿰뚫는다<span class="sub">(표면 ≠ 내재가치)</span></td><td>기준가 앵커링을 역이용 — 환산 우위로 <b>25만 단독 낙찰</b></td><td>무시받던 극한 매움 → 새 카테고리 → <b>가격결정력</b></td><td>'비싼 = 좋은' 공식 부정 — value pricing으로 <b>매출총이익률 71%</b> 방어</td></tr>
+    <tr><td>③ 검증한다<span class="sub">(가정을 데이터로)</span></td><td>'분산 안전' 가정을 재고·행동 데이터로 <b>전복</b></td><td>밈인가 수요인가 — 까르보 한정판 <b>3,600만 개</b>로 검증 후 정식화</td><td>검증에 속도 결합 — 개념→진열 <b>약 20주</b></td></tr>
+    <tr><td>④ 베팅한다<span class="sub">(확신 집중·리스크 단호)</span></td><td>재고 1,216개 <b>미국 올인</b> + 회수율&lt;1 투자 중단</td><td>해외 단일 브랜드 집중 — 해외 비중 <b>약 80%</b></td><td>마케팅비 <b>7%→25%</b> 의도적 집중</td></tr>
+  </table>
+  <p class="lead" style="font-size:14.5px;margin-top:14px">이 렌즈는 성공담이 아니라 실패에서 벼려졌다. R1 ROE 최하위 출발, R2-3 호주 미낙찰, 자기 모델의 1차 결론 기각. 세 번의 실패를 데이터로 학습한 결과가 이 표의 판단들이다.</p>
+</div></section>
+
+<!-- LESSONS -->
+<section class="alt" id="lessons"><div class="wrap">
+  <div class="eyebrow">LESSONS — 마케터로서, 나라면 이렇게 적용한다</div>
+  <h2>여섯 개의 교훈, 겹침 없음</h2>
+  <p class="lead">여기가 두 케이스의 결론이다. 성공을 분석하는 데서 멈추지 않는다. 중요한 건 마케터인 내가 이 무형자산을 어떻게 측정하고 내 판단으로 가져오느냐다. 삼양의 셋과 e.l.f.의 셋은 서로 겹치지 않는다. 각 교훈 옆에 그것이 어떤 결정에서 강력하게 입증됐는지를 함께 적는다.</p>
+  <div class="lgrid">
+    <div class="lcol sam">
+      <div class="lch"><b>삼양 고유 교훈</b><span>프리미엄 축</span></div>
+      <div class="les"><span class="ln">SAMYANG 1</span><h4>무형자산을 측정 가능한 자산으로 다룬다</h4>
+        <p class="d">브랜드는 '느낌'이 아니라 가격결정력으로 환원되는 자산이다. 나는 브랜드 강도를 '얼마나 알려졌나'가 아니라 '수요를 잃지 않고 올릴 수 있는 가격의 폭'으로 측정한다. 마케팅 성과를 인지도·도달이 아니라 가격결정력과 재구매가 만든 단위 마진으로 보고하는 것, 이것이 내가 마케팅과 재무를 잇는 지점이다.</p>
+        <p class="proof">입증 — 미국 공급가 <b>9%</b> 인상(소비자가 약 14% 상승) 뒤에도 판매량 <b>+6%</b>: 브랜드가 가격결정력이라는 측정 가능한 자산임을 실측</p></div>
+      <div class="les"><span class="ln">SAMYANG 2</span><h4>트렌드를 읽되, 베팅 전에 데이터로 검증한다</h4>
+        <p class="d">매운맛 챌린지처럼 보이는 모든 바이럴이 지속 수요는 아니다. 나는 ① 읽기와 ③ 검증을 분리한다. 흐름을 먼저 감지하되(demand sensing), 작은 규모로 시장에 던져 그것이 밈인지 수요인지 매출·재구매 데이터로 가른 뒤에야 예산을 싣는다. 신호를 수요로 착각해 자원을 태우는 실수를 막는 것이 마케터의 데이터 규율이다.</p>
+        <p class="proof">입증 — 까르보 불닭: 소비자 레시피(신호) → 한정판 3개월 <b>3,600만 개</b>(검증) → 정식 출시(베팅). 신호와 수요를 분리한 전형</p></div>
+      <div class="les"><span class="ln">SAMYANG 3</span><h4>검증된 확신에는 분산 대신 집중한다</h4>
+        <p class="d">삼양이 내수 분산 대신 해외 단일 브랜드에 집중했듯, 검증이 끝난 기회에는 예산을 쪼개지 않고 싣는다. 그리고 논리가 깨진 채널·캠페인은 매몰비용과 무관하게 끊는다. 확신엔 집중하되 리스크는 단호히 끊는 것이다. 게임 마지막 분기에서 내가 한 일을 마케팅 예산 배분에서 그대로 한다.</p>
+        <p class="proof">입증 — 내수 분산 대신 해외 단일 브랜드 집중 → 해외 비중 <b>약 80%</b>·영업이익률 <b>22%</b>: 집중이 만든 마진</p></div>
+    </div>
+    <div class="lcol elf">
+      <div class="lch"><b>e.l.f. 고유 교훈</b><span>value 축</span></div>
+      <div class="les"><span class="ln">ELF 1</span><h4>프리미엄이 아니어도 가치 인식으로 마진을 지킨다</h4>
+        <p class="d">삼양은 비싸게 파는 힘으로 마진을 지켰지만, e.l.f.는 싸게 팔면서도 지켰다. 둘의 공통점은 마진의 출처가 가격표가 아니라 무형자산이라는 것이다. 나는 낮은 가격대 브랜드를 다룰 때도 마진 방어를 '원가 후려치기'가 아니라 '가치 인식 구축'의 문제로 본다. 소비자가 이 제품을 '싼 제품'이 아니라 '고가 제품과 같은 결과를 주는 영리한 선택'으로 인식하게 만들면, 낮은 가격에도 브랜드와 마진이 동시에 산다.</p>
+        <p class="proof">입증 — 평균 <b>55%</b> 관세를 가격 인상으로 상쇄하고도 매출총이익률 <b>약 71%</b>: 마진의 출처가 가격표가 아니라 무형자산임을 증명</p></div>
+      <div class="les"><span class="ln">ELF 2</span><h4>트렌드→제품의 속도 자체를 마케팅 역량으로 설계한다</h4>
+        <p class="d">e.l.f.의 경쟁우위는 '무엇을 만드느냐'가 아니라 '얼마나 빨리 만드느냐'였다. 나는 이것을 마케팅 조직의 KPI로 가져온다. 캠페인의 성과를 도달·인지도만이 아니라 '감지에서 실행까지 걸린 시간(sensing-to-launch lead time)'으로도 측정한다. 소셜에서 신호를 읽고, 데이터로 검증하고, 콘텐츠·프로모션·(가능하다면) 제품으로 답하기까지의 사이클을 구조적으로 단축하는 것. 경쟁자가 아직 회의하는 동안 먼저 시장에 답을 내놓는 속도가, 그 자체로 방어하기 힘든 우위가 된다.</p>
+        <p class="proof">입증 — 개념→진열 <b>약 20주</b> (업계 12~18개월): '얼마나 빨리'가 방어하기 힘든 우위가 됨</p></div>
+      <div class="les"><span class="ln">ELF 3</span><h4>마케팅비 비율을 통제 대상이 아니라 투자 포트폴리오로 설계한다</h4>
+        <p class="d">e.l.f.는 마케팅비 약 25%를 '높은 비용'이 아니라 '성장 베팅'으로 다뤘고, 그것을 자신이 읽은 채널(디지털·커뮤니티)에 집중해 회수했다. 나는 마케팅 예산을 '얼마까지 줄일 수 있나'가 아니라 '어느 채널에 얼마를 실으면 어떤 회수가 오나'라는 포트폴리오 배분의 문제로 접근한다. 검증된 채널에는 통념보다 과감하게 싣고, 회수가 깨진 채널은 매몰비용과 무관하게 끊는다. 비율을 지키는 것이 아니라 회수를 극대화하는 것이 목표다.</p>
+        <p class="proof">입증 — 마케팅비 <b>7% → 25%</b> 5년 의도적 상향, 디지털·커뮤니티 집중 → <b>29분기</b> 연속 성장으로 회수</p></div>
+    </div>
+  </div>
+
+  <div class="cbcv">
+    <div class="ct">마케팅 × 재무 — CBCV 착지</div>
+    <p>이 교훈들이 하나로 모이는 지점이, 마케팅과 재무의 교차점이다. e.l.f.의 진짜 자산은 재무제표에 '싼 화장품 재고'로 잡히지만, 실제 가치는 로열티 회원이 비회원보다 <b>166% 높은 생애가치</b>(LTV, Lifetime Value — 고객 한 명이 관계 전체에서 만드는 가치)를 만들고, 그 회원들이 자사몰 매출의 약 80%와 앱 거래의 95%를 책임지는 고객 경제성에 있다.</p>
+    <p>특히 e.l.f.는 소비자가 매장 영수증을 스캔하면 타 유통 채널에서의 구매까지 로열티 관계로 연결한다. 파편화된 구매를 한 고객의 생애가치로 재구성하는 것이다. 브랜드를 '느낌'이 아니라 반복구매와 단위 경제성으로 측정하는 이 관점을, 학계는 <b>고객 기반 기업가치평가(CBCV, Customer-Based Corporate Valuation — 고객·브랜드 데이터로 기업 가치를 평가하는 방법론)</b>로 정립하고 있다. 이 관점에 서면 +25%라는 헤드라인보다 유기적 점유율(4.5%→12%)과 회원 LTV가 더 정직한 지표가 된다. M&amp;A로 부푼 매출은 표면이고, 고객이 반복해서 만드는 가치가 실체이기 때문이다. <b>삼양이 가격결정력이라는 렌즈로 CBCV에 닿았다면, e.l.f.는 고객 충성도와 반복구매라는 다른 문으로 같은 지점에 닿는다.</b></p>
+    <p>게임에서 통한 사고방식은 삼양에서 한 번, e.l.f.에서 다시 한 번 작동했다. 프리미엄에서도, 그 정반대인 value pricing에서도. 나는 특정 기능의 전문가가 아니라, <em class="hl">맥락이 바뀌어도 같은 렌즈로 비즈니스 전체를 읽고 판단하는 마케터다.</em></p>
+  </div>
+</div></section>
+
+<!-- GO DEEPER -->
+<section id="docs"><div class="wrap">
+  <div class="eyebrow">GO DEEPER</div>
+  <h2>더 깊이 보려면</h2>
+  <div class="docs">
+    <a class="doc" href="index.html"><span class="dk">SUB-HUB</span><h4>4렌즈 의사결정 OS ↗</h4><p>이 페이지가 검증한 OS의 본체. 서브허브로 복귀해 다른 증거들을 본다.</p></a>
+    <a class="doc" href="dvmp.html"><span class="dk">ORIGIN — GAME</span><h4>게임 원본: 8분기 전 기록 ↗</h4><p>R1 ROE 최하위에서 R2 종합 1위까지. 이 페이지가 압축해 쓴 판단들의 전체 과정.</p></a>
+  </div>
+  <p class="linknote">두 문서는 같은 클러스터(/decision-os/)의 형제 파일이라 상대경로로 연결된다.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <p class="pos">게임에서 벼린 렌즈로, 실제 시장을 두 번 통과했다.<br>나는 <em>무형자산과 데이터로 시장 흐름을 읽는</em> 마케터다.</p>
+  <div class="contact"><span>김형준</span><a href="mailto:wns1235689@gmail.com">wns1235689@gmail.com</a></div>
+  <div class="colophon">
+    <h5>HOW THIS PAGE WAS BUILT</h5>
+    <p>이 페이지의 설계는, 페이지가 다루는 렌즈를 스스로에게 적용한 결과다.</p>
+    <ul>
+      <li><b>② 표면 ≠ 내재</b><span>— 두 케이스의 표면↔내재 스위치: 같은 데이터를 두 렌즈로 갈라 보는 장치로 구현했다.</span></li>
+      <li><b>①/③ 분리 원칙</b><span>— '왜 두 번 보는가'(WHY TWICE)와 '무엇으로 검증하는가'(THE LENS)를 분리 배치했다.</span></li>
+      <li><b>④ 집중 원칙</b><span>— 다크 콘솔은 시그니처 하나에만 썼다. 시선 예산의 집중 베팅이다.</span></li>
+      <li><b>정합성 규율</b><span>— 모든 수치는 원고 확정값만 옮겼고, 시계열은 확정 시점만 연결했다(임의 보간 0건).</span></li>
+    </ul>
+  </div>
+  <p class="hubslot"><a href="../index.html">← 전체 프로젝트</a></p>
+  <p class="byline">© 2026 KIM HYUNGJUN — TRANSFER PROOF · DECISION-OS CLUSTER</p>
+</div></footer>
+
+<script>
+// 진행 바
+var bar=document.getElementById('bar');
+window.addEventListener('scroll',function(){
+  var h=document.documentElement, s=h.scrollTop, m=h.scrollHeight-h.clientHeight;
+  bar.style.width=(m>0?(s/m*100):0)+'%';
+},{passive:true});
+
+// 시그니처 — 렌즈 전환 3열 뷰 (내용은 원고 확정 수치만 사용)
+var LENS={
+ 1:{g:{a:"회피",t:"시장별 입찰·낙찰 데이터를 8분기 누적 추적해 강팀 본진의 이동(미국→호주→이탈리아)을 한 발 앞서 예측하고, 다음에 비는 시장을 선점했다.",n:"8분기",s:"입찰·낙찰 데이터 누적 추적"},
+    s:{a:"증폭",t:"K-푸드 세계화·매운맛 놀이 소비·SNS 우선 구매, 세 흐름이 겹치는 지점을 먼저 읽고 매운맛 챌린지에 올라타 증폭했다.",n:"100억 개+",s:"불닭 누적 판매 · 100여 개국"},
+    e:{a:"응답",t:"뷰티 구매 결정이 매대에서 TikTok 피드로 옮겨가는 전환을 먼저 읽고, 2019년 오프라인 매장 22곳을 전부 닫아 자원을 디지털로 재배치했다.",n:"22곳 → 0",s:"오프라인 매장 전면 철수 (2019)"},
+    b:"<b>렌즈 ①.</b> 닫힌 게임의 정답은 군중 회피, 열린 시장의 정답은 증폭과 응답이다. 행동은 갈리지만 '흐름을 먼저 읽는다'는 렌즈는 동일하다."},
+ 2:{g:{a:"환산 우위",t:"경쟁자들이 인도 기준가 21만 원(매입 시장 최저)에 앵커링된(처음 본 숫자에 묶인) 채로 21~23만을 부를 때, 능력치가 만드는 환산지수 우위를 계산하고 일부러 비싸 보이는 25만 원을 불러 단독 낙찰했다.",n:"21만 → 25만",s:"기준가 앵커링 역이용 — 명목가는 높아도 환산은 우위"},
+    s:{a:"카테고리 창조",t:"'너무 매워서 안 팔린다'고 무시받던 극한 매움을 경쟁자 없는 새 카테고리로 보고, '프리미엄 K라면'의 가격결정력으로 전환했다.",n:"+9% → +6%",s:"미국 공급가 인상 → 판매량 (2025 4Q)"},
+    e:{a:"공식 부정",t:"'비싼 가격 = 좋은 품질'이라는 공식을 깼다. 프리스티지급 품질을 매스 가격에 판다. 마진은 가격표가 아니라 무형자산이 지킨다.",n:"55% → 71%",s:"평균 관세 → 지킨 매출총이익률 (FY2026)"},
+    b:"<b>렌즈 ②.</b> 셋 모두 표면 숫자가 아니라, 측정되지 않은 실체에 걸었다."},
+ 3:{g:{a:"가정 전복",t:"자체 제작한 낙찰 확률 모델의 1차 결과(분산이 안전)를 그대로 믿지 않고, 타팀 재고·행동 데이터로 입력 가정을 재검증해 결론을 뒤집었다.",n:"90% vs 35%",s:"분산 vs 미국 단일의 풀 낙찰 확률 — 가정 수정으로 전복"},
+    s:{a:"신호 ≠ 수요",t:"소비자 레시피에서 출발한 까르보 불닭은, 한정판 3개월 3,600만 개로 수요를 확인한 뒤에야 정식 출시로 전환됐다.",n:"3,600만 개",s:"한정판 3개월 검증 (2017.12 → 2018.5 정식)"},
+    e:{a:"검증 + 속도",t:"소셜·검색·판매 데이터로 수요를 실시간 감지하고 자사몰을 테스트베드로 검증한 뒤, 약 20주 만에 SKU로 낸다.",n:"약 20주",s:"개념→진열 (업계 12~18개월)"},
+    b:"<b>렌즈 ③.</b> '신호를 읽는 것'과 '진짜인지 검증하는 것'은 다른 일이다. 셋 다 둘을 분리했다."},
+ 4:{g:{a:"올인 + 절제",t:"마지막 분기까지 확보한 제품 재고 1,216개를 미국 단일 시장에 전량 집중했다. 동시에 회수율(ROI) 1 미만의 막판 투자는 단호히 접었다.",n:"약 55%",s:"미국 시장 단독 점유 — R1 최하위 → R2 1위"},
+    s:{a:"단일 브랜드",t:"포화 내수에 분산하는 대신 불닭 한 브랜드로 해외에 집중했다.",n:"약 80%",s:"해외 매출 비중 (2025년 연간)"},
+    e:{a:"마케팅비 베팅",t:"마케팅비를 통제 대상이 아니라 성장 베팅으로 다뤘다. 5년에 걸쳐 순매출의 7%에서 25%로 끌어올려 디지털·커뮤니티에 실었다.",n:"7% → 25%",s:"마케팅비 비율 (특정 분기 34%)"},
+    b:"<b>렌즈 ④.</b> 검증 없는 집중은 도박, 집중 없는 검증은 실행이 아니다. ③과 ④는 한 세트다."}
+};
+var btnWrap=document.getElementById('lensBtns');
+if(btnWrap){
+  btnWrap.addEventListener('click',function(ev){
+    var btn=ev.target.closest('button'); if(!btn) return;
+    var d=LENS[btn.dataset.lens]; if(!d) return;
+    var ids={g:['actG','txtG','numG','subG'],s:['actS','txtS','numS','subS'],e:['actE','txtE','numE','subE']};
+    ['g','s','e'].forEach(function(k){
+      document.getElementById(ids[k][0]).textContent=d[k].a;
+      document.getElementById(ids[k][1]).textContent=d[k].t;
+      document.getElementById(ids[k][2]).textContent=d[k].n;
+      document.getElementById(ids[k][3]).textContent=d[k].s;
+    });
+    document.getElementById('tbot').innerHTML=d.b;
+    btnWrap.querySelectorAll('button').forEach(function(b){
+      var on=(b===btn); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false');
+    });
+  });
+}
+
+// 표면 ↔ 내재 강조 스위치 (내용 숨김 없음 — 강조만 전환, 재클릭 시 해제)
+document.querySelectorAll('.flip').forEach(function(f){
+  f.querySelectorAll('.flipctl button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var cls='s-'+b.dataset.side, active=f.classList.contains(cls);
+      f.classList.remove('s-srf','s-cor');
+      f.querySelectorAll('.flipctl button').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false');});
+      if(!active){ f.classList.add(cls); b.classList.add('on'); b.setAttribute('aria-pressed','true'); }
+    });
+  });
+});
+// fn 툴팁 — 터치 환경 대응 (탭으로 열고 닫기, 바깥 탭 시 닫힘)
+document.querySelectorAll('.fn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var on=b.classList.contains('on');
+    document.querySelectorAll('.fn.on').forEach(function(x){x.classList.remove('on');});
+    if(!on) b.classList.add('on');
+  });
+});
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.fn')) document.querySelectorAll('.fn.on').forEach(function(x){x.classList.remove('on');});
+});
+</script>
+</body>
+</html>
