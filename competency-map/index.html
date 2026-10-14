@@ -27,7 +27,7 @@
   /* 허브 B안과 맞춘 값 · 열린 결정은 한 줄로 바꾼다 */
   --paper-b:#F7F8FA; --card:#FFFFFF; --line-strong:#C9D2E0; --ink-body:#334155; --ink-soft-b:#5E6A7A;
   --claim:#15233F; --claim-band:inset 0 -.38em #DCE7FB;
-  --link:#245AC2; --link-line:#245AC2; --link-hover:#1B47A0;
+  --link:#15233F; --link-line:#245AC2; --link-hover:#1B47A0;
   --sig:inherit; --nav-h:64px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -95,8 +95,8 @@ p{max-width:760px}
 .ix-ev a{font-size:14.5px;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-color:var(--link-line);text-underline-offset:4px;line-height:1.5}
 .ix-ev a:hover{color:var(--link-hover)}
 .ix-ev .kind{font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--ink-soft);background:var(--mist);border-radius:6px;padding:1px 6px;margin-left:6px;display:inline-block;text-decoration:none}
-.ix-row:target{background:#EEF3FF;box-shadow:inset 4px 0 0 var(--link)}
-.ix-row:target .ix-n{color:var(--link)}
+.ix-row:target{background:#EEF3FF;box-shadow:inset 4px 0 0 var(--link-line)}
+.ix-row:target .ix-n{color:var(--link-line)}
 @media(max-width:900px){
   .ix-row{grid-template-columns:48px minmax(0,1fr);gap:4px 14px}
   .ix-def{grid-column:2}
@@ -274,7 +274,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
 
 <div id="bar"></div>
 <nav class="nav"><div class="nav-in">
-  <a class="nav-logo" href="#">역량 · 지도</a>
+  <a class="nav-logo" href="#">역량 <span class="sig">·</span> 지도</a>
   <a class="nav-back" href="../index.html">← 전체 프로젝트</a>
   <div class="nav-links">
     <a href="#evidence-index">근거 색인</a>
