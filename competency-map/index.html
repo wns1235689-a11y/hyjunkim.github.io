@@ -24,11 +24,16 @@
   --sans:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Consolas,monospace;
   --maxw:1020px; --r:14px;
+  /* 허브 B안과 맞춘 값 · 열린 결정은 한 줄로 바꾼다 */
+  --paper-b:#F7F8FA; --card:#FFFFFF; --line-strong:#C9D2E0; --ink-body:#334155; --ink-soft-b:#5E6A7A;
+  --claim:#15233F; --claim-band:inset 0 -.38em #DCE7FB;
+  --link:#15233F; --link-line:#245AC2; --link-hover:#1B47A0;
+  --sig:#F2A91E; --nav-h:64px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
-body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
 ::selection{background:var(--gate);color:var(--ink)}
 a{color:var(--blue)}
 button{font-family:inherit;cursor:pointer}
@@ -36,15 +41,16 @@ button{font-family:inherit;cursor:pointer}
 
 /* progress + nav */
 #bar{position:fixed;top:0;left:0;height:3px;background:var(--gate);width:0;z-index:90}
-.nav{position:fixed;top:3px;left:0;right:0;z-index:80;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav-in{max-width:var(--maxw);margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px}
-.nav-logo{font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.08em;color:var(--ink);text-decoration:none}
-.nav-logo b{color:var(--gate-deep)}
-.nav-links{margin-left:auto;display:flex;gap:14px}
-.nav-links a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600}
-.nav-links a:hover{color:var(--ink)}
-@media(max-width:640px){.nav-links{display:none}}
-.nav-back{font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.nav{position:fixed;top:3px;left:0;right:0;z-index:80;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:0 20px;height:var(--nav-h);display:flex;align-items:center;gap:18px}
+.nav-logo{font-weight:800;font-size:17px;letter-spacing:-.01em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.nav-logo .sigdot{color:var(--sig)}
+.nav-links{margin-left:auto;display:flex;gap:2px}
+.nav-links a{font-size:14px;color:var(--ink-body);text-decoration:none;font-weight:600;padding:8px 10px;border-radius:8px;white-space:nowrap}
+.nav-links a:hover{background:var(--mist);color:var(--ink)}
+@media(max-width:700px){.nav-links{display:none}}
+.nav-back{font-size:14px;color:var(--link);text-decoration:underline;text-decoration-color:var(--link-line);text-underline-offset:4px;font-weight:600;white-space:nowrap}
+.nav-back:hover{color:var(--link-hover)}
 
 /* shared */
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
@@ -53,7 +59,7 @@ section{padding:84px 0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--ink-soft);margin-bottom:14px}
 .eyebrow::before{content:"";width:22px;height:10px;background:var(--gate);border-radius:2px}
 h1{font-size:clamp(30px,5.4vw,52px);line-height:1.12;letter-spacing:-.02em;font-weight:800}
-h1 .y{color:var(--gate)}
+h1 .y{color:var(--claim);box-shadow:var(--claim-band)}
 h2{font-size:clamp(23px,3.3vw,32px);line-height:1.22;letter-spacing:-.015em;font-weight:800;margin-bottom:18px}
 h3{font-size:19px;font-weight:700;margin-bottom:8px}
 .lead{color:var(--ink-soft);max-width:760px}
@@ -70,8 +76,36 @@ p{max-width:760px}
 
 
 /* HERO */
-.hero{padding:150px 0 90px}
-.hero .lead{font-size:19px;margin-top:22px;max-width:720px}
+.hero{padding:calc(var(--nav-h) + 3px + 56px) 0 52px;background:var(--card);border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(30px,4.6vw,48px);letter-spacing:-.03em;line-height:1.2}
+.hero .lead{font-size:18.5px;line-height:1.65;margin-top:22px;max-width:720px;color:var(--ink-body)}
+
+/* ═══ EVIDENCE INDEX (역량별 근거 색인) ═══ */
+#evidence-index{padding:56px 0 64px}
+#evidence-index,.ix-row,.axis[id]{scroll-margin-top:calc(var(--nav-h) + 3px + 24px)}
+.ix-list{list-style:none;margin:22px 0 0;padding:0;border:1px solid var(--line);border-radius:var(--r);background:var(--card);overflow:hidden}
+.ix-row{display:grid;grid-template-columns:56px 180px minmax(0,1fr) 330px;gap:2px 18px;align-items:start;padding:18px 22px;border-top:1px solid var(--line)}
+.ix-row:first-child{border-top:0}
+.ix-n{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink-soft);padding-top:4px}
+.ix-name{font-size:18px;font-weight:700;margin:0;letter-spacing:-.01em;line-height:1.5}
+.ix-name a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--link-line);text-decoration-thickness:2px;text-underline-offset:5px}
+.ix-name a:hover{color:var(--link-hover)}
+.ix-def{font-size:15px;color:var(--ink-body);line-height:1.6;max-width:none;padding-top:2px}
+.ix-ev{display:flex;flex-direction:column;gap:8px}
+.ix-ev a{font-size:14.5px;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-color:var(--link-line);text-underline-offset:4px;line-height:1.5}
+.ix-ev a:hover{color:var(--link-hover)}
+.ix-ev .kind{font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--ink-soft);background:var(--mist);border-radius:6px;padding:1px 6px;margin-left:6px;display:inline-block;text-decoration:none}
+.ix-row:target{background:#EEF3FF;box-shadow:inset 4px 0 0 var(--link-line)}
+.ix-row:target .ix-n{color:var(--link-line)}
+@media(max-width:900px){
+  .ix-row{grid-template-columns:48px minmax(0,1fr);gap:4px 14px}
+  .ix-def{grid-column:2}
+  .ix-ev{grid-column:2;margin-top:8px;padding-top:10px;border-top:1px dashed var(--line)}
+}
+@media(max-width:640px){
+  .ix-row{grid-template-columns:1fr;gap:4px;padding:16px 18px}
+  .ix-def,.ix-ev{grid-column:1}
+}
 
 /* SIGNALS — 현장 사진 */
 .field-photo{margin:26px 0 4px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -212,10 +246,10 @@ table.terrain sup{color:var(--gate-deep);font-weight:700;font-size:11px}
 /* ═══ GO DEEPER ═══ */
 .docs{margin-top:22px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 @media(max-width:760px){.docs{grid-template-columns:1fr}}
-.doc{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;background:var(--paper);display:flex;flex-direction:column;gap:8px}
+.doc{border:1px dashed var(--ink-soft);border-radius:var(--r);padding:18px 20px;background:var(--mist);display:flex;flex-direction:column;gap:8px}
 .doc-t{font-weight:700;font-size:15.5px;color:var(--ink);line-height:1.4}
 .doc-d{font-size:13.5px;color:var(--ink-soft);line-height:1.6;flex:1}
-.doc-scope{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--gate-deep);letter-spacing:.03em;padding-top:8px;border-top:1px solid var(--line)}
+.doc-scope{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;padding-top:8px;border-top:1px solid var(--line)}
 .docs-note{margin-top:18px;font-size:13px;color:var(--ink-soft);line-height:1.7;max-width:none;padding:14px 18px;background:var(--mist);border-radius:10px}
 .docs-note b{color:var(--ink)}
 
@@ -240,9 +274,10 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
 
 <div id="bar"></div>
 <nav class="nav"><div class="nav-in">
-  <a class="nav-logo" href="#">역량 · 지도</a>
+  <a class="nav-logo" href="#">역량 <span class="sigdot">·</span> 지도</a>
   <a class="nav-back" href="../index.html">← 전체 프로젝트</a>
   <div class="nav-links">
+    <a href="#evidence-index">근거 색인</a>
     <a href="#signals">SIGNALS</a>
     <a href="#terrain">일의 지형</a>
     <a href="#map">역량 5축</a>
@@ -256,6 +291,45 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
   <h1>시장이 말한 마케터의 역량,<br>프로젝트로 <span class="y">채워간다</span></h1>
   <p class="lead">이 지도의 기준은 내가 정한 것이 아니다. 2026년 5월 AWS Summit Seoul. 기조연설 두 개, 그리고 아모레퍼시픽·GS리테일·바비톡 세션. 다섯 개 세션의 전사에서 무대에 선 실무 리더들이 말한 것을 직접 추출했다. 지도의 각 축은 그 발화에서 나왔고, 각 프로젝트가 그 축의 증거다.</p>
 </div></header>
+
+<!-- ═══════════ EVIDENCE INDEX ═══════════ -->
+<section id="evidence-index"><div class="wrap">
+  <div class="eyebrow">EVIDENCE INDEX</div>
+  <h2>역량별 근거 색인</h2>
+  <p class="lead">이 지도는 역량의 정답 목록이 아니다. 축마다 대표 근거 두 개를 골랐다. 누르면 그 근거가 실린 장이 바로 열린다.</p>
+  <ol class="ix-list">
+    <li class="ix-row" id="ix-01">
+      <span class="ix-n">01</span>
+      <h3 class="ix-name"><a href="#axis-01">문제 정의력</a></h3>
+      <p class="ix-def">현장에서 직접 뛰며, 진짜 문제를 파헤쳐 한 문장으로 만든다</p>
+      <div class="ix-ev"><a href="../cj/index.html#experiment">고메 우리맛 아시안 · 원인 6→1 특정<span class="kind">본문</span></a><a href="../rx/index.html#problem">개강한 RX · 외부자 4인 검증<span class="kind">본문</span></a></div>
+    </li>
+    <li class="ix-row" id="ix-02">
+      <span class="ix-n">02</span>
+      <h3 class="ix-name"><a href="#axis-02">데이터 검증력</a></h3>
+      <p class="ix-def">데이터로 내 판단을 집요하게 검증하고, 틀렸으면 수용한다</p>
+      <div class="ix-ev"><a href="../echo/index.html#data">ECHO · 65,486건 검증 <small>(6인 팀 · 데이터 정제 단독)</small><span class="kind">본문</span></a><a href="../rx/index.html#fieldtest-kr">개강한 RX · 17명 검증<span class="kind">본문</span></a></div>
+    </li>
+    <li class="ix-row" id="ix-03">
+      <span class="ix-n">03</span>
+      <h3 class="ix-name"><a href="#axis-03">AI 통제력</a></h3>
+      <p class="ix-def">AI에게 의존하는 대신, 의심하고 교차검증하며 통제한다</p>
+      <div class="ix-ev"><a href="../rehearsal-engine/index.html#act4">리허설 엔진 · "판별 불가" 판정<span class="kind">본문</span></a><a href="../rehearsal-engine/docs/calibration.html">리허설 엔진 · 보정 시뮬 최종 보고서<span class="kind">보고서</span></a></div>
+    </li>
+    <li class="ix-row" id="ix-04">
+      <span class="ix-n">04</span>
+      <h3 class="ix-name"><a href="#axis-04">번역력</a></h3>
+      <p class="ix-def">기술과 데이터를 상대의 언어로 옮겨, 이해를 넘어 상상하게 만든다</p>
+      <div class="ix-ev"><a href="../echo/index.html#solution">ECHO · 음운 피드백·화법 체계 <small>(6인 팀)</small><span class="kind">본문</span></a><a href="../rx/index.html#problem">개강한 RX · "주치의" 자발 재명명·0/4 해부<span class="kind">본문</span></a></div>
+    </li>
+    <li class="ix-row" id="ix-05">
+      <span class="ix-n">05</span>
+      <h3 class="ix-name"><a href="#axis-05">완주력</a></h3>
+      <p class="ix-def">일단 빠르게 달려들고, 작동하는 답이 나올 때까지 물고 늘어진다</p>
+      <div class="ix-ev"><a href="../business/index.html#cycles">사업 3사이클 · 3사이클 완주·스카웃 2회<span class="kind">본문</span></a><a href="../rx/index.html#how-i-worked">개강한 RX · 사이클·폐기 기록<span class="kind">본문</span></a></div>
+    </li>
+  </ol>
+</div></section>
 
 <!-- ═══════════ SIGNALS ═══════════ -->
 <section id="signals"><div class="wrap">
@@ -358,7 +432,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
     <div class="legend-row"><span class="legend-name"><a href="../rx/index.html">개강한 RX</a></span><span class="legend-desc">아모레퍼시픽 브랜드 공모전에 낸 뷰티 캠페인(3인 팀 공동 제출). 탈락 후 혼자 케이스 스터디로 전환해, 유럽 4개국 현장 판정까지 네 바퀴 검증을 완료했다.</span></div>
     <div class="legend-row"><span class="legend-name"><a href="../echo/index.html">ECHO</a></span><span class="legend-desc">영어 발음 교정 앱, 6인 팀 졸업 프로젝트. 내 몫은 87GB 비정형 음성의 정제와 검증이었다.</span></div>
     <div class="legend-row"><span class="legend-name"><a href="../business/index.html">사업 3사이클</a></span><span class="legend-desc">자체 상품과 채널을 세 사이클(1인 → 동업 → 프리랜서)로 운영. 합산 구독·팔로워 20,601, 최고 조회 롱폼 58만·쇼츠 30만, 48시간 트래픽 75만.</span></div>
-    <div class="legend-row"><span class="legend-name"><a href="../cj/index.html">고메 우리맛 아시안</a></span><span class="legend-desc">CJ제일제당 채용연계 공모전. 본선 탈락 후 자비 ₩148,459로 리뷰 분석·행동 실험(방문 549명)·설문의 3게이트 검증을 직접 집행했다.</span></div>
+    <div class="legend-row"><span class="legend-name"><a href="../cj/index.html">고메 우리맛 아시안</a></span><span class="legend-desc">CJ제일제당 신제품 기획 공모전. 본선 탈락 후 자비 ₩148,459로 리뷰 분석·행동 실험(방문 549명)·설문의 3게이트 검증을 직접 집행했다.</span></div>
     <div class="legend-row"><span class="legend-name"><a href="../rehearsal-engine/index.html">리허설 엔진</a></span><span class="legend-desc">푸마리에서 파생한 LLM 시뮬레이션 검증 도구. AI에게 기대 방향을 알려주지 않는 원칙과 널 확률 병기를 시스템으로 만들었다.</span></div>
     <div class="legend-row"><span class="legend-name"><a href="../decision-os/index.html">4렌즈 의사결정 OS</a></span><span class="legend-desc">모의투자 대회 10,053명 중 368위(상위 3.7%, 폭락장 코스피 −4.97% 대비 +15.6%p) · 가치투자대회는 판단을 6/9에 봉인하고 시장의 채점(10/2)을 기다리는 중 · 경영 시뮬레이션 11팀 중 종합 1위(3인 팀).</span></div>
     <div class="legend-row"><span class="legend-name"><a href="../ai-flow/index.html">AI-FLOW</a></span><span class="legend-desc">인천공항 AI 공모전. 결선 미진출 후 통과작 20팀을 전수 분석해 다음 설계의 기준으로 바꿨다.</span></div>
@@ -367,7 +441,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
   </div>
 
   <!-- 축 1 -->
-  <div class="axis">
+  <div class="axis" id="axis-01">
     <div class="axis-head">
       <div class="axis-num">01</div>
       <div class="axis-headtext">
@@ -390,7 +464,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
   </div>
 
   <!-- 축 2 -->
-  <div class="axis">
+  <div class="axis" id="axis-02">
     <div class="axis-head">
       <div class="axis-num">02</div>
       <div class="axis-headtext">
@@ -413,7 +487,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
   </div>
 
   <!-- 축 3 -->
-  <div class="axis">
+  <div class="axis" id="axis-03">
     <div class="axis-head">
       <div class="axis-num">03</div>
       <div class="axis-headtext">
@@ -436,7 +510,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
   </div>
 
   <!-- 축 4 -->
-  <div class="axis">
+  <div class="axis" id="axis-04">
     <div class="axis-head">
       <div class="axis-num">04</div>
       <div class="axis-headtext">
@@ -459,7 +533,7 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
   </div>
 
   <!-- 축 5 -->
-  <div class="axis">
+  <div class="axis" id="axis-05">
     <div class="axis-head">
       <div class="axis-num">05</div>
       <div class="axis-headtext">
@@ -526,17 +600,17 @@ footer .wrap{display:flex;flex-direction:column;gap:16px}
     <div class="doc">
       <div class="doc-t">K-뷰티·리테일 AI 시장 분석</div>
       <div class="doc-d">5개 세션 × 시장 패턴 매트릭스(에이전트 분류·옴니채널·AI Ready·AI DLC·Marketplace)와 다섯 기업의 핵심 발화 정리.</div>
-      <div class="doc-scope">요약본 · 세션별 상세는 면접에서</div>
+      <div class="doc-scope">공개 링크 없음 · 요약본 · 세션별 상세는 면접에서</div>
     </div>
     <div class="doc">
       <div class="doc-t">역량의 산업 독립성 검증</div>
       <div class="doc-d">완성차·패션이라는 전혀 다른 두 산업이 "현업이 직접 데이터를 다뤄 가치를 만든다"는 같은 패턴으로 수렴함을 정리. 위 반론 2의 근거. 두 도메인은 신호이지 전 산업 증명은 아니라는 한계도 함께 명시한다.</div>
-      <div class="doc-scope">요약본</div>
+      <div class="doc-scope">공개 링크 없음 · 요약본</div>
     </div>
     <div class="doc">
       <div class="doc-t">전사 분석 방법론</div>
       <div class="doc-d">40분 발표 전사를 분석할 때 쓴 자기변호 방지 가드레일 프롬프트 일부와, AI 진단 앱 3종 벤치마크 결과.</div>
-      <div class="doc-scope">발췌 · 프롬프트 전문은 면접에서</div>
+      <div class="doc-scope">공개 링크 없음 · 발췌 · 프롬프트 전문은 면접에서</div>
     </div>
   </div>
 
