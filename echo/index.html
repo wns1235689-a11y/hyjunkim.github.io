@@ -29,7 +29,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
-body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
 ::selection{background:var(--gate);color:var(--ink)}
 a{color:var(--blue)}
 button{font-family:inherit;cursor:pointer}
@@ -77,11 +77,11 @@ h2{font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-.02em;line-hei
 .board{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:34px}
 .board span b{color:var(--ink);font-weight:600}
 .hero h1{font-size:clamp(44px,8vw,82px);font-weight:800;letter-spacing:-.03em;line-height:1.08;margin-bottom:4px}
-.hero h1 .y{color:var(--gate-deep)}
+.hero h1 .y{color:var(--ink);box-shadow:inset 0 -.38em #DCE7FB}
 .hero .pron{font-family:var(--mono);font-size:clamp(13px,2vw,16px);color:var(--ink-soft);letter-spacing:.1em;margin-bottom:8px}
 .hero .pron i{font-style:normal;background:var(--sky-soft);border:1px solid var(--sky);color:var(--blue);border-radius:6px;padding:2px 8px;margin-right:5px}
 .thesis{font-size:clamp(20px,3.1vw,29px);font-weight:700;letter-spacing:-.01em;line-height:1.5;margin:26px 0 14px;max-width:840px}
-.thesis em{font-style:normal;box-shadow:inset 0 -0.45em var(--gate)}
+.thesis em{font-style:normal;box-shadow:inset 0 -.38em #DCE7FB}
 .hero .lead{font-size:17.5px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px;max-width:780px}
 .stat{border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;background:#fff}
