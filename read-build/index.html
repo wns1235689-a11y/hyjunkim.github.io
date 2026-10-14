@@ -26,7 +26,7 @@
   --maxw:1020px; --r:14px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
 ::selection{background:var(--gate);color:var(--ink)}
@@ -37,14 +37,15 @@ button{font-family:inherit;cursor:pointer}
 /* progress + nav */
 #bar{position:fixed;top:0;left:0;height:3px;background:var(--gate);width:0;z-index:90}
 .nav{position:fixed;top:3px;left:0;right:0;z-index:80;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav-in{max-width:var(--maxw);margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:18px}
 .nav-logo{font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.08em;color:var(--ink);text-decoration:none}
-.nav-logo b{color:var(--gate-deep)}
-.nav-links{margin-left:auto;display:flex;gap:14px}
-.nav-links a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.nav-logo b{color:var(--gate)}
+.nav-links{margin-left:auto;display:flex;gap:2px}
+.nav-links a{font-size:14px;color:#334155;text-decoration:none;font-weight:600;padding:8px 10px;border-radius:8px;white-space:nowrap}
 .nav-links a:hover{color:var(--ink)}
-@media(max-width:640px){.nav-links{display:none}}
-.nav-back{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600;white-space:nowrap}
+@media(max-width:540px){.nav-links{display:none}}
+.nav-back{font-size:14px;color:var(--ink);text-decoration:underline;text-decoration-color:#245AC2;text-underline-offset:4px;font-weight:600;white-space:nowrap}
+.nav-back:hover{color:#1B47A0}
 .nav-back:hover{color:var(--ink)}
 
 /* shared */
@@ -387,8 +388,8 @@ footer .pos em{font-style:normal;color:var(--gate)}
 <body>
 <div id="bar"></div>
 <nav class="nav"><div class="nav-in">
-  <a class="nav-back" href="../index.html">← 전체 프로젝트</a>
   <a class="nav-logo" href="#top">READ<b>·</b>BUILD</a>
+  <a class="nav-back" href="../index.html">← 전체 프로젝트</a>
   <div class="nav-links">
     <a href="#deconstruct">해체</a><a href="#market">검증</a><a href="#build">구축</a><a href="#whysmall">경제성</a><a href="#docs">문서</a>
   </div>
