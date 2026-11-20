@@ -490,7 +490,7 @@ details.draw .body{padding:0 20px 20px}
   <div class="board">
     <span>PROJECT <b>CJ제일제당 푸마리 5기 — 본선 출품 · 탈락 후 자가 검증</b></span>
     <span>PERIOD <b>2026.03 — 07</b></span>
-    <span>ROLE <b>개인 참가 · 기획 — 분석 — 실험 — 계측</b></span>
+    <span>ROLE <b>개인 참가 · 기획 · 분석 · 실험 · 계측</b></span>
     <span>SERIES <b>본편 · <a href="process/" style="color:inherit;text-decoration:underline">과정편 ↗</a></b></span>
   </div>
   <h1>고메 <span class="y">우리맛</span> 아시안</h1>
@@ -634,7 +634,7 @@ details.draw .body{padding:0 20px 20px}
       <div class="rgate"><div class="gk">GATE C · 소액</div><b>설문</b><span>그 수요층은 얼마나 되는가 · 진술도 같은 방향인가</span></div>
     </div>
     <div class="roadmap-cap" style="color:var(--console-dim)">검증은 이 순서로 진행된다. 비용이 들지 않는 검증부터 시작하고, 앞 관문을 통과해야 다음으로 넘어간다. 아래 네 질문은 세 게이트와 판정 장치가 순서대로 하나씩 맡는다.</div>
-    <div style="margin-top:14px;font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--console-dim)"><span style="color:var(--gate);font-weight:600">GATE A</span> · 소비자의 목소리는 어느 시나리오를 가리키는가<br><span style="color:var(--gate);font-weight:600">GATE B</span> · 그 가설은 실제 행동 데이터로 실측되는가<br><span style="color:var(--gate);font-weight:600">GATE C</span> · 그 수요층은 얼마나 되는가 — 진술도 같은 방향인가<br><span style="color:var(--gate);font-weight:600">판정</span> · 사전에 잠근 기준만으로 결론이 내려지는가</div>
+    <div style="margin-top:14px;font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--console-dim)"><span style="color:var(--gate);font-weight:600">GATE A</span> · 소비자의 목소리는 어느 시나리오를 가리키는가<br><span style="color:var(--gate);font-weight:600">GATE B</span> · 그 가설은 실제 행동 데이터로 실측되는가<br><span style="color:var(--gate);font-weight:600">GATE C</span> · 그 수요층은 얼마나 되는가, 진술도 같은 방향인가<br><span style="color:var(--gate);font-weight:600">판정</span> · 사전에 잠근 기준만으로 결론이 내려지는가</div>
   </div>
 </section>
 <!-- ============ PART 2 · QUESTION ============ -->
@@ -785,7 +785,7 @@ details.draw .body{padding:0 20px 20px}
         <div class="vout">
           <div class="vrow"><span>T1 / C0</span><b id="rT1">—</b></div>
           <div class="vrow"><span>T2 / C0</span><b id="rT2">—</b></div>
-          <div class="vrow"><span>생존선 <button class="fn" data-note="표본(n)이 얇으면 유의성 대신 방향만 말한다 — Wilson 신뢰구간과 표본수를 함께 적고 '방향성'으로만 표기하는 것이, 린 실험의 정직한 한계 표기다.">n이 작으면?</button></span><span style="font-size:12px">C0의 70% 이상</span></div>
+          <div class="vrow"><span>생존선 <button class="fn" data-note="표본(n)이 얇으면 유의성 대신 방향만 말한다. Wilson 신뢰구간과 표본수를 함께 적고 '방향성'으로만 표기하는 것이, 린 실험의 정직한 한계 표기다.">n이 작으면?</button></span><span style="font-size:12px">C0의 70% 이상</span></div>
           <div id="vFlagWrap"></div>
           <div class="vdiag" id="vDiag"></div>
         </div>
@@ -879,10 +879,10 @@ details.draw .body{padding:0 20px 20px}
       <div style="border:1.5px solid var(--line);border-left:4px solid var(--gate);border-radius:var(--r);background:#fff;padding:2px 22px 20px;margin-top:12px">
       <p style="margin-top:18px"><b>① 수요층 확정</b> — 향 기피 <b>33.0%</b>(협의 — "매우" 응답 기준) [95% CI 24~43%]. 수집 전에 등록해 둔 예측 밴드(20~48%) 안에 착지했고, 모집 채널을 갈라 봐도 흔들리지 않았다(다만 자기선택 표본이라, 주장 범위는 모집단 대표성이 아니라 채널 강건성까지다). 본선에서 근거 없이 주장했던 그 소비자가 이제 숫자를 가졌다: <b>셋 중 하나.</b></p>
       <p style="margin-top:12px"><b>② 진술도 같은 방향</b> — 카피 선택에서 매실청(T2) <b>43%</b> vs 완성도(T1) <b>27%</b>. 행동(게이트 B)과 진술(게이트 C)이 같은 쪽을 가리킨다. 판정은 불변이고, 그 판정을 받치는 다리가 하나 더 생겼다.</p>
-      <p style="margin-top:12px"><b>③ 정직 종료</b> — 세그 반응(향 기피층의 매실청 카피 선택 52% vs 비기피층 39%, +13%p)은 <b>방향만이다(확증 아님)</b>. n=88의 검정력으로는 우연과 구분되지 않아(<button class="fn" data-note="관측된 차이가 순전히 우연으로도 나올 법한 정도. 낮을수록 우연이 아니라는 신호이며, 통상 0.05 미만을 확증의 관례적 기준으로 삼는다. 0.18은 그 기준에 한참 못 미친다.">p≈0.18</button>, 확증에 필요한 표본은 약 600), 사전 승인해 둔 출구 — "본조사 미검증, 방향만" — 그대로 종료했다. 확증하지 못한 것을 확증했다고 쓰지 않았다.</p>
+      <p style="margin-top:12px"><b>③ 정직 종료</b> — 세그 반응(향 기피층의 매실청 카피 선택 52% vs 비기피층 39%, +13%p)은 <b>방향만이다(확증 아님)</b>. n=88의 검정력으로는 우연과 구분되지 않아(<button class="fn" data-note="관측된 차이가 순전히 우연으로도 나올 법한 정도. 낮을수록 우연이 아니라는 신호이며, 통상 0.05 미만을 확증의 관례적 기준으로 삼는다. 0.18은 그 기준에 한참 못 미친다.">p≈0.18</button>, 확증에 필요한 표본은 약 600), 사전 승인해 둔 출구("본조사 미검증, 방향만") 그대로 종료했다. 확증하지 못한 것을 확증했다고 쓰지 않았다.</p>
       </div>
       <h3 style="margin-top:40px;font-size:19px;font-weight:800">탐색 — 양날의 매실청: 누구에게, 어떤 언어로</h3>
-      <p style="margin-top:12px">정통성 우려("이게 팟타이 맞나")는 예상의 반대편에서 나왔다. 향 기피층에서는 <b>7%</b>에 그쳤고, 비기피층에서 <b>31%</b>였다. 자유 응답의 질적 신호와 정량 문항이 같은 곳을 가리킨다. 매실청은 만능 소구가 아니라 <b>조준의 문제</b>다. 기피층에는 전면에 세우고, 정통파에게는 다른 방어가 필요하다. 판정의 처방("소구는 뾰족하게")이 "누구에게, 어떤 언어로"까지 내려온 것이다. <span style="font-size:12.5px;color:var(--ink-soft)">(탐색 트랙 — 확증 아님)</span></p>
+      <p style="margin-top:12px">정통성 우려("이게 팟타이 맞나")는 예상의 반대편에서 나왔다. 향 기피층에서는 <b>7%</b>에 그쳤고, 비기피층에서 <b>31%</b>였다. 자유 응답의 질적 신호와 정량 문항이 같은 곳을 가리킨다. 매실청은 만능 소구가 아니라 <b>조준의 문제</b>다. 기피층에는 전면에 세우고, 정통파에게는 다른 방어가 필요하다. 판정의 처방("소구는 뾰족하게")이 "누구에게, 어떤 언어로"까지 내려온 것이다. <span style="font-size:12.5px;color:var(--ink-soft)">(탐색 트랙, 확증 아님)</span></p>
       <h3 style="margin-top:40px;font-size:19px;font-weight:800">집행 기록 — 규율이 일한 세 장면</h3>
       <p style="margin-top:12px"><b>장면 1 · ₩21,000이 산 진실.</b> 광고에 ₩21,000을 태우고 5명을 얻었다. 실패처럼 보이는 숫자를 퍼널로 뜯자 판정이 갈렸다. 도구 무죄, 채널 유죄였다. 페이지 뷰 약 269 중 첫 문항 도달 ~3%인데, 일단 시작한 사람의 83%는 끝까지 갔다. 콜드 트래픽(광고로 처음 들어온 방문자)은 문 앞에서 돌아서고, 문을 넘은 사람은 완주한다. 응답 단가 ₩4,200으로 광고 단일 모집의 경제성을 기각하고 커뮤니티·인증형 설문 플랫폼으로 전환했다(광고 ~3% 대비, 채널 완료율 커뮤니티 70% · 인증 플랫폼 90%).</p>
           <p style="margin-top:12px"><b>장면 2 · n=5의 유혹.</b> 광고 5명 시점의 중간 그림은 "둘 다 별로 60%"였다. 전체 88명에서 그 수치는 23%로 희석됐고, 매실청이 명확히 우세했다(43% vs 27%). 판정 규칙을 수집 전에 잠가두지 않았다면 5명의 그림에 흔들렸을 것이다. 소표본 중간 판독의 위험을 실물로 확인했다.</p>
@@ -893,7 +893,7 @@ details.draw .body{padding:0 20px 20px}
       <div class="rnotes">
         <div>· 재정의의 기록 — 게이트 C는 B 판정 후 남은 공백(수요층 크기·세그 반응)에 맞춰 목표를 재정의했고, 그 재정의를 <b>데이터 수집 전</b> 별도 사전등록(설계서 v2.5)으로 잠근 뒤 집행했다. 원 기준이던 가격은 문항으로 유지·측정해 결과까지 보고했으며(가격 수용률이 6,900→7,500원 사이에서 급락하는 절벽 관측), 판정 기준에서만 제외했다. 위 동결 표의 게이트 C 행은 동결 시점의 기록 그대로 둔다.</div>
       </div>
-    <p style="margin-top:28px">그리고 분명히 해 둔다 — <b>여기까지의 결론도 "출시 GO"는 아니다.</b> 게이트 C 파일럿은 수요층을 확정하고 방향을 보강했지만, 세그 반응의 확증(필요 표본 약 600)과 본조사는 남은 일이다. 이 결론은 H2(강조점) 판별과 그 보강까지다.</p>
+    <p style="margin-top:28px">그리고 분명히 해 둔다. <b>여기까지의 결론도 "출시 GO"는 아니다.</b> 게이트 C 파일럿은 수요층을 확정하고 방향을 보강했지만, 세그 반응의 확증(필요 표본 약 600)과 본조사는 남은 일이다. 이 결론은 H2(강조점) 판별과 그 보강까지다.</p>
       <p style="margin-top:22px;font-size:15.5px">이 케이스의 산출물은 "매실청이 옳았다"가 아니다. 핵심은 내가 옳았음을 증명한 프로젝트가 아니라, <b>내가 틀렸음을 스스로 밝혀낸 프로젝트</b>라는 것이다. 그리고 그 전환은 운이 아니라 설계의 결과였다 — 가혹한 대조군, 사전 등록, "T2는 반드시 측정한다"는 게이트, 그리고 확증하지 못한 것을 확증이라 쓰지 않은 출구.</p>
       <div style="margin-top:20px"><a href="docs/00_conclusion.pdf" target="_blank" rel="noopener" style="display:inline-block;border:1.5px solid var(--ink);border-radius:12px;padding:13px 20px;font-weight:800;text-decoration:none;color:var(--ink);background:#fff">결론 전문(원문) — 세 게이트 총괄 판정문 ↗</a></div>
   </div>
@@ -1055,8 +1055,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classLis
 /* ===== 베팅 — 시나리오 선택 ===== */
 var bets=document.querySelectorAll('#bets .bet'),betRev=document.getElementById('betReveal'),gateA=document.getElementById('gateA');
 var MICRO={
-  A:'당신은 <b>A</b>를 골랐다 — 나와 같은 선택이다.',
-  B:'당신은 <b>B</b>를 골랐다 — 셋 중 가장 무난한 답이다.',
+  A:'당신은 <b>A</b>를 골랐다. 나와 같은 선택이다.',
+  B:'당신은 <b>B</b>를 골랐다. 셋 중 가장 무난한 답이다.',
   C:'당신은 <b>C</b>를 골랐다.'
 };
 var CODA={
