@@ -44,7 +44,7 @@ button{font-family:inherit;cursor:pointer}
 .nav-links{margin-left:auto;display:flex;gap:14px}
 .nav-links a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600}
 .nav-links a:hover{color:var(--ink)}
-@media(max-width:640px){.nav-links{display:none}}
+@media(max-width:640px){.nav-logo{display:none}.nav-in{gap:12px;padding:10px 16px}.nav-links{gap:12px;overflow-x:auto;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.nav-links a{white-space:nowrap}}
 .nav-back{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:600;white-space:nowrap}
 .nav-back:hover{color:var(--ink)}
 
@@ -61,10 +61,12 @@ h2{font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-.02em;line-hei
 
 /* hero */
 .hero{padding-top:150px;padding-bottom:90px}
-.board{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:34px}
+@media(max-width:640px){.hero{padding-top:92px;padding-bottom:64px}section{padding:64px 0}}
+.board{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--sans);font-size:13px;color:var(--ink-soft);margin-bottom:34px}
 .board span b{color:var(--ink);font-weight:600}
 .hero h1{font-size:clamp(34px,6vw,60px);font-weight:800;letter-spacing:-.03em;line-height:1.14;margin-bottom:10px}
 .hero h1 .y{color:var(--gate-deep)}
+.nw{white-space:nowrap}
 
 .hero .lead{font-size:17.5px}
 .hero .lead em{font-style:normal;box-shadow:inset 0 -0.45em var(--gate)}
@@ -118,7 +120,7 @@ img.zoomable{display:block;width:100%;max-width:560px;border:1px solid var(--lin
 
 /* disclaimer band */
 section.disc{padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
-.disc p{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);letter-spacing:.02em;line-height:1.7}
+.disc p{font-size:13px;color:var(--ink-soft);line-height:1.7}
 
 /* docs + footer */
 .docs{display:grid;grid-template-columns:1fr;gap:14px;margin-top:26px}
@@ -143,6 +145,7 @@ footer{background:var(--console);color:var(--console-dim);padding:70px 0 60px;ma
 
 @media print{
   .nav,#bar{display:none!important}
+  .rc,.oc,.qg,.how2>div,.fix5 li,.f4>div,.res-fig,.mk-legend{break-inside:avoid}
   footer{background:#fff;color:var(--ink)}
   section{padding:30px 0}
   tr{break-inside:avoid}
@@ -228,12 +231,11 @@ section h2,section h3{text-wrap:balance}
 <!-- HERO -->
 <header class="hero wrap" id="top">
   <div class="board">
-    <span>DOMAIN <b>가치투자대회 기록</b></span>
-    <span>CONTEST <b>제10회 전국대학생 가치투자대회 · 모의계좌 1억 원(대회 규정)</b></span>
-    <span>TIMELINE <b>운용 6/1–10/2 · 계획 확정 6/9 · 제출 6/30</b></span>
-    <span>STATUS <b><span class="live done"><i></i><span>종료 · 수익률 +20.67% · 장려상</span></span></b></span>
+    <span>대회 <b>제10회 전국대학생 가치투자대회 · 모의계좌 1억 원(대회 규정)</b></span>
+    <span>일정 <b>운용 6/1–10/2 · 계획 확정 6/9 · 제출 6/30</b></span>
+    <span>결과 <b><span class="live done"><i></i><span>수익률 +20.67% · 장려상</span></span></b></span>
   </div>
-  <h1>코스피가 17% 내린 넉 달,<br>모의계좌는 20.67% 올랐다<span class="y">.</span></h1>
+  <h1>코스피가 17% 내린 <span class="nw">넉 달,</span><br>모의계좌는 20.67% 올랐다<span class="y">.</span></h1>
   <p class="lead">제10회 전국대학생 가치투자대회에서 모의계좌 1억 원을 6월 1일부터 10월 2일까지 운용했다. 마케터의 눈으로 브랜드가 값을 정하는 소비재 네 종목을 골랐고, 적정가치와 매수·매도 기준을 6월 9일에 확정했다. 보고서 심사로 본선 10인에 올랐고, 본선 발표 뒤 장려상을 받았다.</p>
   <div class="stats">
     <div class="stat"><div class="n">+20.67<small>%</small></div><div class="l">모의계좌 수익률<span>같은 기간 코스피 −17.46%</span></div></div>
@@ -335,7 +337,7 @@ section h2,section h3{text-wrap:balance}
 
 <!-- DISCLAIMER -->
 <section class="disc"><div class="wrap">
-  <p>DISCLAIMER: 이 페이지는 제10회 전국대학생 가치투자대회(모의투자) 참가 기록이며, 특정 종목에 대한 투자 권유나 조언이 아니다. 모든 수치는 명시된 기준일의 기록이다.</p>
+  <p>이 페이지는 제10회 전국대학생 가치투자대회(모의투자) 참가 기록이며, 특정 종목에 대한 투자 권유나 조언이 아니다.</p>
 </div></section>
 
 <!-- 문서 -->
@@ -346,12 +348,12 @@ section h2,section h3{text-wrap:balance}
     <a class="doc" href="docs/value-plan.pdf" target="_blank" rel="noopener">
       <div class="dk">계획서 · 6월 30일 제출</div>
       <h4>가치투자대회 투자 계획서 (PDF)</h4>
-      <p>투자 철학, 네 종목의 적정가치와 계산 방법, 매수 구간과 매매 계획 전문. 이 페이지 '6월에 정한 계획'의 원문이다.</p>
+      <p>투자 철학, 네 종목의 적정가치 계산과 매수 구간, 매매 기준을 담았다. 6월 9일에 확정한 내용이다.</p>
     </a>
     <a class="doc" href="docs/value-report.pdf" target="_blank" rel="noopener">
       <div class="dk">최종 보고서 · 10월 9일 제출</div>
       <h4>가치투자대회 최종 보고서 (PDF, 40쪽)</h4>
-      <p>종목별 손익과 성과 분해, 계획 대비 실제, 고친 원칙까지 대회 전 과정을 정리했다. 이 보고서로 본선 10인에 올랐다.</p>
+      <p>종목별 손익과 성과 분해, 계획 대비 실제, 고친 원칙까지 대회 전 과정을 정리했다. 매매 27건 전체는 39~40쪽에 있다. 이 보고서로 본선 10인에 올랐다.</p>
     </a>
     <a class="doc" href="docs/value-final-deck.pdf" target="_blank" rel="noopener">
       <div class="dk">본선 발표 · 11월 11일</div>
@@ -374,15 +376,14 @@ section h2,section h3{text-wrap:balance}
   </div>
   <div class="colophon">
     <h5>COLOPHON — 이 페이지의 제작 노트</h5>
-    <p>운영 일지에서 지킨 규율을, 이 페이지의 설계 원칙으로 그대로 썼다.</p>
+    <p>본선 발표 자료의 흐름과 원칙을 이 페이지에 그대로 옮겼다.</p>
     <ul>
-      <li><b>봉인 →</b><span>판단을 미리 잠그는 규율을 신뢰의 근간으로 삼고, 모든 수치에 기준일을 박았다.</span></li>
-      <li><b>관망 →</b><span>움직이지 않은 판단을 매매와 동급의 카드로 배치했다. 규율은 체결 내역이 아니라 판단 내역이다.</span></li>
-      <li><b>무예단 →</b><span>예상치를 기록하지 않는 일지 원칙대로, 대회가 끝나기 전에는 결과를 짐작하는 문구를 쓰지 않았다.</span></li>
-      <li><b>정본 →</b><span>수익률 곡선을 재현하지 않고 HTS 원가 스냅샷을 표로 제시했다. 없는 데이터를 그리지 않는다.</span></li>
+      <li><b>발표 순서 →</b><span>결과, 기준, 종목, 운용, 복기 순서로 본선 발표 자료의 흐름을 따랐다.</span></li>
+      <li><b>요약과 원문 →</b><span>2분 안에 읽도록 줄이고, 계산 과정과 매매 27건은 PDF 원문에 남겼다.</span></li>
+      <li><b>불리한 기록 →</b><span>빗나간 추정, 오리온의 손실, 아직 고치지 못한 규칙도 그대로 적었다.</span></li>
     </ul>
   </div>
-  <div class="byline">VALUE · KIM HYUNGJUN · 2026 · 봉인 2026.06.09 · 운용 2026.06.01–10.02</div>
+  <div class="byline">VALUE · KIM HYUNGJUN · 2026 · 계획 확정 2026.06.09 · 운용 2026.06.01–10.02</div>
 </div></footer>
 
 <div class="lb" id="lb"><button class="lbx" id="lbx" aria-label="닫기">✕</button><img id="lbImg" alt=""><div class="lbhint">이미지를 다시 누르면 더 확대된다</div></div>
