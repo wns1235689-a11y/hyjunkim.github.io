@@ -109,12 +109,6 @@ h2{font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-.02em;line-hei
 .vs2 tr:last-child td{border-bottom:none}
 @media(max-width:560px){.vs2 td:first-child{width:44%}.vs2 th,.vs2 td{padding:11px 12px}}
 
-/* console (signature, dark panel) */
-.console{background:var(--console);color:var(--console-text);border-radius:18px;padding:30px clamp(18px,3.5vw,34px) 34px;margin-top:34px;border:1px solid var(--console-line)}
-.console .eyebrow{color:var(--console-dim)}
-.console h3{font-size:clamp(20px,3vw,25px);font-weight:800;color:#fff;letter-spacing:-.01em}
-.console .hint{font-size:14px;color:var(--console-dim);margin:6px 0 22px;max-width:660px}
-
 /* verdict / zero (accent block) */
 .zero{margin-top:22px;border-left:4px solid var(--red);background:#fff;border-radius:0 var(--r) var(--r) 0;padding:20px 22px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
 .zero .zt{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:600;letter-spacing:.08em;margin-bottom:8px}
@@ -207,22 +201,7 @@ details.draw summary{flex-wrap:wrap}
 
 /* ============ [3C] TEST·SCORE 전용 컴포넌트 ============ */
 /* 기록 원칙 그리드 */
-.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
-.rule{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
-.rule .rn{font-family:var(--mono);font-size:11px;color:var(--gate-deep);font-weight:600;letter-spacing:.06em}
-.rule h4{font-size:14px;font-weight:700;margin:3px 0 4px}
-.rule p{font-size:12.5px;color:var(--ink-soft);line-height:1.6}
-@media(max-width:640px){.rules{grid-template-columns:1fr}}
 /* 잠금 패널 내부 */
-.sphead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.spstamp{font-family:var(--mono);font-size:11px;color:var(--gate);letter-spacing:.08em;font-weight:600}
-.spgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-.sp{border:1px solid var(--console-line);border-radius:12px;padding:14px 16px;background:rgba(10,17,30,.45)}
-.sp .spn{color:#fff;font-weight:700;font-size:14.5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.sp .spt{font-family:var(--mono);font-size:10.5px;color:var(--console-dim);border:1px solid var(--console-line);border-radius:99px;padding:1px 8px}
-.sp .spz{font-size:12.5px;color:var(--console-dim);margin-top:7px;line-height:1.55}
-.sp .spv{font-family:var(--mono);font-size:11.5px;color:var(--console-text);margin-top:8px;line-height:1.8}
-@media(max-width:680px){.spgrid{grid-template-columns:1fr}}
 /* 카운터 + 필터 바 */
 .jcount{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:34px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .jcount b{color:var(--ink)}
@@ -313,18 +292,10 @@ footer .pos em{font-style:normal;color:var(--gate)}
 
 @media print{
   .nav,#bar{display:none!important}
-  .console{background:#fff;color:var(--ink);border:1px solid #999}
-  .console h3{color:var(--ink)}
   footer{background:#fff;color:var(--ink)}
   section{padding:30px 0}
   tr{break-inside:avoid}
   .lb{display:none!important}
-  .console .eyebrow,.console .hint{color:#333}
-  .sp{background:#fff;border-color:#999}
-  .sp .spn,.sp .spv{color:var(--ink)}
-  .sp .spz{color:#333}
-  .sp .spt{color:#333;border-color:#999}
-  .spstamp{color:#8a6100}
   .colophon{background:#fff;border-color:#999}
   .colophon p,.colophon li span,.colophon li b{color:var(--ink)}
   .colophon h5,footer .pos em{color:#8a6100}
@@ -457,29 +428,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
 <section id="test" class="alt"><div class="wrap">
   <div class="eyebrow">넉 달의 기록</div>
   <h2>6월 8일부터 10월 2일까지 사고판 기록</h2>
-  <p class="lead">6월 8일부터 10월 2일까지 사고판 날과 사지 않기로 한 날을 날짜순으로 적었다.</p>
-  <div class="rules">
-    <div class="rule"><div class="rn">원칙 01</div><h4>계획 봉인</h4><p>봉인 후의 매매·매크로·실적 변화는 기록만 하고, 계획을 소급 수정하지 않는다. 사후확신편향을 막는 장치다.</p></div>
-    <div class="rule"><div class="rn">원칙 02</div><h4>매크로는 계기다</h4><p>금리·환율·관세는 가치의 입력값이 아니라 가격이 적정가에 닿는 계기다. 지수가 빠져서 사지 않는다. 시장 배경은 기록일 뿐 매매의 사유가 아니다.</p></div>
-    <div class="rule"><div class="rn">원칙 03</div><h4>재산정 조건</h4><p>매크로가 특정 종목의 현금흐름을 실제로 바꿀 때만 적정가와 안전마진을 다시 계산한다. 경로가 없으면 재산정하지 않는다.</p></div>
-    <div class="rule"><div class="rn">원칙 04</div><h4>내러티브 테스트</h4><p>주가가 움직이면 먼저 묻는다. 이 움직임에 대응하는 내러티브 변화가 있는가. 없으면 수급 노이즈로 분류하고 안전마진을 건드리지 않는다.</p></div>
-    <div class="rule"><div class="rn">원칙 05</div><h4>평온할 때 지정가</h4><p>하락 당일의 판단은 공포에, 급등 당일의 판단은 탐욕에 왜곡된다. 매수와 매도 주문 모두 평온한 시장에서 미리 걸어둔다.</p></div>
-    <div class="rule"><div class="rn">원칙 06</div><h4>거시는 사후 기록</h4><p>금통위·FOMC를 예정으로 적지 않는다. 실제로 펀더멘털을 건드렸을 때만 반응을 기록한다. 실적 발표 예상일은 미리 적어 두고 그날 확인한다.</p></div>
-    <div class="rule"><div class="rn">원칙 07</div><h4>환산과 본업 분리</h4><p>해외법인 실적은 현지 통화 성장률로 본업을 판정한다. 원화 성장의 상당 부분은 환산효과일 수 있다.</p></div>
-  </div>
-
-  <div class="console">
-    <div class="eyebrow">SEALED PLAN</div>
-    <div class="sphead"><h3>봉인된 계획</h3><span class="spstamp">SEALED 2026.06.09 · SUBMITTED 06.30</span></div>
-    <p class="hint">아래 스트림의 모든 판단은 이 봉인 값을 기준으로 집행된다. 값은 가격이 아니라 펀더멘털이 변할 때만 다시 계산한다.</p>
-    <div class="spgrid">
-      <div class="sp"><div class="spn"><span class="dot c-kolmar"></span>한국콜마 <span class="spt">그로스(GARP) · 촉매</span></div><div class="spz">K뷰티 전체에 베팅하는 곡괭이와 삽. 성장을 절반 값에 산다.</div><div class="spv">적정 96,000~130,000 (중심 115,000)<br>진입 78,000 · 추가 75,000~78,000 · 비중 40%</div></div>
-      <div class="sp"><div class="spn"><span class="dot c-cj"></span>CJ제일제당 <span class="spt">딥밸류+턴어라운드 · 촉매</span></div><div class="spz">자산이 하방을 받치고, 비비고가 상방을 여는 미스터 마켓의 할인.</div><div class="spv">적정 240,000~300,000 (중심 270,000)<br>메인 186,000~190,000 · 서브 175,000~180,000 · 비중 20%</div></div>
-      <div class="sp"><div class="spn"><span class="dot c-orion"></span>오리온 <span class="spt">스노우볼(코어) · 모멘텀</span></div><div class="spz">브랜드·현금·무차입의 복리기계. 표면 할인 20%, 실질 50% 초과.</div><div class="spv">적정 150,000~165,000 (중심 155,000)<br>메인 124,000~127,000 · 서브 117,000 · 비중 20%</div></div>
-      <div class="sp"><div class="spn"><span class="dot c-amore"></span>아모레퍼시픽 <span class="spt">턴어라운드 · 모멘텀</span></div><div class="spz">COSRX 가격결정력의 턴어라운드. 가장 얇은 마진, 가장 보수적 접근.</div><div class="spv">적정 140,000~173,000 (중심 155,000)<br>메인 102,000~105,000 · 서브 86,000~88,000 · 비중 20%</div></div>
-    </div>
-  </div>
-
+  <p class="lead">사고판 날과 사지 않기로 한 날을 날짜순으로 적었다.</p>
   <div class="jcount"><b>체결 27건</b> · 매수 19 · 매도 8</div>
   <div class="fbar" id="fbar">
     <div class="fg"><button type="button" class="fbtn on" data-v="all">전체</button><button type="button" class="fbtn" data-v="kolmar">한국콜마</button><button type="button" class="fbtn" data-v="cj">CJ제일제당</button><button type="button" class="fbtn" data-v="orion">오리온</button><button type="button" class="fbtn" data-v="amore">아모레퍼시픽</button></div>
@@ -768,6 +717,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
     <div class="zt">SEALED RULES · 봉인된 매매 규율</div>
     <p><b>적정주가는 점이 아니라 구간이다.</b> 대략 맞는 것이 정밀하게 틀린 것보다 낫다. 매수의 방아쇠는 날짜나 차트가 아니라 안전마진 구간 도달이며, 모든 매수 트리거는 시장이 평온할 때 지정가로 미리 걸어둔다. 하락 당일의 판단은 공포에 왜곡되기 때문이다.</p>
     <p><b>매도의 근거는 두 갈래뿐이다.</b> 적정가치 도달(안전마진 소멸), 그리고 투자 논리 훼손. 손절매가 아니다. 주가가 매수가보다 높아도 논리가 깨졌으면 팔고, 주가가 빠져도 논리가 유효하면 오히려 더 산다. 급락일에 사는 방아쇠도 지수가 아니라 내 종목의 안전마진이다.</p>
+    <p><b>시장이 움직일 때.</b> 지수나 금리가 움직였다는 이유만으로 사지 않고, 적정가치도 다시 계산하지 않는다. 회사가 버는 돈이 실제로 달라질 때만 다시 계산한다. 주가가 크게 움직이면 회사 사정부터 확인하고, 해외 법인 실적은 현지 통화 기준으로 본다.</p>
   </div>
 
   <div class="kick">SEAL</div>
@@ -785,13 +735,6 @@ body{word-break:keep-all;overflow-wrap:break-word}
   <div class="zero" style="border-left-color:var(--gate)">
     <div class="zt" style="color:var(--gate-deep)">DECLARATION · 잠금 선언</div>
     <p>이 판단은 2026년 6월 9일에 봉인되고, 6월 30일에 제출로 잠겼다. <b>운용 기록과 결과는 이 사전 판단에 대한 채점이다.</b> 모의계좌라 채점의 대상은 돈이 아니라 판단이며, 봉인·기록·출구의 규율은 계좌의 성격을 가리지 않는다. 제출본 원문이 정본이며, 이 장은 그 요약이다.</p>
-  </div>
-  <div class="docs" style="margin-top:20px">
-    <a class="doc" href="docs/value-plan.pdf" target="_blank" rel="noopener">
-      <div class="dk">VALUE PLAN · 제출본 <span class="live done"><i></i>완료 · 6/30 판단 잠금</span></div>
-      <h4>가치투자 대회 계획서 (PDF)</h4>
-      <p>투자 철학, 4종목의 내재가치와 평가 방법론, 적정가 밴드와 실행 계획 전문. 2026년 6월 30일 제출된 원본이다.</p>
-    </a><!-- 배포 시 docs/value-plan.pdf 에 제출본 PDF를 배치할 것 (invest.html 과 동일 경로 공유) -->
   </div>
 </div></section>
 
