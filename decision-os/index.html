@@ -158,6 +158,8 @@ a.dcardx:hover{border-color:var(--ink)}
 .dcardx a{text-decoration:none}
 .live{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;font-weight:600;color:#1F7A4D;background:#EAF6EF;border:1px solid #BFE0CC;border-radius:99px;padding:3px 10px;margin-top:12px;margin-right:12px}
 .live .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.6s ease infinite}
+.live.done{color:var(--blue);background:#E5EFFA;border-color:#BCD4EE}
+.live.done .dot{background:var(--blue);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 @media(max-width:720px){.dgrid{grid-template-columns:1fr}}
 
@@ -232,7 +234,7 @@ footer .pos em{font-style:normal;color:var(--gate)}
   <div class="board">
     <span>PROJECT <b>4렌즈 의사결정 OS</b></span>
     <span>DOMAINS <b>대회 · 실전 시장 · 기업 분석 · 마케팅 실무</b></span>
-    <span>STATUS <b>가치투자 대회 운용 중</b></span>
+    <span>STATUS <b>가치투자 대회 종료 · 장려상</b></span>
   </div>
   <h1>무형자산과 데이터로<br>시장 흐름을 읽는 <span class="y">마케터</span>.</h1>
   <p class="thesis">대회 · 실전 시장 · 기업 분석 · 마케팅 실무.<br class="bk"><em>네 개의 판</em>에서 반복 검증된 <em>하나의 의사결정 체계</em>다.</p>
@@ -240,7 +242,7 @@ footer .pos em{font-style:normal;color:var(--gate)}
   <div class="stats">
     <div class="stat"><div class="n">1<small>위</small></div><div class="l">비즈니스 시뮬레이션 종합 (11팀)<br><button class="fn" data-note="ROE(자기자본이익률)는 자기자본 대비 이익 비율. DB 기업경영체험스쿨 3일·8분기 시뮬레이션 최종 ROE 71.18%, 2위 대비 +20.81%p.">ROE 71.18%</button></div></div>
     <div class="stat"><div class="n">3.7<small>%</small></div><div class="l">모의투자 상위 (10,053명 중 368위)<br><button class="fn" data-note="알파는 시장 대비 초과수익. 한국투자증권 모의투자 수익률 +10.6%, 대회 구간(3/3~4/10) 코스피 −4.97% 대비 +15.6%p.">알파 +15.6%p</button></div></div>
-    <div class="stat"><div class="n">4<small>개</small></div><div class="l">기업 무형자산 분석<br>가치투자 대회 · 운용 중</div></div>
+    <div class="stat"><div class="n">4<small>개</small></div><div class="l">기업 무형자산 분석<br>가치투자 대회 · 장려상</div></div>
     <div class="stat"><div class="n">2<small>건</small></div><div class="l">실제 브랜드 전이증명<br>삼양식품 · e.l.f. Beauty</div></div>
   </div>
 </header>
@@ -311,9 +313,9 @@ footer .pos em{font-style:normal;color:var(--gate)}
       <div class="dk">기업 분석 — 가치투자</div>
       <h4>브랜드를 무형자산으로 측정 — 4개 기업</h4>
       <p>한국콜마·CJ제일제당·오리온·아모레퍼시픽 · 마케팅과 재무의 교차점</p>
-      <a class="live" id="liveBadge" href="value.html" hidden><span class="dot"></span><span id="liveTxt"></span></a>
+      <a class="live done" href="value.html"><span class="dot"></span><span>가치투자 대회 종료 · 수익률 +20.67% · 장려상</span></a>
       <a class="go" href="invest.html">4개 기업 무형자산 분석 →</a>
-      <a class="go" href="value.html">가치투자 대회 라이브 판단 기록 →</a>
+      <a class="go" href="value.html">가치투자 대회 판단 기록과 결과 →</a>
     </div>
     <a class="dcardx" href="../business/index.html">
       <div class="dk">마케팅 실무 — 사업 3사이클</div>
@@ -377,7 +379,7 @@ footer .pos em{font-style:normal;color:var(--gate)}
   <div class="nx">
     <a class="nxrow" href="dvmp.html"><span class="nxk">대회 케이스 스터디</span><span class="nxd">R1 꼴찌에서 R2 종합 1위까지, 8분기 의사결정 전 과정과 실제 화면</span><span class="nxa">→</span></a>
     <a class="nxrow" href="invest.html"><span class="nxk">투자 기록</span><span class="nxd">폭락장에서도 +10.6% 매매 일지, 그리고 4개 기업 무형자산 분석</span><span class="nxa">→</span></a>
-    <a class="nxrow" href="value.html"><span class="nxk">가치투자 대회 라이브</span><span class="nxd">가치투자 포트폴리오의 판단 기록 (운용 중, 10월 2일 결과 확정)</span><span class="nxa">→</span></a>
+    <a class="nxrow" href="value.html"><span class="nxk">가치투자 대회</span><span class="nxd">6월에 정한 기준대로 넉 달을 운용한 기록. 코스피 −17% 구간에서 +20.67%, 장려상</span><span class="nxa">→</span></a>
     <a class="nxrow" href="transfer.html"><span class="nxk">전이증명</span><span class="nxd">삼양식품·e.l.f. Beauty, 역사로 증명되는 비즈니스 시뮬레이션 1위</span><span class="nxa">→</span></a>
     <a class="nxrow" href="../business/index.html"><span class="nxk">마케팅 실무</span><span class="nxd">개인사업 · 동업 · 프리랜서, 사업 3사이클의 상세 기록</span><span class="nxa">→</span></a>
   </div>
@@ -485,16 +487,6 @@ if(lmx){
   pick(0);
 }
 
-/* 라이브 배지 — 가치투자 대회 D+n (기준일 2026-07-01 = D+0, business·value와 동일 산식)
-   대회 종료(2026-10-02) 후: DOMAINS의 라이브 배지를 결과 배지로 교체 + value.html 링크 연결 */
-var lb=document.getElementById('liveBadge');
-if(lb){
-  var dn=Math.floor((new Date()-new Date(2026,6,1))/864e5);
-  if(dn>=0){
-    document.getElementById('liveTxt').textContent='가치투자 대회 운용 중 · D+'+dn;
-    lb.hidden=false;
-  }
-}
 
 })();
 </script>

@@ -276,7 +276,7 @@ footer .pos em{font-style:normal;color:var(--gate)}
 <header class="hero wrap" id="top">
   <div class="board">
     <span>DOMAIN <b>실전 투자 × 기업 분석</b></span>
-    <span>PERIOD <b>2026.03.03~04.10 한투 대회 · 가치투자 운용 중</b></span><!-- 대회 종료(2026-10-02) 후: "가치투자 운용 중" → "가치투자 완료" 로 교체 -->
+    <span>PERIOD <b>2026.03.03~04.10 한투 대회 · 가치투자 완료</b></span>
     <span>ROLE <b>개인 · 분석 — 운용 — 기록</b></span>
   </div>
   <h1>비즈니스 깊이<span class="y">.</span></h1>
@@ -496,8 +496,7 @@ footer .pos em{font-style:normal;color:var(--gate)}
 <section class="alt" id="four"><div class="wrap">
   <div class="eyebrow">PART 2 · PORTFOLIO</div>
   <h2>네 유형, 네 기업</h2>
-  <!-- 대회 종료(2026-10-02) 후: 아래 "진행 중인" → "2026년" 으로 교체 -->
-  <p class="lead">이 4기업은 진행 중인 <b>가치투자 대회의 분석 대상이자 초기 포트폴리오</b>다. 한국형 가치투자의 네 유형(스노우볼=현금 복리형, 그로스=성장형, 딥밸류=자산 저평가형, 턴어라운드=회복형 / 최준철·김민국)으로 분산해 담았다. 각 기업을 <b style="color:var(--ink)">브랜드(무형자산) → 마케팅 전략 → 재무 증거</b>의 순서로 분석했다.</p>
+  <p class="lead">이 4기업은 2026년 <b>가치투자 대회의 분석 대상이자 초기 포트폴리오</b>다. 한국형 가치투자의 네 유형(스노우볼=현금 복리형, 그로스=성장형, 딥밸류=자산 저평가형, 턴어라운드=회복형 / 최준철·김민국)으로 분산해 담았다. 각 기업을 <b style="color:var(--ink)">브랜드(무형자산) → 마케팅 전략 → 재무 증거</b>의 순서로 분석했다.</p>
   <div class="tbl-scroll"><table class="vs">
     <tr><th>기업</th><th>유형</th><th>무형자산(브랜드)</th><th>마케팅 전략·프레임</th><th>재무 증거(검증)</th></tr>
     <tr>
@@ -571,10 +570,9 @@ footer .pos em{font-style:normal;color:var(--gate)}
   <h2>더 깊게 읽기</h2>
   <div class="docs">
     <a class="doc" href="value.html">
-      <div class="dk">VALUE INVESTING · 전체 기록 <span class="live" id="liveBadge"><i></i><span id="liveDay">운용 중</span></span></div>
-      <!-- 대회 종료(2026-10-02) 후: 위 라이브 배지를 결과 배지(수익률·순위)로 교체하고, 아래 h4/p 에 헤드라인 한 줄(수익률·순위)만 추가 -->
+      <div class="dk">VALUE INVESTING · 전체 기록 <span class="live done"><i></i><span>종료 · 수익률 +20.67% · 장려상</span></span></div>
       <h4>가치투자 대회 — 계획서 · 운용 · 결과</h4>
-      <p>계획서(6/30 판단 잠금) · 운용(7/1~10/2) · 결과. 이 페이지의 4기업 분석을 정량 밸류에이션(적정가치·안전마진·진입)까지 확장한 전체 기록.</p>
+      <p>코스피가 17% 내린 넉 달 동안 모의계좌는 20.67% 올랐다. 보고서 심사로 본선 10인에 올라 장려상을 받았다. 계획서(6/30 판단 잠금) · 운용(6/1~10/2) · 결과. 이 페이지의 4기업 분석을 정량 밸류에이션(적정가치·안전마진·진입)까지 확장한 전체 기록.</p>
     </a>
   </div>
 </div></section>
@@ -688,21 +686,6 @@ rotNext.addEventListener('click',function(){if(ri<ROT.length-1){ri++;rotRender()
 rotPrev.addEventListener('click',function(){if(ri>0){ri--;rotRender();}});
 rotRender();
 
-/* live badge — 정적 파일에서 2026-07-01 기준 D+n 계산 */
-(function(){
-  var el=document.getElementById('liveDay');
-  if(!el)return;
-  var start=new Date(2026,6,1);      /* 2026-07-01 운용 시작 */
-  var end=new Date(2026,9,2);        /* 2026-10-02 대회 종료 */
-  var now=new Date();
-  if(now>=end){
-    el.textContent='운용 종료 — 결과 집계 중';
-    /* 종료 후: 배지를 결과 배지(수익률·순위)로 교체 예정 */
-  }else{
-    var days=Math.floor((now-start)/86400000);
-    el.textContent='운용 중 · D+'+(days<0?0:days);
-  }
-})();
 
 /* lightbox — img.zoomable 클릭 시 확대 */
 var lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg');
