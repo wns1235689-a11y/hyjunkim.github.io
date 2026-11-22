@@ -199,6 +199,16 @@ section h2,section h3{text-wrap:balance}
 .how2 b{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:8px}
 .how2 p{font-size:14px;line-height:1.65;color:var(--ink);margin:0}
 .lead a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.ops3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.oc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 20px}
+.oc .ok{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.oc h3{font-size:16px;font-weight:700;line-height:1.45;letter-spacing:-.01em;margin:10px 0 8px;color:var(--ink)}
+.oc p{font-size:14px;line-height:1.7;color:var(--ink);margin:0}
+.note1{max-width:760px;margin-top:14px;font-size:14px;line-height:1.7;color:var(--ink-soft)}
+.note1 b{color:var(--ink)}
+@media(max-width:900px){.ops3{grid-template-columns:1fr}}
+.lead+.lead{margin-top:14px}
+.lead{text-wrap:pretty}
 @media(max-width:900px){.how2{grid-template-columns:1fr}}
 .res4+.tbl-cap{margin-top:12px}
 @media(max-width:900px){.q6{grid-template-columns:1fr}}
@@ -295,6 +305,12 @@ section h2,section h3{text-wrap:balance}
 <section id="ops" class="alt"><div class="wrap">
   <div class="eyebrow">운용</div>
   <h2>미리 정한 기준대로 팔았다</h2>
+  <p class="lead">넉 달 동안 매수 19건, 매도 8건을 체결했다. 아래는 그중 세 장면이고, 전체 내역은 <a href="docs/value-report.pdf" target="_blank" rel="noopener">최종 보고서</a> 39~40쪽에 있다.</p>
+  <div class="ops3">
+    <article class="oc"><div class="ok"><span class="dot c-kolmar"></span>한국콜마 · 8/12~9/9</div><h3>실적이 나온 날 다시 계산하고, 미리 계산한 가격선에서 팔았다</h3><p>8월 12일 2분기 영업이익이 증권사 예상보다 17~18% 많은 사상 최대로 나왔다. 걸어 둔 매도 주문부터 취소하고, 반기보고서로 숫자를 확인해 적정가치와 매도 가격을 다시 계산했다. 그 가격에서 네 번에 나눠 팔았고, 평균 매도가는 대회 기간 최고 종가의 93%였다.</p></article>
+    <article class="oc"><div class="ok"><span class="dot c-kolmar"></span>한국콜마 · 8/18, 9/9</div><h3>시장 전체가 내린 날에는 팔지 않았고, 소비재만 내린 날에는 팔았다</h3><p>8월 18일에는 세계 채권 금리가 급등해 시장 전체가 내렸다. 한국콜마 종가가 이익 보전선 아래로 내려갔지만, 실적과 적정가치는 그대로여서 팔지 않았다. 1주일 뒤 같은 물량을 약 207만 원 더 받고 팔았다. 9월 9일에는 지수는 오르고 소비재만 내려, 규칙대로 24주를 팔았다.</p></article>
+    <article class="oc"><div class="ok"><span class="dot c-cj"></span>CJ제일제당 · 8/11~12</div><h3>실적 관문에 걸려 팔았고, 싸게 산 덕에 손실은 없었다</h3><p>7월에 "2분기 식품 사업부 영업이익이 전년보다 늘 것"을 통과 기준으로 정해 두었다. 8월 11일 공시에서 21.3% 줄어, 다음 날 106주를 모두 팔았다. 해외 만두 매출이 31% 늘어 더 들고 있을 이유도 있었지만, 결과를 본 뒤 기준을 바꾸지 않았다. 10월 2일까지 들고 있었다면 4.9% 손실이었다.</p></article>
+  </div>
 </div></section>
 
 <!-- ================================================================ -->
@@ -303,7 +319,8 @@ section h2,section h3{text-wrap:balance}
 <section id="review"><div class="wrap">
   <div class="eyebrow">복기</div>
   <h2>이익 추정은 넷 중 셋이 빗나갔고, 원칙 다섯을 고쳤다</h2>
-  <p class="lead">네 종목의 이익 추정 중 셋이 빗나갔다. 한국콜마는 낮게, 오리온과 아모레퍼시픽은 높게 잡았다. 그래도 20% 이상 싸게 산 덕에, 손실은 실적 관문을 빠뜨린 오리온 한 종목에서만 났다.</p>
+  <p class="lead">성장주인 한국콜마는 이익을 낮게, 안정·회복 기업인 오리온과 아모레퍼시픽은 높게 잡았다. 낮게 잡은 한국콜마는 더 사지 못했고, 높게 잡은 오리온은 비싸게 샀다. 아모레퍼시픽은 다시 계산한 적정가치가 크게 낮아졌지만, 매수가가 그 구간 안이어서 손실은 없었다. 이익을 잘못 잡았어도 20% 이상 싸게 사 둔 덕에, 손실은 오리온 한 종목에서만 났다.</p>
+  <p class="lead"><b>내가 가장 크게 틀린 종목은 오리온이다.</b> 현금이 많고 빚이 없는 회사라 실적 대신 자산을 보면 된다고 생각해, 오리온에만 실적 관문을 두지 않았다. 회사는 상반기 영업이익이 17.9% 늘었지만, 마감일 주가는 평균 매수가보다 17.4% 낮았다. 회사가 튼튼하다고 해서 주가도 버티는 것은 아닌데, 나는 둘을 같은 것으로 봤다.</p>
   <p class="lead">좋은 결과를 얻었다고 해서 당시 판단도 옳았다고 볼 수는 없다.</p>
   <ol class="fix5">
     <li><span class="fn5">1</span><div><h4>예측 대신 확인</h4><p>일정이 알려진 사건 앞에서는 결과를 보고 움직인다.</p><p class="why">계기 · 네이버 매수를 미국 상원 표결 앞에서 "부결될 것 같다"는 예측으로 미뤘다. 부결을 맞힌 것은 운이었다.</p></div></li>
@@ -312,7 +329,8 @@ section h2,section h3{text-wrap:balance}
     <li><span class="fn5">4</span><div><h4>현금은 용도까지</h4><p>현금이 얼마인지뿐 아니라 어디에 쓰는지까지 따져 적정가치에 반영한다.</p><p class="why">계기 · 오리온의 순현금 1.21조 원을 액면 그대로 더했다.</p></div></li>
     <li><span class="fn5">5</span><div><h4>보수 시나리오는 EPS도 보수적으로</h4><p>PER만 낮추지 않고 이익(EPS) 가정도 낮춘다.</p><p class="why">계기 · 아모레퍼시픽 보수 시나리오의 최저값이 실적으로 다시 계산한 구간의 최고값과 같았다.</p></div></li>
   </ol>
-  <div class="zero res-end"><p><b>대회 전에는 추정을 더 정확히 하는 것이 실력이라고 생각했다. 지금은 추정이 틀릴 것을 전제로 기준을 세우고 지키는 것이 실력이라고 생각한다.</b></p></div>
+  <p class="note1"><b>남은 문제.</b> 9월 9일에는 규칙대로 한국콜마 24주를 팔았지만, 주가가 내렸다는 이유로 판 것이다. "회사가 변했을 때 판다"는 내 기준과 맞지 않는 이 규칙은 아직 고치지 못했다.</p>
+  <div class="zero res-end"><p><b>대회 전에는 추정을 더 정확히 하는 것이 실력이라고 생각했다. 지금은 추정이 틀릴 것을 전제로 기준을 세우고 지키는 것이 실력이라고 생각한다.</b></p><p>마케터인 나에게 이 넉 달은 브랜드의 재무를 깊이 이해한 시간이었다.</p></div>
 </div></section>
 
 <!-- DISCLAIMER -->
