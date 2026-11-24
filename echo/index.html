@@ -515,7 +515,7 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
       </div>
       <div class="stat">
         <div class="n">39<small>장</small></div>
-        <div class="l">자발 제작한 발음 교정 시각 자산</div>
+        <div class="l">자발적으로 만든 발음 교정 그림</div>
       </div>
     </div>
   </div>
@@ -711,7 +711,7 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
 <section class="alt" id="content">
   <div class="wrap">
     <div class="eyebrow reveal">불만 ② 해결 — 콘텐츠</div>
-    <h2 class="reveal">왜 틀렸는지 보여주는 자산을, 39장</h2>
+    <h2 class="reveal">왜 틀렸는지 보여 주는 학습 보조 도구, 39장</h2>
     <p class="lead reveal">"한국어 설명이 직관적이지 않다"는 문제가 있었다. 그래서 나는 소리마다 입과 혀의 위치를 보여 주는 그림(조음 위치 이미지)을 만들자고 먼저 제안했고, 39장을 모두 직접 만들었다. 39개 음소를 같은 품질로 그리려면 만드는 방식부터 정해야 했다.</p>
 
     <div class="assetgrid reveal">
@@ -760,14 +760,14 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
 <!-- ===== DEMO (signature) ===== -->
 <section id="demo">
   <div class="wrap">
-    <div class="eyebrow reveal">두 갈래가 만나는 곳 — 시그니처</div>
-    <h2 class="reveal">음소 정렬 진단 — 데이터와 자산이 한 화면에서 만난다</h2>
-    <p class="lead reveal">데이터(갈래 A)가 한국인 발음을 알아듣고, 자산(갈래 B)이 한국어로 교정을 보여준다. 두 갈래가 실제 화면에서 합류하는 지점이 이 진단이다. 단어를 고르면 정답 음소열과 한국인 전형 오발음이 한 칸씩 정렬되고, 빨간 칸이 틀린 음소다. <b>그 음소를 누르면 한국어 조음 카드가 열린다.</b></p>
+    <div class="eyebrow reveal">두 갈래가 만나는 곳</div>
+    <h2 class="reveal">음소 정렬 진단 — 데이터와 콘텐츠가 한 화면에서 만난다</h2>
+    <p class="lead reveal">데이터는 모델이 한국인 발음을 알아듣게 하고, 콘텐츠는 한국어로 교정을 보여 준다. 이 둘이 실제 화면에서 만나는 곳이 이 진단이다. 단어를 고르면 정답 발음과 한국인이 흔히 하는 틀린 발음이 한 칸씩 나란히 놓이고, 빨간 칸이 틀린 음소다. <b>그 음소를 누르면 조음 이미지가 열린다.</b></p>
 
     <div class="console reveal">
       <div class="eyebrow">PHONEME ALIGNMENT DIAGNOSIS · 재현 데모</div>
       <h3>단어를 골라 진단을 실행하라</h3>
-      <p class="hint">한국인이 가장 자주 혼동하는 자음: R↔L, TH↔S, V↔B. 빨간 음소를 누르면 실제 앱에 쓰인 조음 이미지가 열린다.</p>
+      <p class="hint">한국인이 가장 자주 헷갈리는 자음은 R↔L, TH↔S, V↔B다.</p>
       <div class="word-pick" id="wordPick"></div>
       <div class="align-wrap">
         <div class="align-row"><span class="alab">정답</span><div class="phon-seq" id="seqCanon"></div></div>
@@ -776,7 +776,7 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
       <div class="diag-hint" id="diagHint"></div>
       <div class="artic" id="artic"></div>
     </div>
-    <p class="demo-foot reveal">위 진단은 <b>실제 ECHO 앱의 동작을 그대로 재현</b>한 것이다. 단어를 음소 단위로 정렬해 틀린 음소를 표시하고, 그 음소를 누르면 한국어 조음 이미지(내가 제작한 39장 자산)가 뜨는 흐름이다. 아래는 실제 앱 화면이다.</p>
+    <p class="demo-foot reveal">위 진단은 <b>실제 ECHO 앱의 동작을 그대로 재현</b>한 것이다. 틀린 음소를 누르면 뜨는 조음 이미지는 내가 만든 39장 가운데 하나다. 아래는 실제 앱 화면이다.</p>
 
     <div class="shots reveal" id="shots"></div>
     <div class="shotcaps reveal"><span>통과 84점</span><span>69점 · 교정</span><span>72점 · 정렬</span><span>55점 · 다중</span><span>50점 · 조음</span></div>
@@ -996,7 +996,7 @@ function showArtic(ph, el){
   [].forEach.call(seqC.querySelectorAll(".ph.err"),function(x){x.classList.remove("sel");});
   el.classList.add("sel");
   if(!PH_IMG[ph]) return;
-  articBox.innerHTML='<img class="real-img" src="'+PH_IMG[ph]+'" alt="'+ph+' 조음 이미지"><p class="real-cap">틀린 음소를 누르면 실제 ECHO 앱이 보여주는 한국어 조음 이미지다. 내가 제작한 39장 자산 중 하나다.</p>';
+  articBox.innerHTML='<img class="real-img" src="'+PH_IMG[ph]+'" alt="'+ph+' 조음 이미지"><p class="real-cap">실제 ECHO 앱이 틀린 음소에 보여 주는 조음 이미지다. 내가 만든 39장 가운데 하나다.</p>';
   articBox.classList.add("show");
 }
 WORDS.forEach(function(d,i){ var b=document.createElement("button"); b.type="button"; b.textContent=d.w; b.addEventListener("click",function(){renderWord(i);}); wordPick.appendChild(b); });
