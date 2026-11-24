@@ -667,27 +667,19 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
 <!-- ===== 갈래 A: DATA ===== -->
 <section id="data">
   <div class="wrap">
-    <div class="eyebrow reveal">불만 ① 해결 — <button class="fn" data-note="FDE(Forward Deployed Engineer) — 데이터를 직접 다루며 문제를 푸는 실무 역할.">FDE</button> · QA</div>
+    <div class="eyebrow reveal">불만 ① 해결 — 데이터</div>
     <h2 class="reveal">형식이 다른 두 원천을, 하나의 학습 데이터로</h2>
-    <p class="lead reveal">모델이 한국인 발음을 듣게 하려면, 정발음·실제 발음 음소 쌍 데이터가 필요했다. 두 원천은 형식이 전혀 달랐다. L2-ARCTIC은 음성 정렬 파일(TextGrid)에 ARPAbet 표기, AI-Hub 한국인 영어 음성은 JSON 라벨에 IPA 표기. 담당 변경으로 이 정제를 내가 맡게 되었다. 규칙은 모델 학습 담당과 협의해 정했고, 환경 확보부터 스크립트 작성·산출·최종 데이터 검증까지 직접 했다.</p>
+    <p class="lead reveal">모델이 한국인 발음을 알아듣게 하려면, 표준 발음과 학습자의 실제 발음을 소리 단위로 짝지은 데이터가 필요했다. 쓸 수 있는 공개 데이터는 둘이었는데, 소리를 적는 방식도 파일 형식도 서로 달랐다. 데이터 정제는 원래 둘이 맡았는데, 담당 변경으로 나 혼자 맡게 됐다. 모델 학습 담당이 돕겠다고 했지만, 그쪽 일이 많아 보여서 내가 다 하겠다고 했다. 하지만 원본 음성을 내려받는 일부터 여러 번 실패하는 등 어려움이 많았다. 나는 원인을 찾아 해결했고, 스크립트 작성과 산출, 최종 검증까지 해냈다.</p>
 
-    <div class="bignums reveal">
-      <div class="bn"><div class="n">87GB+</div><div class="l">두 원천 원본</div></div>
-      <div class="bn"><div class="n">2</div><div class="l">이종 형식 통합</div></div>
-      <div class="bn"><div class="n">40</div><div class="l"><button class="fn" data-note="ARPAbet: 영어의 소리(음소)를 알파벳 대문자로 적는 표준 표기 체계(예: R, TH, AY). 두 원천의 서로 다른 표기를 ARPAbet 39개 음소에 묵음 기호를 더한 40개 공통 음소 집합으로 통일했다.">ARPAbet 기반 공통 음소 집합</button></div></div>
-      <div class="bn"><div class="n">13,225</div><div class="l">직접 정제 산출</div></div>
-      <div class="bn"><div class="n">65,486</div><div class="l">서버 통합 전수 검증</div></div>
-      <div class="bn"><div class="n">SSH</div><div class="l">원격 GPU 서버 자력 합류</div></div>
-    </div>
 
     <div class="dcards reveal">
       <div class="dcard">
-        <h4>환경부터 자력 구축 <span class="badge direct">직접 수행</span></h4>
-        <p>80GB+ 데이터의 일반 다운로드가 반복 실패하자 용량 대조로 원인을 좁혀, 전용 도구(aihubshell)와 <span class="fn" data-note="WSL — Windows에서 리눅스를 실행하는 환경.">WSL</span>을 마련했다. 노트북에서 계속 막히자 <b>가상화(BIOS) 제약을 의심해 데스크탑으로 전환</b>하는 판단까지 내렸다. 원격 GPU 서버 합류용 <span class="fn" data-note="중간 점프 서버(PP)를 거쳐 최종 서버에 접속하는 다단 구성. ED25519 키 인증.">다단 SSH</span>는 접속 실패 원인(원격 플랫폼 오인)을 로그에서 추적해 해결했다.</p>
+        <h4>정제 규칙 구현 <span class="badge direct">직접 수행</span></h4>
+        <p>정제 규칙은 모델 학습 담당과 협의해 정했고, 구현과 산출은 내가 했다. 가장 오래 논의한 것은 뜻을 알 수 없는 기호(***)가 든 문장을 쓸지 버릴지였다. 나는 버리면 얼마나 남는지를 라벨 파일 103,044개 전체에서 확인해 전했고, 담당이 버리기로 결정했다. 이렇게 정한 규칙으로 스크립트 3종을 짜서 <b>13,225건</b>(L2-ARCTIC 3,496건 + AI-Hub 9,729건)을 산출했다. 이 가운데 L2-ARCTIC은 내가 초기 리서치에서 가장 먼저 추천했던 데이터다. AI-Hub 9,729건은 규칙을 정하고 모델용 데이터를 검증하는 데 썼다.</p>
       </div>
       <div class="dcard">
-        <h4>정제 규칙 구현 <span class="badge direct">직접 수행</span></h4>
-        <p>정제 규칙은 모델 학습 담당과 협의해 확정했고, 구현과 산출은 내가 했다. 규칙은 비정상 토큰 포함 발화 제외, 정발음 표기 이상은 표준 음소 변환 도구로 재생성, 분리 표기된 이중모음 병합, 검증된 오픈소스 참조 구현 기준의 <b>40개 공통 음소 집합(ARPAbet 39개 음소 + 묵음) 정규화</b>다. 스크립트 3종을 작성·실행해 <b>13,225건</b>(L2-ARCTIC 3,496건 + AI-Hub 9,729건)을 직접 산출했다. 초기 리서치에서 최우선 추천했던 L2-ARCTIC은 실제 채택 데이터셋과 일치했다.</p>
+        <h4>최종 데이터 전량 검증 <span class="badge direct">직접 수행</span></h4>
+        <p>최종 학습 데이터는 <b>65,486건</b>이다. 내가 산출한 L2-ARCTIC 3,496건에, 내 1차 가공본을 모델 학습 담당이 서버에서 최종 처리한 AI-Hub 61,990건을 더한 것이다. 나는 이 전체를 빠진 값이나 잘못된 기호가 없는지 검사하고, 표본을 뽑아 원본과도 맞춰 봤다. 그러다가 담당이 만든 데이터가 내 규칙과 다르다는 것을 알았고, 담당에게 알렸다. 어디가 어떻게 다른지는 프로젝트가 끝난 뒤 졸업 논문에서 끝까지 확인했다.</p>
       </div>
     </div>
 
@@ -696,18 +688,36 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
       <h3>"많이 모은다 ≠ AI-ready" — 정제의 본질은 무엇을 버릴지 정하는 것</h3>
       <p class="hint">AI-Hub 발음 평가(PRN) 라벨에 내가 구현한 정제 규칙을 적용하면 어떻게 되는지, 한 단계씩 펼쳐 보라.</p>
       <div class="steps" id="calcSteps">
-        <div class="step" data-i="0"><span class="k">원본</span><span class="v">AI-Hub PRN 라벨: 대규모(학습 91,594 · 검증 11,450건)</span></div>
-        <div class="step" data-i="1"><span class="k">− 제외</span><span class="v">대응 음소 없는 위치 표시(<b>***</b>)를 하나라도 포함한 발화 <b>(원본 문장의 83.3%)</b></span></div>
-        <div class="step" data-i="2"><span class="k">− 제외</span><span class="v">실제 발음 필드의 비정상 토큰(x · null · nan · 특수문자) 발화</span></div>
-        <div class="step" data-i="3"><span class="k">− 제외</span><span class="v">40개 공통 음소 집합으로 변환 불가능한 토큰을 가진 발화</span></div>
-        <div class="step final" data-i="4"><span class="k">= 보존</span><span class="v">신뢰 가능한 음소 쌍만 남김 <b>(보존율 약 10%)</b></span></div>
+        <div class="step" data-i="0"><span class="k">원본</span><span class="v">AI-Hub PRN 라벨: 대규모(학습용 91,594 · 검증용 11,450건)</span></div>
+        <div class="step" data-i="1"><span class="k">− 제외</span><span class="v">뜻을 알 수 없는 기호(<b>***</b>)가 하나라도 든 문장 <b>(원본 문장의 83.3%)</b></span></div>
+        <div class="step" data-i="2"><span class="k">− 제외</span><span class="v">실제 발음 칸에 쓸 수 없는 값(x · null · nan · 특수문자)이 든 문장</span></div>
+        <div class="step" data-i="3"><span class="k">− 제외</span><span class="v">40개 공통 음소 집합으로 바꿀 수 없는 기호가 든 문장</span></div>
+        <div class="step final" data-i="4"><span class="k">= 보존</span><span class="v">믿고 쓸 수 있는 음소 쌍만 남김 <b>(보존율 약 10%)</b></span></div>
       </div>
       <button type="button" id="calcBtn">다음 단계 펼치기</button>
       <button type="button" id="calcAll" style="margin-left:8px;background:#fff;color:var(--ink)">전체 펼치기</button>
       <div class="insight">
         <div class="it">데이터 담당으로서의 통찰</div>
-        <p>내가 구현한 규칙은 AI-Hub 원본의 약 90%를 뺐다. 뜻이 확정되지 않은 기호(***)가 든 발화는 <b>신뢰도를 우선해</b> 빼기로 모델 학습 담당과 협의했기 때문이다. 이때 가장 큰 결정은 "얼마나 모으나"가 아니라 "무엇을 버리나"였다.<br><br>이 규칙으로 내가 직접 산출한 데이터는 <b>13,225건</b>(L2-ARCTIC 3,496건 + AI-Hub 9,729건)이다. AI-Hub 9,729건은 규칙을 확정하고 검증하는 데 쓰였다. 최종 학습에는 내 1차 가공본을 모델 학습 담당이 서버에서 최종 처리한 AI-Hub 정제본 61,990건과 내가 산출한 L2-ARCTIC 3,496건을 합친 <b>65,486건(= 61,990 + 3,496)</b>이 쓰였다. 서버 정제본은 그 기호를 버리지 않고 묵음으로 바꿨다.<br><br>나는 이 65,486건 전체를 전수 품질 검사·고정 시드 표본의 원본 대조·학습 전처리 코드 검토로 검증해 최종 발표의 표기 <b>"총 65,486 발화 · 화자 906명"</b>과 정합함을 확인했다. 이후 졸업 논문에서 원본 라벨 전체를 분석해, 그 기호가 소리를 빠뜨리거나 덧붙인 자리의 표시임을 확인했다. 버리는 규칙과 묵음으로 바꾸는 규칙이 데이터에 각각 어떤 대가를 남기는지도 수치로 정리했다. 무엇을 버리느냐에 따라 학습 데이터에 남는 오류의 종류가 달라진다. <span class="src"><span class="chip refl">반영</span></span></p>
+        <p>이 규칙대로 하니 AI-Hub 원본의 약 90%가 빠졌다. 그때 가장 큰 결정은 "얼마나 모으나"가 아니라 "무엇을 버리나"였다. 프로젝트가 끝난 뒤 졸업 논문에서 원본 전체를 다시 분석해 보니, 무엇을 버리느냐에 따라 학습 데이터에 남는 오류의 종류가 달라졌다. 자세한 내용은 아래 논문에 정리했다.</p>
       </div>
+    </div>
+    <div class="paper-deeper reveal">
+      <div class="pd-head">
+        <span class="pd-eyebrow">GO DEEPER</span>
+        <span class="pd-status">2026.10 제출</span>
+      </div>
+      <h3>졸업 논문 — 이종 음소 표기 음성 데이터의 통합 정제를 통한 한국인 영어 오발음 진단 학습 데이터셋 구축</h3>
+      <p>표기 방식이 다른 두 공개 음성 데이터를 하나의 학습 데이터로 통합하는 정제 규칙과, 최종 학습 데이터 65,486건을 원본과 대조해 검증한 과정을 정리했다. 모델·피드백·앱은 개요만 다룬다. 전문은 아래에서 열 수 있다.</p>
+      <a class="pd-card" href="./docs/graduation_thesis.pdf" target="_blank" rel="noopener">
+        <div class="pd-file">
+          <span class="pd-ext">PDF</span>
+          <div>
+            <strong>졸업 논문</strong>
+            <em>학사학위 논문 · 학습 데이터셋 구축과 검증 · 41쪽</em>
+          </div>
+        </div>
+        <span class="pd-soon">PDF 열기 →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -853,26 +863,6 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
         <h3><span class="num">02</span> 협업 — 원문 불가침</h3>
         <p>원본 작성자와 보강 담당의 경계를 '원문 무수정 · 추가는 별도 섹션 · 전체 하이라이트'로 명문화해, 다인 문서 협업의 소유권 충돌을 구조적으로 막았다. 이 기준이 이후 프로젝트 문서 작업의 표준이 되었다.</p>
       </div>
-    </div>
-
-    <p class="lead reveal" style="margin-top:30px">프로젝트가 끝난 뒤, 데이터 정제 과정을 졸업 논문으로 정리했다.</p>
-    <div class="paper-deeper reveal">
-      <div class="pd-head">
-        <span class="pd-eyebrow">GO DEEPER</span>
-        <span class="pd-status">2026.10 제출</span>
-      </div>
-      <h3>졸업 논문 — 이종 음소 표기 음성 데이터의 통합 정제를 통한 한국인 영어 오발음 진단 학습 데이터셋 구축</h3>
-      <p>표기 방식이 다른 두 공개 음성 데이터를 하나의 학습 데이터로 통합하는 정제 규칙과, 최종 학습 데이터 65,486건을 원본과 대조해 검증한 과정을 정리했다. 모델·피드백·앱은 개요만 다룬다. 전문은 아래에서 열 수 있다.</p>
-      <a class="pd-card" href="./docs/graduation_thesis.pdf" target="_blank" rel="noopener">
-        <div class="pd-file">
-          <span class="pd-ext">PDF</span>
-          <div>
-            <strong>졸업 논문</strong>
-            <em>학사학위 논문 · 학습 데이터셋 구축과 검증 · 41쪽</em>
-          </div>
-        </div>
-        <span class="pd-soon">PDF 열기 →</span>
-      </a>
     </div>
   </div>
 </section>
