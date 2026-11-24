@@ -6,7 +6,7 @@
 <title>ECHO — 한국인 영어 발음 교정 앱 | 김형준</title>
 <meta name="description" content="사용자 불만을 데이터로 검증해 문제를 정의하고, 직접 만든 데이터·자산으로 구현하며, 기술을 사람 언어로 번역한 기록. 87GB+ raw 데이터를 13,225건의 AI-ready 데이터로 정제하고, 39장 발음 자산을 제작했다.">
 <meta property="og:title" content="ECHO — 두 가지 불만을, 데이터와 콘텐츠로 풀다">
-<meta property="og:description" content="한국인 영어 발음 교정 앱 ECHO. 데이터 정제·기획·발표를 관통한 기여 기록.">
+<meta property="og:description" content="AI-ready data는 모은다고 장땡이 아니다. 6만 5천 건을 전부 다시 확인해야 했다.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hyjunkim.com/echo/">
 <meta property="og:image" content="https://hyjunkim.com/echo/og.png">
@@ -503,15 +503,15 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
     <h1 class="reveal">ECHO<span class="y">.</span></h1>
     <div class="pron reveal" style="margin-top:10px"><i>/EH/</i><i>/K/</i><i>/OW/</i> &nbsp;단어를 소리의 최소 단위로 쪼개 오발음을 진단한다</div>
     <p class="thesis reveal">사용자는 두 가지를 불평했다. <em>못 알아듣는다</em>, <em>왜 틀렸는지 안 알려준다</em>. 나는 그 둘을 <em>데이터</em>와 <em>콘텐츠</em>로 풀었다.</p>
-    <p class="lead reveal">한국인 영어 발음 교정 앱 ECHO에서 3월 초부터 발표 당일 새벽까지 남긴 기여의 기록이다. 공식 분담은 QA·데이터였다. 데이터 정제 규칙은 모델 학습 담당과 협의해 정했고, <b>스크립트 작성·산출·최종 데이터 검증</b>은 내가 맡았다. 기획·자산·발표 전반에도 기여했다. 이 페이지의 모든 주장에는 <b>근거 등급</b>이 붙는다. 기록에 없는 수치와 성과는 싣지 않았다.</p>
+    <p class="lead reveal">한국인 영어 발음 교정 앱 ECHO에서 3월 초부터 발표 당일 새벽까지 내가 한 일을 적었다. 공식 분담은 QA·데이터였다. 내 몫의 중심은 87GB가 넘는 원본 음성을 AI가 바로 학습할 수 있는 데이터(<b>AI-ready data</b>)로 만들고 검증하는 일이었다. 모으는 것만으로는 되지 않았다. 정제 규칙은 모델 학습 담당과 협의해 정했고, 스크립트 작성과 산출은 내가 맡았다. 최종 학습 데이터 <b>65,486건은 전량 검증</b>했다. 기획·자산·발표 전반에도 기여했다.</p>
     <div class="stats reveal">
-      <div class="stat">
-        <div class="n">87<small>GB+</small></div>
-        <div class="l">정제 전 원천 음성 데이터<sup><button class="fn" data-note="압축본 L2-ARCTIC 7GB+ 와 압축 해제 시 80GB+ 의 AI-Hub 한국인 영어 음성을 합한 규모. 두 원천의 기준이 다르므로 합산은 근사값이다.">?</button></sup></div>
-      </div>
       <div class="stat">
         <div class="n">13,225<small>건</small></div>
         <div class="l">직접 정제해 산출한 AI-ready 데이터<sup><button class="fn" data-note="L2-ARCTIC 3,496건과 AI-Hub 9,729건의 합. L2-ARCTIC 3,496건은 최종 학습 데이터에 그대로 들어갔고, AI-Hub 9,729건은 정제 규칙을 확정·검증하는 데 쓰였다.">?</button></sup></div>
+      </div>
+      <div class="stat">
+        <div class="n">65,486<small>건</small></div>
+        <div class="l">전량 검증한 최종 학습 데이터<sup><button class="fn" data-note="내가 산출한 L2-ARCTIC 3,496건과, 내 1차 가공본을 모델 학습 담당이 서버에서 최종 처리한 AI-Hub 정제본 61,990건을 합친 것. 화자 906명.">?</button></sup></div>
       </div>
       <div class="stat">
         <div class="n">39<small>장</small></div>
