@@ -533,16 +533,16 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
 <!-- ===== PROBLEM ===== -->
 <section id="problem">
   <div class="wrap">
-    <div class="eyebrow reveal">문제 — 마케터</div>
+    <div class="eyebrow reveal">문제 정의</div>
     <h2 class="reveal">기능이 아니라, 불만에서 출발했다</h2>
-    <p class="lead reveal">팀이 '발음 교정 앱'으로 방향을 잡았지만 무엇이 진짜 문제인지에 대한 1차 근거가 없었다. 앱 마켓은 불만 카테고리별 비중 통계를 공개하지 않았다. 그래서 막힌 통계 대신 팀원 각자가 경쟁 앱 저평점 리뷰 원문을 크롤링해 한곳에 모았다(듀오링고 1점 한국어 리뷰 63건 등). 팀이 함께 불만 패턴을 분석했고, 두 갈래로 수렴함을 확인했다.</p>
+    <p class="lead reveal">팀은 '발음 교정 앱'으로 방향을 잡았지만, 사용자가 실제로 무엇을 불편해하는지 보여 줄 근거가 없었다. 앱 마켓은 어떤 불만이 얼마나 많은지 공개하지 않았다. 그래서 팀원들이 각자 경쟁 앱의 저평점 리뷰를 크롤링해 한곳에 모았고(듀오링고 1점 한국어 리뷰 63건 등), 함께 분석해 보니 불만은 두 갈래로 모였다.</p>
 
     <div class="cpx reveal">
       <div class="cp">
         <div class="qn">불만 ①</div>
         <div class="quote">"맞게 말했는데 자꾸 틀렸대요"</div>
         <p>발음을 제대로 <b>인식하지 못한다.</b> 엄격한 앱은 맞는 발음을 틀렸다 하고, 관대한 앱은 틀린 발음을 통과시킨다.</p>
-        <div class="lead-to">→ 모델이 한국인 발음을 듣게 하는 문제 (데이터)</div>
+        <div class="lead-to">→ 모델이 한국인 발음을 알아듣게 하는 문제 (데이터)</div>
       </div>
       <div class="cp">
         <div class="qn">불만 ②</div>
@@ -551,12 +551,12 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
         <div class="lead-to">→ 한국어로 교정을 보여주는 문제 (콘텐츠)</div>
       </div>
     </div>
-    <p class="evnote reveal">팀원 각자가 크롤링한 경쟁 앱 1점 리뷰를 모아 함께 분석해 도출 &nbsp;|&nbsp; "두 가지 불만 수렴" 프레임은 <b>제안서 첫 문장</b>으로 채택 <span class="chip refl">반영</span></p>
+    <p class="evnote reveal">이 두 가지 불만이 <b>제안서의 첫 문장</b>이 되었다. <span class="chip refl">반영</span></p>
 
     <!-- 불만 분류기 (signature 보조) -->
     <div class="sorter reveal" id="sorter">
       <h3>직접 분류해 보기 — 불만 분류기</h3>
-      <p class="hint">경쟁 앱 저평점 리뷰에서 반복된 불만이다(카드 문구는 취지를 간추린 재구성). 각 카드를 두 갈래 중 하나로 보내 보라. 전부 분류하면 ECHO의 문제 정의가 드러난다.</p>
+      <p class="hint">경쟁 앱 저평점 리뷰에서 되풀이된 불만을 간추려 카드로 만들었다. 카드를 하나씩 두 갈래 중 한쪽으로 보내 보라. 전부 분류하면 ECHO가 풀려던 문제가 보인다.</p>
       <div class="rv-pool" id="rvPool"></div>
       <div class="bins">
         <div class="bin b1" data-bin="1">
@@ -576,18 +576,18 @@ details.fbfull[open] summary::after{content:"닫기";margin-left:auto;font-size:
         <button type="button" id="sortReset">처음부터</button>
       </div>
       <div class="sorter-done" id="sortDone">
-        <b>여섯 개 모두 두 갈래로 수렴한다.</b> 기능을 먼저 정하지 않고 불만에서 출발했더니, ECHO가 풀어야 할 문제가 정확히 둘로 나뉘었다. 모델이 <b>못 알아듣는 문제(데이터)</b>와, 알아들어도 <b>한국어로 설명하지 못하는 문제(콘텐츠)</b>. 이 프레임이 제안서 첫 문장이 되었고, 명칭 ECHO도 이 본질(듣고·따라하고·교정받는 반복)에서 나왔다.
+        <b>6개 모두 두 갈래로 모인다.</b> 기능을 먼저 정하지 않고 불만에서 출발했더니, ECHO가 풀어야 할 문제가 둘로 나뉘었다. 모델이 <b>못 알아듣는 문제(데이터)</b>와, 알아들어도 <b>한국어로 설명하지 못하는 문제(콘텐츠)</b>다.
       </div>
     </div>
 
     <div class="dcards reveal" style="margin-top:26px">
       <div class="dcard">
         <h4>명칭 ECHO <span class="chip refl">반영</span></h4>
-        <p>후보 5종 탐색 → "듣고·따라하고·교정받는 반복"을 메아리에 빗댄 <b>ECHO(English Correction &amp; Hearing Optimization)</b> 선별. 공식 과제명으로 채택되어 전 제출물·발표 제목이 되었다.</p>
+        <p>나는 이름 후보 5개를 찾아보고, "듣고·따라 하고·교정받는 반복"을 메아리에 빗댄 <b>ECHO(English Correction &amp; Hearing Optimization)</b>를 골라 팀에 제안했다. 이 이름이 공식 과제명으로 채택되어 모든 제출물과 발표의 제목이 되었다.</p>
       </div>
       <div class="dcard">
         <h4>리텐션 전략 3종 <span class="chip refl">반영</span></h4>
-        <p>손실 회피(전망 이론) 근거의 <b>출석 환급</b>, 게임화 <b>속도 챌린지</b>, 캐릭터 <b>BOO</b>. 3종 전부 제안서 본문 → 발표자료 → 설계서 → 중간보고 → 최종 제품으로 채택.</p>
+        <p>사용자가 계속 쓰게 할 방법도 3가지 제안했다. 손실 회피 심리(전망 이론)에 근거한 <b>출석 환급</b>, 게임처럼 겨루는 <b>속도 챌린지</b>, 캐릭터 <b>BOO</b>다. 3가지 모두 제안서부터 최종 제품까지 채택되었다.</p>
       </div>
     </div>
   </div>
